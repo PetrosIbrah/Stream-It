@@ -200,3 +200,51 @@ Text {
 .scroll-pane .scroll-bar:horizontal .thumb:hover {
     -fx-background-color: #777;
 }
+
+#MenuPane, #ProfilePane {
+    -fx-background-color: linear-gradient(to bottom right, #0a0a0f, #1a1620, #0f0a15);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-background-radius: 24px;
+    -fx-border-radius: 24px;
+    -fx-padding: 20;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0.3, 0, 12),
+                dropshadow(gaussian, rgba(100, 140, 200, 0.1), 20, 0.5, 0, 0);
+}
+
+#MenuPane .button, #ProfilePane .button {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-text-fill: #e5e7eb;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 14 20 14 24;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+#MenuPane .button:hover, #ProfilePane .button:hover {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(236, 72, 153, 0.15));
+    -fx-text-fill: #ffffff;
+    -fx-border-color: rgba(167, 139, 250, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.3), 12, 0.5, 0, 2),
+                innershadow(gaussian, rgba(255, 255, 255, 0.1), 2, 0.8, 0, 1);
+}
+
+#MenuPane .button:pressed, #ProfilePane .button:pressed {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.25));
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.5, 0, 2);
+}
+
+#MenuPane .separator .line, #ProfilePane .separator .line {
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+    -fx-opacity: 0.6;
+}

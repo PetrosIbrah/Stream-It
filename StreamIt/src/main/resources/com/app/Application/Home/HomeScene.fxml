@@ -45,10 +45,10 @@
       <Pane prefHeight="17.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" />
       <VBox fx:id="MenuPane" fillWidth="true" layoutY="69.0" prefHeight="198.0" prefWidth="200.0" spacing="0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="72.0">
          <children>
-            <Button maxWidth="Infinity" onAction="#switchToLibraryScene" text="Library" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="Infinity" onAction="#ClickedOnHome" text="Home" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="Infinity" onAction="#ClickedOnLibrary" text="Library" VBox.vgrow="ALWAYS" />
             <Separator />
             <Button maxWidth="Infinity" text="Recommended" VBox.vgrow="ALWAYS" />
-            <Button maxWidth="Infinity" text="Most popular" VBox.vgrow="ALWAYS" />
             <Separator />
             <Button maxWidth="Infinity" text="Movies" VBox.vgrow="ALWAYS" />
             <Button maxWidth="Infinity" text="Shows" VBox.vgrow="ALWAYS" />
@@ -61,8 +61,8 @@
             <Button maxWidth="Infinity" text="Recordings" VBox.vgrow="ALWAYS" />
             <Button maxWidth="Infinity" text="Profile Options" VBox.vgrow="ALWAYS" />
             <Separator />
-            <Button maxWidth="Infinity" text="Exit" VBox.vgrow="ALWAYS" />
-            <Button maxWidth="Infinity" text="Log Out" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
 

@@ -72,7 +72,7 @@ public class LibraryServerComm {
 
     }
 
-    public static String ResultAddToLibrary (Socket socket) {
+    public static String ResultEditLibrary (Socket socket) {
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             return reader.readLine();

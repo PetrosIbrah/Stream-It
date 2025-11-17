@@ -33,8 +33,8 @@
          </font>
       </Text>
       <Button fx:id="SignUpButton" layoutX="67.0" layoutY="288.0" mnemonicParsing="false" onAction="#SignUpAction" text="Sign Up" />
-      <Text fx:id="InfoText" layoutX="200.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" wrappingWidth="186.0" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="252.0" />
-      <ImageView fx:id="LoadingGif" fitHeight="60.0" fitWidth="65.0" layoutX="472.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+      <Text fx:id="InfoText" layoutX="200.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" wrappingWidth="186.0" />
+      <ImageView fx:id="LoadingGif" fitHeight="60.0" fitWidth="65.0" layoutX="450.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@loading.gif" />
          </image>

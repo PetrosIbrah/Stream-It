@@ -69,6 +69,7 @@ public class LibraryAccess {
         }
     }
 
+
     public static void AddItemToLibrary (Socket socket, String Username, String Password, String Item){
         SendResult(socket, AddItem(Username, Password, Item));
     }
@@ -124,4 +125,56 @@ public class LibraryAccess {
             em.close();
         }
     }
+
+
+    public static void RemoveFromLibrary(Socket socket, String Username, String Password, String Item){
+        SendResult(socket, RemoveItem(Username, Password, Item));
+    }
+
+    public static String RemoveItem(String Username, String Password, String Item) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            TypedQuery<Accounts> userQuery = em.createQuery(
+                    "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
+            );
+            userQuery.setParameter("uname", Username);
+            userQuery.setParameter("pwd", Password);
+            List<Accounts> users = userQuery.getResultList();
+
+            if (users.isEmpty()) {
+                return "User not found.";
+            }
+
+            Accounts user = users.get(0);
+
+            TypedQuery<Library> libQuery = em.createQuery(
+                    "SELECT l FROM Library l WHERE l.user = :user AND l.medianame = :item", Library.class
+            );
+            libQuery.setParameter("user", user);
+            libQuery.setParameter("item", Item);
+
+            List<Library> results = libQuery.getResultList();
+
+            if (results.isEmpty()) {
+                return "Item not found in library.";
+            }
+
+            Library libItem = results.get(0);
+
+            em.remove(libItem);
+
+            em.getTransaction().commit();
+            return "Item removed successfully.";
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            return "Unexpected error: " + e.getMessage();
+        } finally {
+            em.close();
+        }
+    }
+
 }

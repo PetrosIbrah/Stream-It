@@ -1,6 +1,7 @@
 package com.app.Application.ChoiceDisplay;
 
 
+import com.app.Application.MenuAndProfileUtility;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
@@ -53,7 +54,7 @@ public class ChoiceDisplayController {
 
     @FXML private TextFlow textflowDesc;
 
-    @FXML private Pane MenuPane;
+
 
     public void InitializeData(String filename){
 
@@ -157,9 +158,6 @@ public class ChoiceDisplayController {
         stage.show();
     }
 
-    public void ClickedOnMenu() {
-        MenuPane.setVisible(true);
-    }
 
     public void SaveToLibrary(){
         Image img;
@@ -170,6 +168,7 @@ public class ChoiceDisplayController {
         } else {
             img = new Image(getClass().getResource("/com/app/Application/ChoiceDisplay/star.png").toExternalForm());
             SavedOrNot = false;
+            RemoveFromLibrary();
         }
 
         LibraryIcon.setImage(img);
@@ -178,19 +177,74 @@ public class ChoiceDisplayController {
     public void AddToLibrary () {
         Socket socket = LibraryServerComm.Connect();
         LibraryServerComm.AddToLibrary(socket, "Add To library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
-        System.out.println(LibraryServerComm.ResultAddToLibrary(socket));
+        System.out.println(LibraryServerComm.ResultEditLibrary(socket));
         LibraryServerComm.SocketClose(socket);
 
-        /*
+
         socket = LibraryServerComm.Connect();
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
         LibraryServerComm.SocketClose(socket);
 
-         */
+
+    }
+
+    public void RemoveFromLibrary () {
+        Socket socket = LibraryServerComm.Connect();
+        LibraryServerComm.AddToLibrary(socket, "Remove From library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
+        System.out.println(LibraryServerComm.ResultEditLibrary(socket));
+        LibraryServerComm.SocketClose(socket);
+
+
+        socket = LibraryServerComm.Connect();
+        LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
+        LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
+        LibraryServerComm.SocketClose(socket);
     }
 
     @FXML
     public void initialize()  {
+    }
+
+    @FXML private Pane MenuPane;
+    @FXML private Pane ProfilePane;
+    private boolean VisibleMenu;
+
+    private boolean VisibleProfile;
+
+    public void ClickedOnMenu() {
+        if (!VisibleMenu){
+            MenuPane.setVisible(true);
+            VisibleMenu = true;
+            ProfilePane.setVisible(false);
+            VisibleProfile = false;
+        } else {
+            MenuPane.setVisible(false);
+            VisibleMenu = false;
+        }
+    }
+
+    public void ClickedOnProfile() {
+        if (!VisibleProfile){
+            ProfilePane.setVisible(true);
+            VisibleProfile = true;
+            MenuPane.setVisible(false);
+            VisibleMenu = false;
+        } else {
+            ProfilePane.setVisible(false);
+            VisibleProfile = false;
+        }
+    }
+
+    public void ClickedOnLibrary() {
+        MenuAndProfileUtility.switchToLibraryScene(rootPane);
+    }
+
+    public void ClickedOnHome() {
+        MenuAndProfileUtility.switchToHomeScene(rootPane);
+    }
+
+    public void ClickedOnLogOut() {
+        MenuAndProfileUtility.switchToLogIn(rootPane);
     }
 }

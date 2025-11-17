@@ -69,7 +69,7 @@ public class StreamServer {
             } else if (StageChoice.equals("Log In") || StageChoice.equals("Sign Up") || StageChoice.equals("Get All From Library")){
                 Username = reader.readLine();
                 Password = reader.readLine();
-            } else if (StageChoice.equals("Add To library")){
+            } else if (StageChoice.equals("Add To library") || StageChoice.equals("Remove From library")){
                 Username = reader.readLine();
                 Password = reader.readLine();
                 Item = reader.readLine();
@@ -103,6 +103,8 @@ public class StreamServer {
             LibraryAccess.ReturnAllLibraryItems(socket, Username, Password);
         } else if (StageChoice.equals("Add To library")) {
             LibraryAccess.AddItemToLibrary(socket, Username, Password, Item);
+        } else if (StageChoice.equals("Remove From library")){
+            LibraryAccess.RemoveFromLibrary(socket, Username, Password, Item);
         }
 
     }

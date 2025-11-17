@@ -1,6 +1,7 @@
 package com.app.Application.Home;
 
 import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
+import com.app.Application.MenuAndProfileUtility;
 import com.app.ServerCommunication.HomePageServerComm;
 import com.app.Identification.MediaIdentification;
 import javafx.event.ActionEvent;
@@ -57,20 +58,6 @@ public class HomeSceneController {
         HomePageServerComm.SocketClose(socket);
 
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
-    }
-
-    public void switchToLogInScene() throws IOException {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/com/app/LogIn/LogInScene.fxml"));
-
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/com/app/LogIn/LogIn.css").toExternalForm());
-
-
-        stage.setTitle("StreamIt");
-        stage.setResizable(true);
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void switchToChoiceScene(String filename) throws IOException {
@@ -165,17 +152,20 @@ public class HomeSceneController {
         }
     }
 
-    public void switchToLibraryScene() throws IOException {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/com/app/Application/Menu/Library.fxml"));
+    public void ClickedOnLibrary() {
+        MenuAndProfileUtility.switchToLibraryScene(rootPane);
+    }
 
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/com/app/Application/Home/Home.css").toExternalForm());
+    public void ClickedOnHome() {
+        MenuAndProfileUtility.switchToHomeScene(rootPane);
+    }
 
+    public void ClickedOnLogOut() {
+        new File("rememberme.txt").delete();
+        MenuAndProfileUtility.switchToLogIn(rootPane);
+    }
 
-        stage.setTitle("StreamIt");
-        stage.setResizable(true);
-        stage.setScene(scene);
-        stage.show();
+    public void ClickedOnExit() {
+        MenuAndProfileUtility.ShutDownApp();
     }
 }
