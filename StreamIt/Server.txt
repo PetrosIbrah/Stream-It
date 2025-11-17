@@ -1,0 +1,2 @@
+ServerIp=localhost
+Port=7777

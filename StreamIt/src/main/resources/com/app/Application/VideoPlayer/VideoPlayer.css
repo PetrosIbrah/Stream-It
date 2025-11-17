@@ -1,0 +1,86 @@
+
+#rootPane {
+    -fx-background-color: #1e1e1e;
+    -fx-pref-width: 1280px;
+    -fx-pref-height: 720px;
+    -fx-min-width: 1280px;
+    -fx-min-height: 720px;
+    -fx-max-width: 1280px;
+    -fx-max-height: 720px;
+}
+
+#controlsPane {
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-pref-width: 1280px;
+    -fx-pref-height: 66px;
+    -fx-min-width: 1280px;
+    -fx-min-height: 66px;
+    -fx-max-width: 1280px;
+    -fx-max-height: 66px;
+}
+
+#PausePlayIcon {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, black, 5, 0, 0, 1);
+    -fx-opacity: 0.8;
+    -fx-preserve-ratio: true;
+    -fx-fit-width: 35px;
+    -fx-fit-height: 36px;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+#PausePlayIcon:hover {
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+#stopButton {
+    -fx-background-color: #ff4b5c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-padding: 6 15 6 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4, 0, 0, 1);
+}
+
+#stopButton:hover {
+    -fx-background-color: #ff6b7c;
+}
+
+#progressBar {
+    -fx-accent: #00d4ff;
+    -fx-control-inner-background: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+#BackToChoiceScene {
+    -fx-cursor: hand;
+    -fx-opacity: 0.8;
+    -fx-preserve-ratio: true;
+    -fx-fit-width: 41px;
+    -fx-fit-height: 36px;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+#BackToChoiceScene:hover {
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+#videoImageView {
+    -fx-fit-width: 1280px;
+    -fx-fit-height: 720px
+}
+
+#FullScreenImage:hover {
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}

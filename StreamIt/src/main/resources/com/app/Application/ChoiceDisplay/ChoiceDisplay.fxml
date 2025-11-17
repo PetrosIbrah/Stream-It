@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.Application.ChoiceDisplay.ChoiceDisplayController">
+    <children>
+
+        <ImageView fx:id="ChoiceImage" pickOnBounds="true" preserveRatio="false" smooth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="340" AnchorPane.topAnchor="71" />
+        <Text fx:id="HomeText" layoutX="86.0" layoutY="55.0" text="Home" textAlignment="CENTER" wrappingWidth="1126.6484375" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="108.0">
+            <font>
+                <Font size="48.0" />
+            </font>
+        </Text>
+
+        <ImageView fitHeight="61.0" fitWidth="65.0" layoutX="15.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
+            <image>
+                <Image url="@../menu.png" />
+            </image>
+        </ImageView>
+
+        <ImageView fitHeight="51.0" fitWidth="61.0" layoutX="1242.0" layoutY="10.0" onMouseClicked="#switchToLogInScene" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="27.6484375" AnchorPane.topAnchor="10.0">
+            <image>
+                <Image url="@../user.png" />
+            </image>
+        </ImageView>
+
+        <Separator fx:id="MenuLine" layoutX="86.0" orientation="VERTICAL" prefHeight="71.0" prefWidth="6.0" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="0.0" />
+        <Separator fx:id="MainLine" layoutX="1.0" layoutY="70.0" prefHeight="2.0" prefWidth="1321.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="70.0" />
+        <Separator fx:id="ProfileLine" layoutX="1214.0" orientation="VERTICAL" prefHeight="71.0" prefWidth="0.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="0.0" />
+
+
+
+
+        <VBox fx:id="SidePanel" layoutY="73.0" prefHeight="647.0" prefWidth="340.0" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="73.0">
+            <HBox fx:id="pinnedControls" spacing="0" />
+            <ScrollPane fx:id="sideScrollPane" fitToWidth="true" hbarPolicy="NEVER" maxWidth="340.0" prefWidth="340.0" vbarPolicy="AS_NEEDED">
+                <content>
+                    <FlowPane fx:id="SidePane" hgap="10" maxHeight="Infinity" prefWidth="320.0" vgap="10">
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+        </VBox>
+        <VBox prefHeight="134.0" prefWidth="917.0" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="365.0">
+            <children>
+                <Text text="Description" />
+                <TextFlow fx:id="textflowDesc" prefHeight="118.0" prefWidth="917.0">
+                    <children>
+                        <Text fx:id="textDesc" text="Text" />
+                    </children>
+                </TextFlow>
+            </children>
+        </VBox>
+      <ImageView fx:id="LibraryIcon" fitHeight="36.0" fitWidth="39.0" layoutX="901.0" layoutY="93.0" onMouseClicked="#SaveToLibrary" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="591.0" AnchorPane.rightAnchor="383.6484375" AnchorPane.topAnchor="93.0">
+         <image>
+            <Image url="@star.png" />
+         </image>
+      </ImageView>
+
+    </children>
+</AnchorPane>

@@ -1,0 +1,200 @@
+#rootPane {
+    -fx-background-color: linear-gradient(to bottom right, #0a0a0f, #1a1620, #0f0a15);
+    -fx-font-family: "Inter", "SF Pro Display", "Segoe UI Variable", sans-serif;
+    -fx-font-smoothing-type: lcd;
+}
+
+#HomeText {
+    -fx-fill: linear-gradient(to right, #ffffff, #e0e0e0, #b8c5d6);
+    -fx-font-weight: 900;
+    -fx-font-size: 56px;
+    -fx-effect: dropshadow(gaussian, rgba(100, 140, 200, 0.25), 20, 0.6, 0, 2),
+                dropshadow(gaussian, rgba(0, 0, 0, 0.8), 30, 0.4, 0, 8);
+    -fx-text-alignment: center;
+    -fx-letter-spacing: -0.02em;
+}
+
+Text {
+    -fx-fill: #e5e7eb;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 1.6;
+}
+
+.button {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(236, 72, 153, 0.15));
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-padding: 12 28 12 28;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.2), 15, 0.3, 0, 4),
+                innershadow(gaussian, rgba(255, 255, 255, 0.1), 2, 1, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.3));
+    -fx-border-color: rgba(167, 139, 250, 0.6);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.5), 20, 0.5, 0, 6),
+                dropshadow(gaussian, rgba(236, 72, 153, 0.3), 25, 0.4, 0, 8);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.4), rgba(236, 72, 153, 0.4));
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 2);
+}
+
+#MenuLine, #ProfileLine {
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 1 0 0;
+    -fx-border-style: solid;
+    -fx-opacity: 0.5;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.1), 5, 0.5, 1, 0);
+}
+
+#MainLine {
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1 0 0 0;
+    -fx-border-style: solid;
+    -fx-opacity: 0.5;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.1), 5, 0.5, 0, 1);
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 25, 0.3, 0, 8),
+                dropshadow(gaussian, rgba(167, 139, 250, 0.15), 15, 0.5, 0, 4);
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+}
+
+#Video1, #Video2 {
+    -fx-border-color: linear-gradient(135deg, #a78bfa, #ec4899);
+    -fx-border-width: 2;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.4), 20, 0.5, 0, 4),
+                dropshadow(gaussian, rgba(236, 72, 153, 0.3), 25, 0.4, 0, 8),
+                innershadow(gaussian, rgba(255, 255, 255, 0.1), 3, 0.5, 0, 1);
+}
+
+#Video1:hover, #Video2:hover {
+    -fx-border-color: linear-gradient(135deg, #c4b5fd, #f9a8d4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.6), 30, 0.6, 0, 6),
+                dropshadow(gaussian, rgba(236, 72, 153, 0.5), 35, 0.5, 0, 10);
+}
+
+#galleryScrollPane {
+    -fx-background-color: linear-gradient(to bottom right, #0a0a0f, #1a1620, #0f0a15);
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 8;
+}
+
+#galleryScrollPane .viewport {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+#galleryScrollPane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+    -fx-background-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(to bottom, rgba(167, 139, 250, 0.6), rgba(236, 72, 153, 0.6));
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(167, 139, 250, 0.8), rgba(236, 72, 153, 0.8));
+}
+
+#galleryScrollPane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 6px;
+    -fx-background-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:horizontal .track {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:horizontal .thumb {
+    -fx-background-color: linear-gradient(to right, rgba(167, 139, 250, 0.6), rgba(236, 72, 153, 0.6));
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+}
+
+#galleryScrollPane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: linear-gradient(to right, rgba(167, 139, 250, 0.8), rgba(236, 72, 153, 0.8));
+}
+
+#MenuPane, #ProfilePane {
+    -fx-background-color: linear-gradient(to bottom right, #0a0a0f, #1a1620, #0f0a15);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-background-radius: 24px;
+    -fx-border-radius: 24px;
+    -fx-padding: 20;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0.3, 0, 12),
+                dropshadow(gaussian, rgba(100, 140, 200, 0.1), 20, 0.5, 0, 0);
+}
+
+#MenuPane .button, #ProfilePane .button {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-text-fill: #e5e7eb;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 14 20 14 24;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+#MenuPane .button:hover, #ProfilePane .button:hover {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(236, 72, 153, 0.15));
+    -fx-text-fill: #ffffff;
+    -fx-border-color: rgba(167, 139, 250, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.3), 12, 0.5, 0, 2),
+                innershadow(gaussian, rgba(255, 255, 255, 0.1), 2, 0.8, 0, 1);
+}
+
+#MenuPane .button:pressed, #ProfilePane .button:pressed {
+    -fx-background-color: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.25));
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.5, 0, 2);
+}
+
+#MenuPane .separator .line, #ProfilePane .separator .line {
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+    -fx-opacity: 0.6;
+}

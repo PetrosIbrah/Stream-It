@@ -1,0 +1,202 @@
+#rootPane {
+    -fx-background-color: linear-gradient(to bottom right, #1e1e2f, #2e2e3e);
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+#HomeText {
+    -fx-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 48px;
+    -fx-letter-spacing: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.6, 0, 3);
+}
+
+Text {
+    -fx-fill: #cccccc;
+    -fx-font-size: 18px;
+    -fx-smooth: true;
+}
+
+#textDesc {
+    -fx-fill: #eeeeee;
+    -fx-font-size: 16px;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 4;
+}
+
+#textflowDesc {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-width: 1;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #3a3a4d, #2e2e3c);
+    -fx-text-fill: #eeeeee;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 16 10 16;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0.2, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #4a4a62, #38384b);
+    -fx-text-fill: #ffffff;
+    -fx-translate-y: 0;
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #2c2c3a, #242430);
+    -fx-translate-y: 0;
+}
+
+#MenuLine, #ProfileLine {
+    -fx-border-color: #555;
+    -fx-border-width: 0 1 0 0;
+}
+
+#MainLine {
+    -fx-border-color: #555;
+    -fx-border-width: 1 0 0 0;
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 14, 0.4, 0, 5);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+}
+
+
+#ChoiceImage {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0.4, 0, 0);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.1);
+    -fx-border-width: 2;
+    -fx-cursor: default;
+    -fx-scale-shape: true;
+    -fx-padding: 0;
+}
+
+#SidePanel {
+    -fx-background-color: linear-gradient(to bottom, #353545, #2b2b3b);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 0 0 0 1;
+}
+
+#pinnedControls {
+    -fx-background-color: transparent;
+}
+
+#sideScrollPane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+#SidePane {
+    -fx-background-color: transparent;
+}
+
+.choice-box {
+    -fx-background-color: #1f1f27;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: transparent;
+    -fx-padding: 4 8 4 8;
+    -fx-font-size: 14px;
+    -fx-text-fill: #e0e0e0;
+    -fx-cursor: hand;
+}
+
+.choice-box:hover {
+    -fx-background-color: #24242e;
+    -fx-border-color: transparent;
+}
+
+.choice-box:focused {
+    -fx-border-color: rgba(85,85,255,0.15);
+    -fx-border-width: 1;
+}
+
+.choice-box .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.choice-box .context-menu {
+    -fx-background-color: #1f1f27;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: transparent;
+    -fx-padding: 4 0 4 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0.3, 0, 2);
+}
+
+.choice-box .menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 14px;
+}
+
+.choice-box .menu-item:focused, .choice-box .menu-item:hover {
+    -fx-background-color: #24242e;
+}
+
+.choice-box .menu-item:focused .label, .choice-box .menu-item:hover .label {
+    -fx-text-fill: #ffffff;
+}
+
+.choice-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 4 0 4;
+}
+
+.choice-box .arrow {
+    -fx-background-color: #cccccc;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #555;
+    -fx-background-radius: 4px;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #777;
+}
+
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 8px;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: #555;
+    -fx-background-radius: 4px;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #777;
+}
