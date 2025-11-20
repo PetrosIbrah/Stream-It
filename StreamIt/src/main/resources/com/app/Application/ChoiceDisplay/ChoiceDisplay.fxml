@@ -89,8 +89,8 @@
                 <Button maxWidth="Infinity" text="Recordings" VBox.vgrow="ALWAYS" />
                 <Button maxWidth="Infinity" text="Profile Options" VBox.vgrow="ALWAYS" />
                 <Separator />
-                <Button maxWidth="Infinity" text="Exit" VBox.vgrow="ALWAYS" />
-                <Button maxWidth="Infinity" text="Log Out" VBox.vgrow="ALWAYS" />
+                <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
+                <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />
             </children>
         </VBox>
 

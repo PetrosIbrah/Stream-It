@@ -1,12 +1,14 @@
 package com.app.ServerCommunication;
 
-import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class LibraryServerComm {
+    private static final Logger log = LogManager.getLogger(LibraryServerComm.class);
+
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
@@ -15,7 +17,7 @@ public class LibraryServerComm {
         try {
             socket = new Socket(Host, Port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to start communication with server");
         }
         return socket;
     }
@@ -27,7 +29,7 @@ public class LibraryServerComm {
             out.println(Username);
             out.println(Password);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to request user's library from server.");
         }
     }
 
@@ -39,7 +41,7 @@ public class LibraryServerComm {
             out.println(Password);
             out.println(ToAdd);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to add to user's library - Server Comm.");
         }
     }
 
@@ -54,22 +56,9 @@ public class LibraryServerComm {
             }
             return items;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive all user's library from server.");
             return new String[0];
         }
-    }
-
-
-    public static void RequestDeleteFromLibrary () {
-
-    }
-
-    public static void ResultDeleteFromLibrary () {
-
-    }
-
-    public static void RequestAddToLibrary () {
-
     }
 
     public static String ResultEditLibrary (Socket socket) {
@@ -77,18 +66,16 @@ public class LibraryServerComm {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             return reader.readLine();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive library request result from server.");
         }
         return null;
     }
-
-
 
     public static void SocketClose(Socket socket) {
         try{
             socket.close();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to shut down server Comm.");
         }
     }
 }

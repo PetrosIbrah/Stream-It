@@ -1,5 +1,6 @@
 package com.app.Application;
 
+import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,20 +21,16 @@ public class MenuAndProfileUtility {
             Parent root = FXMLLoader.load(
                     Objects.requireNonNull(MenuAndProfileUtility.class.getResource("/com/app/Application/Menu/Library.fxml"))
             );
-
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(MenuAndProfileUtility.class.getResource("/com/app/Application/Home/Home.css")).toExternalForm()
-            );
-
             stage.setTitle("StreamIt");
             stage.setResizable(true);
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
 
+            log.info("Successfully initiated Library scene");
         } catch (Exception e) {
-            log.error("Inable to swap to Library scene.");
+            log.error("Unable to swap to Library scene.");
         }
     }
 
@@ -50,9 +47,9 @@ public class MenuAndProfileUtility {
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
-
+            log.info("Successfully initiated Home scene");
         } catch (Exception e) {
-            log.error("Inable to swap to Home scene.");
+            log.error("Unable to swap to Home scene.");
         }
     }
 
@@ -72,9 +69,35 @@ public class MenuAndProfileUtility {
             oldStage.close();
 
             stage.show();
-
+            log.info("Successfully initiated Log in scene");
         } catch (Exception e) {
-            log.error("Inable to swap to Log In scene.");
+            log.error("Unable to swap to Log In scene.");
+        }
+    }
+
+    public static void switchToChoiceDisplay(AnchorPane rootPane, String Filename) {
+        try {
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(MenuAndProfileUtility.class.getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.fxml"));
+            Parent root = loader.load();
+
+            ChoiceDisplayController controller = loader.getController();
+
+            controller.InitializeData(Filename);
+
+            Scene scene = new Scene(root, 1280, 720);
+
+            stage.setTitle("StreamIt");
+            stage.setResizable(true);
+            stage.setMinWidth(854);
+            stage.setMinHeight(480);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+            log.info("Successfully initiated Choice scene");
+        } catch (Exception e) {
+            log.error("Unable to swap to Choice scene.");
         }
     }
 

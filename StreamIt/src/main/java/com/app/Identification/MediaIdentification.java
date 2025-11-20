@@ -3,8 +3,8 @@ package com.app.Identification;
 import java.util.List;
 
 public class MediaIdentification {
-    public static String[] FileNames;
-    public static String Choice;
+    private static String[] FileNames;
+    private static String Choice;
 
     public static void Init (int ImageCount) {
         FileNames = new String[ImageCount];
@@ -44,8 +44,6 @@ public class MediaIdentification {
     public static List<Integer> getSeasons() { return Seasons; }
     public static void setSeasons(List<Integer> seasons) { Seasons = seasons; }
 
-
     public static long GetDuration() {return Duration;}
-
     public static void setDuration(long duration) {Duration = duration;}
 }

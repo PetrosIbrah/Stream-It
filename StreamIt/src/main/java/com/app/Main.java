@@ -1,6 +1,7 @@
 package com.app;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
@@ -40,6 +41,8 @@ public class Main extends Application {
     public void stop() {
         DeleteDirectory("ReferencePictures");
         DeleteDirectory("BackgroundPictures");
+
+        Platform.exit();
     }
 
     private static void DeleteDirectory(String Path) {

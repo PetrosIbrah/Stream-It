@@ -1,11 +1,14 @@
 package com.app.ServerCommunication;
 
 import com.app.Identification.ServerIdentification;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class VideoPlayerServerComm {
+    private static final Logger log = LogManager.getLogger(VideoPlayerServerComm.class);
+
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
@@ -14,7 +17,7 @@ public class VideoPlayerServerComm {
         try {
             socket = new Socket(Host, Port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to start communication with server");
         }
         return socket;
     }
@@ -24,9 +27,8 @@ public class VideoPlayerServerComm {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
             out.println(TimeStamp);
-            System.out.println(TimeStamp);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send media time stamp to server");
         }
     }
 
@@ -36,7 +38,7 @@ public class VideoPlayerServerComm {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Restart = reader.readLine();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive restart result from server");
         }
         return Restart;
     }
@@ -48,26 +50,15 @@ public class VideoPlayerServerComm {
             out.println(TimeStamp);
             out.println(Speedtest);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send speedtest results and timestamp to server");
         }
-    }
-
-    public static String GetAssurance(Socket socket) {
-        try{
-            InputStream is = socket.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            return br.readLine();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static void SocketClose(Socket socket) {
         try{
             socket.close();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to shut down server Comm.");
         }
     }
 }

@@ -1,13 +1,9 @@
 package com.app.Application.Home;
 
-import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
 import com.app.Application.MenuAndProfileUtility;
 import com.app.ServerCommunication.HomePageServerComm;
 import com.app.Identification.MediaIdentification;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.*;
@@ -51,32 +46,6 @@ public class HomeSceneController {
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
     }
 
-    private void switchToChoiceScene(String filename) {
-        try {
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.fxml"));
-            Parent root = loader.load();
-
-            ChoiceDisplayController controller = loader.getController();
-
-            controller.InitializeData(filename);
-
-            Scene scene = new Scene(root, 1280, 720);
-            scene.getStylesheets().add(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.css").toExternalForm());
-
-            stage.setTitle("StreamIt");
-            stage.setResizable(true);
-            stage.setMinWidth(854);
-            stage.setMinHeight(480);
-
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void displayImages(String[] imageFiles, FlowPane container) {
         container.getChildren().clear();
 
@@ -98,7 +67,8 @@ public class HomeSceneController {
             Button invisibleButton = new Button();
             invisibleButton.setOpacity(0);
             invisibleButton.setPrefSize(150, 230);
-            invisibleButton.setOnAction(e -> switchToChoiceScene(fileName));
+            invisibleButton.setOnAction(e ->
+                    MenuAndProfileUtility.switchToChoiceDisplay(rootPane, fileName));
 
             StackPane stack = new StackPane(imageView, invisibleButton);
             stack.setPrefWidth(150);
@@ -107,8 +77,6 @@ public class HomeSceneController {
 
             container.getChildren().add(stack);
         }
-
-
         container.setHgap(20);
         container.setVgap(40);
     }
@@ -146,11 +114,14 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnLogOut() {
-        new File("rememberme.txt").delete();
+        File rememberFile = new File("rememberme.txt");
+        if (!rememberFile.delete()) {
+            log.warn("Couldn't delete remember me file.");
+        }
         MenuAndProfileUtility.switchToLogIn(rootPane);
     }
 
-    @FXML public void ClickedOnExit() {
+    @FXML private void ClickedOnExit() {
         MenuAndProfileUtility.ShutDownApp();
     }
 }

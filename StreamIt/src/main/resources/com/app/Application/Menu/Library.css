@@ -1,0 +1,146 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom, #141622, #1a1f30);
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+#rootPane {
+    -fx-background-color: linear-gradient(to bottom, #141622, #1a1f30);
+}
+
+#HomeText {
+    -fx-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0, 0, 2);
+}
+
+#MenuLine, #MainLine, #ProfileLine {
+    -fx-background-color: rgba(30, 42, 63, 0.6);
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: rgba(20, 22, 34, 0.4);
+    -fx-border-radius: 12px;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12px;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 8px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(45, 74, 111, 0.7);
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(61, 90, 143, 0.9);
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+#GalleryFlowPane {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+}
+
+#GalleryFlowPane > * {
+    -fx-cursor: hand;
+}
+
+#GalleryFlowPane .image-view,
+#GalleryFlowPane ImageView {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.3, 0, 3);
+    -fx-background-color: #000000;
+    -fx-background-radius: 10px;
+    -fx-border-color: #000000;
+    -fx-border-width: 4;
+    -fx-border-radius: 10px;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+#MenuPane, #ProfilePane {
+    -fx-background-color: #141622;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 2, 2);
+    -fx-border-color: #1a1f30;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+}
+
+#MenuPane .button, #ProfilePane .button {
+    -fx-background-color: #1a1f30;
+    -fx-text-fill: #e0ecf8;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 15 20;
+    -fx-alignment: center-left;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #2a2f44;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+}
+
+#MenuPane .button:hover, #ProfilePane .button:hover {
+    -fx-background-color: #202537;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #2a2f44;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+}
+
+#MenuPane .button:pressed, #ProfilePane .button:pressed {
+    -fx-background-color: #262c44;
+    -fx-border-color: #2a2f44;
+}
+
+#MenuPane .separator, #ProfilePane .separator {
+    -fx-background-color: #2a2f44;
+}
+
+.image-view {
+    -fx-cursor: hand;
+    -fx-opacity: 1;
+}
+
+.image-view:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.media-image {
+    -fx-background-color: black;
+    -fx-background-radius: 8;
+    -fx-border-color: black;
+    -fx-border-width: 3;
+    -fx-border-radius: 8;
+}
+
+.media-image ImageView {
+    -fx-cursor: hand;
+    -fx-opacity: 1;
+    -fx-effect: none;
+}
+
+.media-image:hover ImageView {
+    -fx-opacity: 0.8;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}

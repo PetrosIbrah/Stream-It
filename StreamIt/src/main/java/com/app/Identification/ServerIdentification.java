@@ -1,48 +1,53 @@
 package com.app.Identification;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class ServerIdentification {
+    private static final Logger log = LogManager.getLogger(ServerIdentification.class);
+
     private static String UserName;
     private static String Password;
 
     public static String GetHost () {
-        return ReadHost("Server.txt");
+        return ReadHost();
     }
 
     public static int GetPort () {
-        return ReadPort("Server.txt");
+        return ReadPort();
     }
 
-    public static String ReadHost(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    private static String ReadHost() {
+
+        try (BufferedReader br = new BufferedReader(new FileReader("Server.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("ServerIp=")) {
                     return line.split("=")[1].trim();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Unable to read Hostname from server file.");
         }
         return null;
     }
 
-    public static int ReadPort(String filePath) {
+    private static int ReadPort() {
         int Port;
         String tmp = "-1";
         try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            BufferedReader br = new BufferedReader(new FileReader("Server.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("Port=")) {
                     tmp = line.split("=")[1].trim();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Unable to read port from server file.");
         }
         Port = Integer.parseInt(tmp);
         return Port;

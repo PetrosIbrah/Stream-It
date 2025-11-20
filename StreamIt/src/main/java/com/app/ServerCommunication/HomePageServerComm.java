@@ -2,11 +2,14 @@ package com.app.ServerCommunication;
 
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class HomePageServerComm {
+    private static final Logger log = LogManager.getLogger(HomePageServerComm.class);
+
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
@@ -15,7 +18,7 @@ public class HomePageServerComm {
         try {
             socket = new Socket(Host, Port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to start communication with server");
         }
         return socket;
     }
@@ -26,7 +29,7 @@ public class HomePageServerComm {
             PrintWriter writer = new PrintWriter(os, true);
             writer.println(Msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send stage choice");
         }
     }
 
@@ -35,7 +38,7 @@ public class HomePageServerComm {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             return dis.readInt();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to read the amount of images.");
             return 0;
         }
     }
@@ -45,9 +48,9 @@ public class HomePageServerComm {
             File dir = new File("ReferencePictures");
             if (!dir.exists()) {
                 if (dir.mkdir()) {
-                    System.out.println("Directory created successfully.");
+                    log.info("Directory ReferencePictures created successfully.");
                 } else {
-                    System.out.println("Failed to create directory.");
+                    log.warn("Failed to create directory ReferencePictures.");
                 }
             }
 
@@ -71,20 +74,17 @@ public class HomePageServerComm {
                 }
             }
 
-            System.out.println("All files received successfully.");
+            log.info("All media thumbnails received successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive the thumbnails.");
         }
     }
-
 
     public static void SocketClose(Socket socket) {
         try{
             socket.close();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to shut down server Comm.");
         }
     }
-
-
 }

@@ -2,13 +2,16 @@ package com.app.ServerCommunication;
 
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChoiceSceneServerComm {
+    private static final Logger log = LogManager.getLogger(ChoiceSceneServerComm.class);
+
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
@@ -17,7 +20,7 @@ public class ChoiceSceneServerComm {
         try {
             socket = new Socket(Host, Port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to start communication with server");
         }
         return socket;
     }
@@ -26,10 +29,9 @@ public class ChoiceSceneServerComm {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
-            System.out.println(Choice);
             out.println(Choice);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Unable to send stage choice");
         }
     }
 
@@ -41,12 +43,12 @@ public class ChoiceSceneServerComm {
             if (!dir.exists()) {
                 boolean created = dir.mkdir();
                 if (created) {
-                    System.out.println("Directory created successfully 2.");
+                    log.info("Successfully created BackgroundPictures directory.");
                 } else {
-                    System.out.println("Failed to create directory.");
+                    log.warn("Unable to create BackgroundPictures directory.");
                 }
             } else {
-                System.out.println("Directory already exists.");
+                log.info("Directory BackgroundPictures already exists.1");
             }
 
             DataInputStream dis = new DataInputStream(socket.getInputStream());
@@ -63,13 +65,10 @@ public class ChoiceSceneServerComm {
                 remaining -= bytesRead;
             }
             fos.close();
-
-            System.out.println("debuging");
-
             is.close();
-            System.out.println("All files received successfully.");
+            log.info("All files received successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive the backgroung image.");
         }
     }
 
@@ -83,18 +82,15 @@ public class ChoiceSceneServerComm {
             List<Integer> seasons = new ArrayList<>();
             if (MediaIdentification.getType().equalsIgnoreCase("Series")) {
                 int seasonCount = Integer.parseInt(in.readLine());
-
                 for (int i = 0; i < seasonCount; i++) {
                     seasons.add(Integer.parseInt(in.readLine()));
                 }
-
                 MediaIdentification.setSeasons(seasons);
             } else {
                 MediaIdentification.setSeasons(seasons);
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive Media details.");
         }
     }
 
@@ -103,9 +99,8 @@ public class ChoiceSceneServerComm {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
             out.println(StreamChoice);
-            System.out.println(StreamChoice);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send Stream file choice.");
         }
     }
 
@@ -123,11 +118,10 @@ public class ChoiceSceneServerComm {
                 }
             }
 
-            System.out.println("Received " + videos.size() + " videos from server.");
             long durationMs = Long.parseLong(in.readLine());
             MediaIdentification.setDuration(durationMs);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to receive video list.");
         }
         return videos;
     }
@@ -136,9 +130,7 @@ public class ChoiceSceneServerComm {
         try{
             socket.close();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to shut down server Comm.");
         }
     }
-
-
 }

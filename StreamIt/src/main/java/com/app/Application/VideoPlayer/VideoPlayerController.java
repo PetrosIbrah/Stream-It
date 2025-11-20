@@ -1,6 +1,6 @@
 package com.app.Application.VideoPlayer;
 
-import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
+import com.app.Application.MenuAndProfileUtility;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
 import com.app.ServerCommunication.VideoPlayerServerComm;
@@ -12,9 +12,6 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
@@ -24,10 +21,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurface;
-
 import java.net.Socket;
 import java.util.Objects;
 import java.util.Timer;
@@ -35,10 +33,10 @@ import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 public class VideoPlayerController {
+    private static final Logger log = LogManager.getLogger(VideoPlayerController.class);
 
-    private boolean Pause;
-    private double Percentage = 0;
-    private boolean isMuted = false;
+    private final Image PauseImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/pause.png")));
+    private final Image PlayImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/play.png")));
 
     @FXML private ImageView videoImageView;
     @FXML private ImageView PausePlayIcon;
@@ -49,30 +47,28 @@ public class VideoPlayerController {
     @FXML private Slider VolumeBar;
     @FXML private ImageView LoadingImage;
     @FXML private CheckBox AdaptiveCheck;
-
-
-    private final Image PauseImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/pause.png")));
-    private final Image PlayImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/play.png")));
+    @FXML private ProgressBar progressBar;
 
     private MediaPlayerFactory mediaPlayerFactory;
     private EmbeddedMediaPlayer mediaPlayer;
     private volatile boolean playerReady = false;
-
+    private boolean Playing;
+    private double Percentage = 0;
+    private final boolean isMuted = false;
     private PauseTransition hideControlsTransition;
+    private Timer progressTimer;
 
-    @FXML
-    public void initialize() {
+    @FXML private void initialize() {
+        if (Playing){
+            log.info("Delete this function in the future if ");
+        }
 
-
-        AdaptiveCheck.setOnAction(e -> {
-            CheckAdaptive();
-
-        });
+        AdaptiveCheck.setOnAction(this::handle);
 
         VolumeBar.setMin(0);
         VolumeBar.setMax(100);
         VolumeBar.setValue(50);
-
+        PausePlayIcon.setImage(PauseImage);
 
         hideControlsTransition = new PauseTransition(Duration.seconds(3));
         hideControlsTransition.setOnFinished(e -> {
@@ -84,18 +80,16 @@ public class VideoPlayerController {
             if (newScene != null) {
                 newScene.addEventFilter(MouseEvent.MOUSE_MOVED, this::onMouseMoved);
             }
-            videoImageView.fitWidthProperty().bind(newScene.widthProperty());
+            videoImageView.fitWidthProperty().bind(Objects.requireNonNull(newScene).widthProperty());
             videoImageView.fitHeightProperty().bind(newScene.heightProperty());
         });
 
         startPlayer();
 
-
         Platform.runLater(() -> {
             videoImageView.fitWidthProperty().bind(videoImageView.getScene().widthProperty());
             videoImageView.fitHeightProperty().bind(videoImageView.getScene().heightProperty());
         });
-
 
         progressBar.setOnMouseClicked(event -> {
             if (mediaPlayer != null && MediaIdentification.GetDuration() > 0) {
@@ -105,144 +99,129 @@ public class VideoPlayerController {
                 long seekTime = (long) (percent * MediaIdentification.GetDuration());
                 ClickedOnProgress(seekTime);
                 Percentage =  (double) seekTime /MediaIdentification.GetDuration();
-
             }
         });
 
-
-
-        /*
         rootPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                Stage stage = (Stage) newScene.getWindow();
-                stage.setOnCloseRequest(e -> dispose());
+                newScene.windowProperty().addListener((obs2, oldWindow, newWindow) -> {
+                    if (newWindow != null) {
+                        newWindow.setOnCloseRequest(e -> {
+                            log.info("Application closing");
+                            dispose();
+                        });
+                    }
 
-
+                    if (newWindow == null && oldWindow != null) {
+                        log.info("Swaping scenes");
+                        dispose();
+                    }
+                });
             }
         });
-        */
     }
 
     private void ClickedOnProgress (long seekTime) {
         if (mediaPlayer != null) {
             mediaPlayer.controls().setTime(seekTime);
         }
-        onTogglePlayPause();
-        LoadingImage.setVisible(true);
         Socket socket = VideoPlayerServerComm.Connect();
         VideoPlayerServerComm.SendTimeStamp(socket, "LoadingBar", seekTime);
-        //String Assurance = ProgressBarServerComm.GetAssurance(socket);
         VideoPlayerServerComm.SocketClose(socket);
         restartPlayer();
-
     }
 
-    @FXML
-    void onTogglePlayPause() {
+    @FXML private void onTogglePlayPause() {
         if (!playerReady) return;
 
         if (mediaPlayer.status().isPlaying()) {
             mediaPlayer.controls().pause();
-            Pause = true;
+            Playing = false;
             PausePlayIcon.setImage(PlayImage);
             stopProgressUpdater();
         } else {
             mediaPlayer.controls().play();
-            Pause = false;
+            Playing = true;
             PausePlayIcon.setImage(PauseImage);
             startProgressUpdater();
         }
     }
 
-    @FXML
-    void onStop(ActionEvent evt) {
+    @FXML private void onStop() {
         if (playerReady) {
             mediaPlayer.controls().stop();
             stopProgressUpdater();
         }
     }
 
-    @FXML
-    public void switchToChoiceScene()  {
-        try {
-            dispose();
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.fxml"));
-            Parent root = loader.load();
-
-            ChoiceDisplayController controller = loader.getController();
-
-            controller.InitializeData(MediaIdentification.GetChoice());
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.css").toExternalForm());
-
-            stage.setTitle("StreamIt");
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @FXML private void switchToChoiceScene()  {
+        MenuAndProfileUtility.switchToChoiceDisplay(rootPane, MediaIdentification.GetChoice());
     }
 
-    @FXML
-    void toggleFullScreen() {
+    @FXML private void toggleFullScreen() {
         Stage stage = (Stage) FullScreenImage.getScene().getWindow();
         stage.setFullScreen(!stage.isFullScreen());
     }
 
-    public void CheckAdaptive () {
+    private void CheckAdaptive () {
         if (AdaptiveCheck.isSelected()) {
-            System.out.println("Adaptive is checked!");
+            log.info("Adaptive is checked!");
             new Thread(() -> {
                 SpeedTest();
                 try {
                     Thread.sleep(6000);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    log.error("Adaptive thread interrupted");
                 }
                 CheckAdaptive ();
             }).start();
         } else {
-            System.out.println("Adaptive is NOT checked!");
+            log.info("Adaptive is NOT checked!");
         }
     }
 
     private void onMouseMoved(MouseEvent event) {
-
         BackToChoicePane.setVisible(true);
         controlsPane.setVisible(true);
         hideControlsTransition.playFromStart();
     }
 
-    public void dispose() {
-        if (mediaPlayer != null && mediaPlayer.status().isPlayable()) {
-            mediaPlayer.controls().stop();
-        }
-        if (mediaPlayer != null) mediaPlayer.release();
-        if (mediaPlayerFactory != null) mediaPlayerFactory.release();
-        stopProgressUpdater();
+    private void dispose() {
         AdaptiveCheck.setSelected(false);
+        stopProgressUpdater();
+
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.controls().stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        } catch (Exception e) {
+            log.error("Unable to Stop mediaplayer");
+        }
+
+        try {
+            if (mediaPlayerFactory != null) {
+                mediaPlayerFactory.release();
+                mediaPlayerFactory = null;
+            }
+        } catch (Exception e) {
+            log.error("Unable to release Media player Factory");
+        }
+
+        log.info("VideoPlayerController disposed.");
     }
 
-    private Timer progressTimer;
-
-    @FXML
-    private ProgressBar progressBar;
-
     private void startProgressUpdater() {
-        progressTimer = new Timer(true); // daemon thread
+        progressTimer = new Timer(true);
         progressTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (mediaPlayer != null && mediaPlayer.status().isPlaying()) {
                     long currentTime = mediaPlayer.status().time();
                     long totalDuration = MediaIdentification.GetDuration();
-
                     if (totalDuration > 0) {
                         double progress = (double) currentTime / totalDuration;
-                        // double trueprogress = progress + Percentage;
                         double trueprogress = Math.max(0.0, Math.min(1.0, progress + Percentage));
                         Platform.runLater(() -> progressBar.setProgress(trueprogress));
                     }
@@ -258,27 +237,19 @@ public class VideoPlayerController {
         }
     }
 
-
-    public void restartPlayer() {
-        if (mediaPlayer != null) {
-            try {
+    private void restartPlayer() {
+        Platform.runLater(() -> {
+            if (mediaPlayer != null) {
                 mediaPlayer.controls().stop();
-                mediaPlayer.release();
-            } catch (Exception e) {
-                e.printStackTrace();
+                mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
+                PausePlayIcon.setImage(PauseImage);
+                startProgressUpdater();
+                LoadingImage.setVisible(false);
             }
-            mediaPlayer = null;
-        }
-        if (mediaPlayerFactory != null) {
-            mediaPlayerFactory.release();
-            mediaPlayerFactory = null;
-        }
-
-        startPlayer();
+        });
     }
 
-
-    public void startPlayer() {
+    private void startPlayer() {
         new Thread(() -> {
             mediaPlayerFactory = new MediaPlayerFactory();
             mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
@@ -288,11 +259,8 @@ public class VideoPlayerController {
                 playerReady = true;
 
                 mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
-                Pause = false;
-                PausePlayIcon.setImage(PauseImage);
+                Playing = true;
                 startProgressUpdater();
-
-
 
                 VolumeBar.valueProperty().addListener((obs, oldVal, newVal) -> {
                     if (!isMuted && mediaPlayer != null) {
@@ -305,7 +273,7 @@ public class VideoPlayerController {
         }).start();
     }
 
-    public void SpeedTest() {
+    private void SpeedTest() {
         CountDownLatch CD = new CountDownLatch(1);
         SpeedTestSocket speedTestSocket = new SpeedTestSocket();
 
@@ -315,7 +283,7 @@ public class VideoPlayerController {
             public void onCompletion(SpeedTestReport report) {
                 double Speed = report.getTransferRateBit().doubleValue() / 1000000;
                 String msg = "Successful completion of speedtest " + "Net Speed: " + String.format("%.2f", Speed) + "Mbs";
-                System.out.println(msg);
+                log.info(msg);
                 CD.countDown();
 
                 Socket socket = VideoPlayerServerComm.Connect();
@@ -325,8 +293,7 @@ public class VideoPlayerController {
                 VideoPlayerServerComm.SocketClose(socket);
 
                 if (Restart.equals("Restart")){
-                    onTogglePlayPause();
-                    Percentage =  (double) progressBar.getProgress();
+                    Percentage =  progressBar.getProgress();
                     LoadingImage.setVisible(true);
                     restartPlayer();
                 }
@@ -334,7 +301,7 @@ public class VideoPlayerController {
 
             @Override
             public void onError(SpeedTestError speedTestError, String errorMessage) {
-                System.out.println("Couldn't complete speedtest");
+                log.error("Couldn't complete speedtest");
                 CD.countDown();
             }
 
@@ -348,7 +315,11 @@ public class VideoPlayerController {
         try{
             CD.await();
         } catch (InterruptedException e) {
-            System.out.println("Couldn't await for speedtest");
+            log.warn("Couldn't await for speedtest");
         }
+    }
+
+    private void handle(ActionEvent e) {
+        CheckAdaptive();
     }
 }

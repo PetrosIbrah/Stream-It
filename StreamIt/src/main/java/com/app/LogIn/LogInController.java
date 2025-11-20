@@ -56,7 +56,7 @@ public class LogInController {
                 Platform.runLater(this::SwitchToHomePage);
             }).start();
         }
-
+        log.info("Log in scene initialized Successfully");
     }
 
     @FXML private void LogInAction()  {

@@ -1,11 +1,15 @@
 package com.app.ServerCommunication;
 
 import com.app.Identification.ServerIdentification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 
 public class LogInServerComm {
+    private static final Logger log = LogManager.getLogger(LogInServerComm.class);
+
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
@@ -14,7 +18,7 @@ public class LogInServerComm {
         try {
             socket = new Socket(Host, Port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to start communication with server");
         }
         return socket;
     }
@@ -26,7 +30,7 @@ public class LogInServerComm {
             out.println(User);
             out.println(Password);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send Credentials to server.");
         }
     }
 
@@ -35,7 +39,7 @@ public class LogInServerComm {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             return reader.readLine();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to get login request's result from server.");
         }
         return "Error";
     }
@@ -44,7 +48,7 @@ public class LogInServerComm {
         try{
             socket.close();
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to shut down server Comm.");
         }
     }
 }
