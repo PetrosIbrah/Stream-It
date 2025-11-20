@@ -31,26 +31,20 @@ dependencies {
     implementation("org.openjfx:javafx-fxml:21.0.5")
     implementation("org.openjfx:javafx-graphics:21.0.5")
     implementation("org.openjfx:javafx-media:21.0.5")
-    implementation("org.openjfx:javafx-swing:21.0.5") // required for SwingNode
+    implementation("org.openjfx:javafx-swing:21.0.5")
 
-    // VLCJ
-    // implementation("uk.co.caprica:vlcj:4.9.0")
-    implementation("org.slf4j:slf4j-simple:2.0.9")
-    // https://mvnrepository.com/artifact/uk.co.caprica/vlcj
+    // implementation("org.slf4j:slf4j-simple:2.0.9")
+    // VLCJ Libraries
     implementation("uk.co.caprica:vlcj:4.8.3")
-
-    // https://mvnrepository.com/artifact/uk.co.caprica/vlcj-javafx
     implementation("uk.co.caprica:vlcj-javafx:1.2.0")
 
-    // https://mvnrepository.com/artifact/fr.bmartel/jspeedtest
+    // Speedtest
     implementation("fr.bmartel:jspeedtest:1.32.1")
 
-    // https://mvnrepository.com/artifact/uk.co.caprica/vlcj-javafx
-    // implementation("com.github.caprica:vlcj-javafx:1.2.0")
-    // implementation("uk.co.caprica:vlcj-javafx:1.3.0")
-    // implementation("com.github.caprica:vlcj-javafx:1.3.0")
-    // Optional: VLCJ JavaFX integration if you want direct rendering
-    // implementation("uk.co.caprica:vlcj-javafx:4.9.0")
+    // Logging
+    implementation("org.apache.logging.log4j:log4j-core:2.25.2")
+    implementation("org.apache.logging.log4j:log4j-api:2.25.2")
+
 }
 
 

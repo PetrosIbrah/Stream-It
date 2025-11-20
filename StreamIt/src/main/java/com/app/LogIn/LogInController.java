@@ -5,51 +5,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
-
+import com.app.Application.MenuAndProfileUtility;
 import com.app.Identification.LibraryIdentification;
-import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-import com.app.ServerCommunication.HomePageServerComm;
 import com.app.ServerCommunication.LibraryServerComm;
 import com.app.ServerCommunication.LogInServerComm;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LogInController {
+    private static final Logger log = LogManager.getLogger(LogInController.class);
 
-    private Stage stage;
+    @FXML private AnchorPane rootPane;
+    @FXML private ImageView LoadingGif;
+    @FXML private CheckBox RememberCheckBox;
+    @FXML private Text InfoText;
+    @FXML private TextField UserFill;
+    @FXML private PasswordField PasswordFill;
 
-    @FXML
-    private AnchorPane rootPane;
-
-    @FXML
-    private ImageView LoadingGif;
-
-    @FXML
-    private CheckBox RememberCheckBox;
-    @FXML
-    private Text InfoText;
-
-    @FXML
-    private TextField UserFill;
-
-    @FXML
-    private PasswordField PasswordFill;
-
-    @FXML
-    public void initialize()  {
+    @FXML private void initialize()  {
         LoadingGif.setVisible(false);
         InfoText.setVisible(false);
 
@@ -62,63 +44,22 @@ public class LogInController {
                     UserFill.setText(scanner.nextLine());
                     PasswordFill.setText(scanner.nextLine());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                log.error("Failed to read saved login information.");
             }
             new Thread(() -> {
                 try {
                     Thread.sleep(3000);
-                    Platform.runLater(() -> {
-                        SwitchToHomePage();
-                    });
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Thread Couldn't sleep on start up for automatic log in");
                 }
+                Platform.runLater(this::SwitchToHomePage);
             }).start();
         }
 
     }
 
-    public void SwitchToHomePage ()  {
-        ServerIdentification.setUserName(UserFill.getText());
-        ServerIdentification.setPassword(PasswordFill.getText());
-        Socket socket = LogInServerComm.Connect();
-        LogInServerComm.SendStageAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
-        String Result = LogInServerComm.GetLogInResult(socket);
-        LogInServerComm.SocketClose(socket);
-
-        if (Result.equals("Log In Accepted")) {
-            try {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-
-                Parent root = FXMLLoader.load(getClass().getResource("/com/app/Application/Home/HomeScene.fxml"));
-                Scene scene = new Scene(root, 1280, 720);
-                scene.getStylesheets().add(getClass().getResource("/com/app/Application/Home/Home.css").toExternalForm());
-
-                stage.setTitle("StreamIt");
-                stage.setScene(scene);
-                stage.setResizable(true);
-                stage.setMinWidth(854);
-                stage.setMinHeight(480);
-                stage.centerOnScreen();
-                stage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (Result.equals("Log In NOT Accepted")) {
-            InfoText.setText("No Such Account Exists");
-            InfoText.setVisible(true);
-        } else {
-            InfoText.setText(Result);
-            InfoText.setVisible(true);
-        }
-        socket = LibraryServerComm.Connect();
-        LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
-        LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
-        LibraryServerComm.SocketClose(socket);
-    }
-
-    public void LogInAction(ActionEvent event) throws IOException {
+    @FXML private void LogInAction()  {
         SwitchToHomePage ();
 
         if (RememberCheckBox.isSelected()) {
@@ -126,20 +67,21 @@ public class LogInController {
                 writer.write(UserFill.getText() + "\n");
                 writer.write(PasswordFill.getText());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn("Couldn't save the log in info for remember me log in");
             }
         } else {
-            new File("rememberme.txt").delete();
+            DeleteRememberMe();
         }
     }
 
-    public void SignUpAction(ActionEvent event) throws IOException {
+    @FXML private void SignUpAction() {
         Socket socket = LogInServerComm.Connect();
         LogInServerComm.SendStageAndCredentials(socket, "Sign Up", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
         LogInServerComm.SocketClose(socket);
 
         if (Result.equals("Account Created")) {
+            log.info("Account successfully created");
             InfoText.setText(Result);
             InfoText.setVisible(true);
             InfoText.setStyle("-fx-fill: green;");
@@ -152,10 +94,41 @@ public class LogInController {
         }
     }
 
-    public void RememberMeFunction () {
+    @FXML private void RememberMeFunction () {
         if (!RememberCheckBox.isSelected()) {
-            new File("rememberme.txt").delete();
+            DeleteRememberMe();
         }
     }
 
+    private void SwitchToHomePage ()  {
+        ServerIdentification.setUserName(UserFill.getText());
+        ServerIdentification.setPassword(PasswordFill.getText());
+        Socket socket = LogInServerComm.Connect();
+        LogInServerComm.SendStageAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
+        String Result = LogInServerComm.GetLogInResult(socket);
+        LogInServerComm.SocketClose(socket);
+
+        if (Result.equals("Log In Accepted")) {
+            MenuAndProfileUtility.switchToHomeScene(rootPane);
+            log.info("Successfully Logged in");
+        } else if (Result.equals("Log In NOT Accepted")) {
+            log.warn("No Such Account Exists");
+            InfoText.setText("No Such Account Exists");
+            InfoText.setVisible(true);
+        } else {
+            InfoText.setText(Result);
+            InfoText.setVisible(true);
+        }
+        socket = LibraryServerComm.Connect();
+        LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
+        LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
+        LibraryServerComm.SocketClose(socket);
+    }
+
+    private void DeleteRememberMe () {
+        File rememberFile = new File("rememberme.txt");
+        if (!rememberFile.delete()) {
+            log.warn("Couldn't delete remember me file.");
+        }
+    }
 }

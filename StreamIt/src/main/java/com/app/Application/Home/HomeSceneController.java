@@ -4,10 +4,8 @@ import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
 import com.app.Application.MenuAndProfileUtility;
 import com.app.ServerCommunication.HomePageServerComm;
 import com.app.Identification.MediaIdentification;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,34 +15,27 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class HomeSceneController {
-    // public static String[] fileNames;
+    private static final Logger log = LogManager.getLogger(HomeSceneController.class);
 
-    @FXML
-    public FlowPane GalleryFlowPane;
-
-    @FXML
-    public ImageView Video1;
-
-    @FXML
-    public AnchorPane rootPane;
-
-    @FXML
-    public Text HomeText;
-
+    @FXML private FlowPane GalleryFlowPane;
+    @FXML private AnchorPane rootPane;
+    @FXML private Text HomeText;
     @FXML private Pane MenuPane;
     @FXML private Pane ProfilePane;
-    private boolean VisibleMenu;
 
+    private boolean VisibleMenu;
     private boolean VisibleProfile;
 
-    @FXML
-    public void initialize()  {
+    @FXML private void initialize()  {
         VisibleProfile = false;
         VisibleMenu = false;
         Socket socket = HomePageServerComm.Connect();
@@ -60,75 +51,69 @@ public class HomeSceneController {
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
     }
 
-    public void switchToChoiceScene(String filename) throws IOException {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.fxml"));
-        Parent root = loader.load();
+    private void switchToChoiceScene(String filename) {
+        try {
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.fxml"));
+            Parent root = loader.load();
 
-        ChoiceDisplayController controller = loader.getController();
+            ChoiceDisplayController controller = loader.getController();
 
-        controller.InitializeData(filename);
+            controller.InitializeData(filename);
 
-        Scene scene = new Scene(root, 1280, 720);
-        scene.getStylesheets().add(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.css").toExternalForm());
+            Scene scene = new Scene(root, 1280, 720);
+            scene.getStylesheets().add(getClass().getResource("/com/app/Application/ChoiceDisplay/ChoiceDisplay.css").toExternalForm());
 
-        stage.setTitle("StreamIt");
-        stage.setResizable(true);
-        stage.setMinWidth(854);
-        stage.setMinHeight(480);
+            stage.setTitle("StreamIt");
+            stage.setResizable(true);
+            stage.setMinWidth(854);
+            stage.setMinHeight(480);
 
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void displayImages(String[] imageFiles, FlowPane container) {
+    private void displayImages(String[] imageFiles, FlowPane container) {
         container.getChildren().clear();
 
         for (String fileName : imageFiles) {
-            try {
-                File dir = new File("ReferencePictures");
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
+            File imageFile = new File("ReferencePictures", fileName);
+            if (!imageFile.exists()) continue;
 
-                File imageFile = new File(dir, fileName);;
+            Image img = new Image(imageFile.toURI().toString());
+            ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(230);
+            imageView.setPreserveRatio(false);
 
-                if (!imageFile.exists()) continue;
+            Rectangle clip = new Rectangle(150, 230);
+            clip.setArcWidth(16);
+            clip.setArcHeight(16);
+            imageView.setClip(clip);
 
-                Image img = new Image(imageFile.toURI().toString());
-                ImageView imageView = new ImageView(img);
+            Button invisibleButton = new Button();
+            invisibleButton.setOpacity(0);
+            invisibleButton.setPrefSize(150, 230);
+            invisibleButton.setOnAction(e -> switchToChoiceScene(fileName));
 
-                imageView.setFitWidth(155);
-                imageView.setFitHeight(211);
-                imageView.setPreserveRatio(true);
+            StackPane stack = new StackPane(imageView, invisibleButton);
+            stack.setPrefWidth(150);
+            stack.setPrefHeight(230);
+            stack.getStyleClass().add("media-image");
 
-                Button invisibleButton = new Button();
-                invisibleButton.setOpacity(0);
-                invisibleButton.setPrefSize(155, 211);
-                invisibleButton.setOnAction(e -> {
-                    try {
-                        System.out.println("Opening scene with file: " + fileName);
-                        switchToChoiceScene(fileName);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-
-                StackPane stack = new StackPane(imageView, invisibleButton);
-
-                container.getChildren().add(stack);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            container.getChildren().add(stack);
         }
 
-        container.setHgap(25);
-        container.setVgap(50);
+
+        container.setHgap(20);
+        container.setVgap(40);
     }
 
-    public void ClickedOnMenu() {
+    @FXML private void ClickedOnMenu() {
         if (!VisibleMenu){
             MenuPane.setVisible(true);
             VisibleMenu = true;
@@ -140,7 +125,7 @@ public class HomeSceneController {
         }
     }
 
-    public void ClickedOnProfile() {
+    @FXML private void ClickedOnProfile() {
         if (!VisibleProfile){
             ProfilePane.setVisible(true);
             VisibleProfile = true;
@@ -152,20 +137,20 @@ public class HomeSceneController {
         }
     }
 
-    public void ClickedOnLibrary() {
+    @FXML private void ClickedOnLibrary() {
         MenuAndProfileUtility.switchToLibraryScene(rootPane);
     }
 
-    public void ClickedOnHome() {
+    @FXML private void ClickedOnHome() {
         MenuAndProfileUtility.switchToHomeScene(rootPane);
     }
 
-    public void ClickedOnLogOut() {
+    @FXML private void ClickedOnLogOut() {
         new File("rememberme.txt").delete();
         MenuAndProfileUtility.switchToLogIn(rootPane);
     }
 
-    public void ClickedOnExit() {
+    @FXML public void ClickedOnExit() {
         MenuAndProfileUtility.ShutDownApp();
     }
 }

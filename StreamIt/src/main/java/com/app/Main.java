@@ -1,67 +1,61 @@
 package com.app;
 
-import atlantafx.base.theme.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-import java.io.File;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Objects;
-
-import java.io.IOException;
 import java.nio.file.*;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class Main extends Application {
+    private static final Logger log = LogManager.getLogger(Main.class);
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("LogIn/LogInScene.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LogIn/LogInScene.fxml")));
             Scene scene = new Scene(root);
-
-            scene.getStylesheets().add(getClass().getResource("LogIn/LogIn.css").toExternalForm());
-
-            // Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
             stage.setScene(scene);
             stage.setTitle("StreamIt");
             stage.setResizable(false);
-
             stage.show();
+
+            log.info("Log in scene initiated successfully");
         } catch(Exception e) {
-            e.printStackTrace();
+            log.fatal("Failed to initiate the Log in scene");
         }
     }
-
 
     @Override
     public void stop() {
+        DeleteDirectory("ReferencePictures");
+        DeleteDirectory("BackgroundPictures");
+    }
+
+    private static void DeleteDirectory(String Path) {
         try {
-            // String dirToDelete = "ReferencePictures";
-            deleteDirectory("ReferencePictures");
-            deleteDirectory("BackgroundPictures");
-            // System.out.println("Deleted directory: " + dirToDelete);
+            try (Stream<Path> paths = Files.walk(Paths.get(Path))) {
+                paths.sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                log.warn("Failed to delete{}", Path);
+                            }
+                        });
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("Failed To delete Directory While shutting down");
         }
-    }
-
-    public static void deleteDirectory(String Path) throws IOException {
-        Files.walk(Paths.get(Path))
-                .sorted(Comparator.reverseOrder())
-                .forEach(path -> {
-                    try {
-                        Files.delete(path);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
