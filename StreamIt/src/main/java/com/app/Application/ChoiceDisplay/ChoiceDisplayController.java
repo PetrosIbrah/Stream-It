@@ -75,7 +75,7 @@ public class ChoiceDisplayController {
 
         VBox.setVgrow(sideScrollPane, Priority.ALWAYS);
 
-        ChoiceImage.fitWidthProperty().bind(rootPane.widthProperty().subtract(340));
+        ChoiceImage.fitWidthProperty().bind(rootPane.widthProperty().subtract(130));
         ChoiceImage.fitHeightProperty().bind(rootPane.heightProperty().subtract(71));
 
         textDesc.wrappingWidthProperty().bind(textflowDesc.widthProperty());

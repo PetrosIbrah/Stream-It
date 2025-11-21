@@ -1,83 +1,68 @@
 .root {
-    -fx-background-color: linear-gradient(to bottom right, #1e1e2f, #2e2e3e);
-    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+#rootPane {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #0f1117 0%,
+        #1a1d2e 25%,
+        #232841 50%,
+        #2a3454 75%,
+        #1e2538 100%
+    );
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
 
 #LogInTitle {
     -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0.5, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0, 0, 2);
 }
 
 #UserFill, #PasswordFill {
-    -fx-background-color: #2a2a3b;
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: #aaaaaa;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: #444;
-    -fx-border-width: 1;
-    -fx-padding: 8;
-}
-
-#UsernameText, #PasswordText {
-    -fx-fill: #dddddd;
+    -fx-background-color: rgba(30, 42, 63, 0.9);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(61, 90, 143, 0.4);
+    -fx-border-width: 1px;
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: rgba(200,200,200,0.5);
+    -fx-padding: 6 10 6 10;
     -fx-font-size: 14px;
 }
 
-#UserFill:focused, #PasswordFill:focused {
-    -fx-border-color: #5a9cff;
-    -fx-background-color: #323246;
-}
-
-#LogInButton {
-    -fx-background-color: #5a9cff;
-    -fx-text-fill: white;
+#LogInButton, #SignUpButton {
+    -fx-background-color: #212738;
+    -fx-text-fill: #c8dcf0;
     -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-padding: 8 20 8 20;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 16 8 16;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.3, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0, 0, 1);
 }
 
-#LogInButton:hover {
-    -fx-background-color: #78b3ff;
+#LogInButton:hover, #SignUpButton:hover {
+    -fx-background-color: #2d3548;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(61, 90, 143, 0.4), 6, 0, 0, 0);
 }
 
-#LogInButton:pressed {
-    -fx-background-color: #3f7ed6;
+#LogInButton:pressed, #SignUpButton:pressed {
+    -fx-background-color: #1e2a41;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.5), 4, 0, 0, 1);
 }
 
-#SignUpButton {
-    -fx-background-color: #5a9cff;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 20;
-    -fx-padding: 8 20 8 20;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.3, 0, 2);
-}
-
-#SignUpButton:hover {
-    -fx-background-color: #78b3ff;
-}
-
-#SignUpButton:pressed {
-    -fx-background-color: #3f7ed6;
+#UsernameText, #PasswordText, #InfoText {
+    -fx-fill: #e0e0e0;
+    -fx-font-size: 14px;
 }
 
 #RememberCheckBox {
-    -fx-text-fill: #cccccc;
-}
-
-#RememberCheckBox .box {
-    -fx-background-color: #2a2a3b;
-    -fx-border-color: #5a9cff;
-    -fx-border-radius: 4;
-}
-
-#RememberCheckBox:selected .mark {
-    -fx-background-color: #5a9cff;
+    -fx-text-fill: #e0e0e0;
 }
 
 #InfoText {
@@ -85,3 +70,8 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
+
+#LoadingGif {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.3, 0, 2);
+}
+

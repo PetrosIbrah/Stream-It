@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,36 +49,35 @@ public class LibraryController {
         container.getChildren().clear();
 
         for (String fileName : imageFiles) {
-            File dir = new File("ReferencePictures");
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    log.error("Failed to create directory `ReferencePictures`");
-                }
-            }
-
-            File imageFile = new File(dir, fileName);
-
+            File imageFile = new File("ReferencePictures", fileName);
             if (!imageFile.exists()) continue;
 
             Image img = new Image(imageFile.toURI().toString());
             ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(230);
+            imageView.setPreserveRatio(false);
 
-            imageView.setFitWidth(155);
-            imageView.setFitHeight(211);
-            imageView.setPreserveRatio(true);
+            Rectangle clip = new Rectangle(150, 230);
+            clip.setArcWidth(16);
+            clip.setArcHeight(16);
+            imageView.setClip(clip);
 
             Button invisibleButton = new Button();
             invisibleButton.setOpacity(0);
-            invisibleButton.setPrefSize(155, 211);
-            invisibleButton.setOnAction(e -> MenuAndProfileUtility.switchToChoiceDisplay(rootPane, fileName));
+            invisibleButton.setPrefSize(150, 230);
+            invisibleButton.setOnAction(e ->
+                    MenuAndProfileUtility.switchToChoiceDisplay(rootPane, fileName));
 
             StackPane stack = new StackPane(imageView, invisibleButton);
+            stack.setPrefWidth(150);
+            stack.setPrefHeight(230);
+            stack.getStyleClass().add("media-image");
 
             container.getChildren().add(stack);
         }
-
-        container.setHgap(25);
-        container.setVgap(50);
+        container.setHgap(20);
+        container.setVgap(40);
     }
 
     @FXML private void ClickedOnMenu() {

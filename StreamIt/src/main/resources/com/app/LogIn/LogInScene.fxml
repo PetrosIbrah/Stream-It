@@ -12,32 +12,28 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="600.0" stylesheets="@LogIn.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.LogIn.LogInController">
-   <children>
-      <Label fx:id="LogInTitle" layoutX="202.0" layoutY="14.0" text="StreamIt">
-         <font>
-            <Font size="50.0" />
-         </font>
-      </Label>
-      <Button fx:id="LogInButton" layoutX="250.0" layoutY="288.0" mnemonicParsing="false" onAction="#LogInAction" text="Log In" />
-      <CheckBox fx:id="RememberCheckBox" layoutX="445.0" layoutY="292.0" mnemonicParsing="false" onAction="#RememberMeFunction" text="Remember me" />
-      <PasswordField fx:id="PasswordFill" layoutX="200.0" layoutY="211.0" prefHeight="25.0" prefWidth="186.0" promptText="••••••" />
-      <TextField fx:id="UserFill" layoutX="200.0" layoutY="124.0" prefHeight="25.0" prefWidth="186.0" promptText="User123" />
-      <Text fx:id="UsernameText" layoutX="200.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Text fx:id="PasswordText" layoutX="200.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Button fx:id="SignUpButton" layoutX="67.0" layoutY="288.0" mnemonicParsing="false" onAction="#SignUpAction" text="Sign Up" />
-      <Text fx:id="InfoText" layoutX="200.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" wrappingWidth="186.0" />
-      <ImageView fx:id="LoadingGif" fitHeight="60.0" fitWidth="65.0" layoutX="450.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@loading.gif" />
-         </image>
-      </ImageView>
-   </children>
+   <Label fx:id="LogInTitle" layoutX="202.0" layoutY="14.0" text="StreamIt">
+      <font>
+         <Font size="50.0" />
+      </font>
+   </Label>
+   <Button fx:id="LogInButton" layoutX="250.0" layoutY="288.0" mnemonicParsing="false" onAction="#LogInAction" text="Log In" />
+   <CheckBox fx:id="RememberCheckBox" layoutX="445.0" layoutY="292.0" mnemonicParsing="false" onAction="#RememberMeFunction" text="Remember me" />
+   <PasswordField fx:id="PasswordFill" layoutX="200.0" layoutY="211.0" prefHeight="25.0" prefWidth="186.0" promptText="••••••" />
+   <TextField fx:id="UserFill" layoutX="200.0" layoutY="124.0" prefHeight="25.0" prefWidth="186.0" promptText="User123" />
+   <Text fx:id="UsernameText" layoutX="200.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Text>
+   <Text fx:id="PasswordText" layoutX="200.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Text>
+   <Button fx:id="SignUpButton" layoutX="67.0" layoutY="288.0" mnemonicParsing="false" onAction="#SignUpAction" text="Sign Up" />
+   <Text fx:id="InfoText" layoutX="200.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" wrappingWidth="186.0" />
+   <ImageView fx:id="LoadingGif" fitHeight="60.0" fitWidth="65.0" layoutX="466.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@loading.gif" />
+   </ImageView>
 </AnchorPane>

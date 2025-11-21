@@ -40,13 +40,13 @@ public class HomeSceneController {
         int ImageCount = HomePageServerComm.GetImageNumber(socket);
         MediaIdentification.Init(ImageCount);
         HomePageServerComm.GetAllImages(socket, ImageCount);
-        displayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
+        DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
         HomePageServerComm.SocketClose(socket);
 
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
     }
 
-    private void displayImages(String[] imageFiles, FlowPane container) {
+    private void DisplayImages(String[] imageFiles, FlowPane container) {
         container.getChildren().clear();
 
         for (String fileName : imageFiles) {

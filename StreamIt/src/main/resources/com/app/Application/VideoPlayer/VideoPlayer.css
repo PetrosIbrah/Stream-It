@@ -1,6 +1,10 @@
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #0d0f16;
+}
 
 #rootPane {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #0d0f16;
     -fx-pref-width: 1280px;
     -fx-pref-height: 720px;
     -fx-min-width: 1280px;
@@ -10,17 +14,18 @@
 }
 
 #controlsPane {
-    -fx-background-color: rgba(0, 0, 0, 0.6);
-    -fx-padding: 10px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-    -fx-pref-width: 1280px;
-    -fx-pref-height: 66px;
-    -fx-min-width: 1280px;
-    -fx-min-height: 66px;
-    -fx-max-width: 1280px;
-    -fx-max-height: 66px;
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        rgba(15,17,23,0.3) 0%,
+        rgba(26,29,46,0.3) 25%,
+        rgba(35,40,65,0.3) 50%,
+        rgba(42,52,84,0.3) 75%,
+        rgba(30,37,56,0.3) 100%
+    );
+    -fx-padding: 6 12;
+    -fx-background-radius: 0;
 }
+
 
 #PausePlayIcon {
     -fx-cursor: hand;
@@ -52,13 +57,6 @@
     -fx-background-color: #ff6b7c;
 }
 
-#progressBar {
-    -fx-accent: #00d4ff;
-    -fx-control-inner-background: rgba(255, 255, 255, 0.2);
-    -fx-background-radius: 5px;
-    -fx-border-radius: 5px;
-}
-
 #BackToChoiceScene {
     -fx-cursor: hand;
     -fx-opacity: 0.8;
@@ -83,4 +81,28 @@
     -fx-opacity: 1.0;
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
+}
+
+#VolumeBar {
+    -fx-control-inner-background: #232737;
+    -fx-accent: #4a8cff;
+}
+
+#progressBar {
+    -fx-accent: #00d4ff;
+    -fx-control-inner-background: rgba(255, 255, 255, 0.35);
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-pref-height: 16px;
+    -fx-padding: 2px;
+}
+
+#progressBar .bar {
+    -fx-background-color: #00d4ff;
+    -fx-background-radius: 5px;
+}
+
+#progressBar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 5px;
 }

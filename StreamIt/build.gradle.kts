@@ -27,11 +27,11 @@ dependencies {
     implementation("io.github.mkpaz:atlantafx-base:2.1.0")
 
     // JavaFX Modules
-    implementation("org.openjfx:javafx-controls:21.0.5")
-    implementation("org.openjfx:javafx-fxml:21.0.5")
-    implementation("org.openjfx:javafx-graphics:21.0.5")
-    implementation("org.openjfx:javafx-media:21.0.5")
-    implementation("org.openjfx:javafx-swing:21.0.5")
+    implementation("org.openjfx:javafx-controls:21.0.8")
+    implementation("org.openjfx:javafx-fxml:21.0.8")
+    implementation("org.openjfx:javafx-graphics:21.0.8")
+    implementation("org.openjfx:javafx-media:21.0.8")
+    implementation("org.openjfx:javafx-swing:21.0.8")
 
     // implementation("org.slf4j:slf4j-simple:2.0.9")
     // VLCJ Libraries
