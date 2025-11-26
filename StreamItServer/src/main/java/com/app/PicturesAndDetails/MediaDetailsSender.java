@@ -1,10 +1,10 @@
-package com.app;
+package com.app.PicturesAndDetails;
 
+import com.app.Identification.Media;
+import com.app.Identification.MediaList;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -21,7 +21,7 @@ public class MediaDetailsSender {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-            for (Media media : wrapper.getShows()) {
+            for (Media media : wrapper.getAllMedia()) {
 
                 if (media.getTitle().equalsIgnoreCase(Choice)) {
                     out.println(media.getTitle());

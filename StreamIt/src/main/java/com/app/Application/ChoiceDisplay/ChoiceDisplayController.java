@@ -1,6 +1,6 @@
 package com.app.Application.ChoiceDisplay;
 
-import com.app.Application.MenuAndProfileUtility;
+import com.app.Application.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
@@ -191,11 +191,11 @@ public class ChoiceDisplayController {
     }
 
     @FXML private void ClickedOnLibrary() {
-        MenuAndProfileUtility.switchToLibraryScene(rootPane);
+        SceneSwapper.switchToLibraryScene(rootPane);
     }
 
     @FXML private void ClickedOnHome() {
-        MenuAndProfileUtility.switchToHomeScene(rootPane);
+        SceneSwapper.switchToHomeScene(rootPane);
     }
 
     @FXML private void ClickedOnLogOut() {
@@ -203,10 +203,10 @@ public class ChoiceDisplayController {
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }
-        MenuAndProfileUtility.switchToLogIn(rootPane);
+        SceneSwapper.switchToLogIn(rootPane);
     }
 
     @FXML private void ClickedOnExit() {
-        MenuAndProfileUtility.ShutDownApp();
+        SceneSwapper.ShutDownApp();
     }
 }

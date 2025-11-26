@@ -1,8 +1,12 @@
 package com.app.Application.Home;
 
-import com.app.Application.MenuAndProfileUtility;
+import com.app.Application.SceneSwapper;
+import com.app.Identification.LibraryIdentification;
+import com.app.Identification.ServerIdentification;
 import com.app.ServerCommunication.HomePageServerComm;
 import com.app.Identification.MediaIdentification;
+import com.app.ServerCommunication.LibraryServerComm;
+import com.app.ServerCommunication.ShowsAndMoviesServerComm;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -68,7 +72,7 @@ public class HomeSceneController {
             invisibleButton.setOpacity(0);
             invisibleButton.setPrefSize(150, 230);
             invisibleButton.setOnAction(e ->
-                    MenuAndProfileUtility.switchToChoiceDisplay(rootPane, fileName));
+                    SceneSwapper.switchToChoiceDisplay(rootPane, fileName));
 
             StackPane stack = new StackPane(imageView, invisibleButton);
             stack.setPrefWidth(150);
@@ -106,11 +110,84 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnLibrary() {
-        MenuAndProfileUtility.switchToLibraryScene(rootPane);
+        if (!HomeText.getText().equals("Library")) {
+            ClickedOnMenu();
+            HomeText.setText("Library");
+            if (LibraryIdentification.getSavedFileNames() == null) {
+                Socket socket = LibraryServerComm.Connect();
+                LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
+                LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
+                LibraryServerComm.SocketClose(socket);
+            }
+            DisplayImages(LibraryIdentification.getSavedFileNames(), GalleryFlowPane);
+        }
+        // SceneSwapper.switchToLibraryScene(rootPane);
     }
 
     @FXML private void ClickedOnHome() {
-        MenuAndProfileUtility.switchToHomeScene(rootPane);
+        if (!HomeText.getText().equals("Home")) {
+            ClickedOnMenu();
+            HomeText.setText("Home");
+
+            if (MediaIdentification.GetAllFileNames() == null) {
+                Socket socket = HomePageServerComm.Connect();
+
+                HomePageServerComm.SendStageChoice(socket, "Images");
+
+                int ImageCount = HomePageServerComm.GetImageNumber(socket);
+                MediaIdentification.Init(ImageCount);
+                HomePageServerComm.GetAllImages(socket, ImageCount);
+
+                HomePageServerComm.SocketClose(socket);
+            }
+            DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
+        }
+        // SceneSwapper.switchToHomeScene(rootPane);
+    }
+
+    @FXML private void ClickedOnRecommended() {
+        if (!HomeText.getText().equals("Recommended")) {
+            ClickedOnMenu();
+            HomeText.setText("Recommened");
+            if (LibraryIdentification.getRecommended() == null ) {
+                Socket socket = ShowsAndMoviesServerComm.Connect();
+                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get Recommended");
+                LibraryIdentification.setRecommended(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
+                ShowsAndMoviesServerComm.SocketClose(socket);
+            }
+            DisplayImages(LibraryIdentification.getRecommended(), GalleryFlowPane);
+        }
+        // SceneSwapper.switchToRecommendedScene(rootPane);
+    }
+
+    @FXML private void ClickedOnMovies() {
+        if (!HomeText.getText().equals("Movies")) {
+            ClickedOnMenu();
+            HomeText.setText("Movies");
+            if (LibraryIdentification.getMovies() == null) {
+                Socket socket = ShowsAndMoviesServerComm.Connect();
+                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get All Movies");
+                LibraryIdentification.setMovies(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
+                ShowsAndMoviesServerComm.SocketClose(socket);
+            }
+            DisplayImages(LibraryIdentification.getMovies(), GalleryFlowPane);
+        }
+        // SceneSwapper.switchToMoviesScene(rootPane);
+    }
+
+    @FXML private void ClickedOnShows() {
+        if (!HomeText.getText().equals("Shows")) {
+            ClickedOnMenu();
+            HomeText.setText("Shows");
+            if (LibraryIdentification.getShows() == null) {
+                Socket socket = ShowsAndMoviesServerComm.Connect();
+                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get All Shows");
+                LibraryIdentification.setShows(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
+                ShowsAndMoviesServerComm.SocketClose(socket);
+            }
+            DisplayImages(LibraryIdentification.getShows(), GalleryFlowPane);
+        }
+        // SceneSwapper.switchToShowsScene(rootPane);
     }
 
     @FXML private void ClickedOnLogOut() {
@@ -118,10 +195,14 @@ public class HomeSceneController {
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }
-        MenuAndProfileUtility.switchToLogIn(rootPane);
+        SceneSwapper.switchToLogIn(rootPane);
     }
 
     @FXML private void ClickedOnExit() {
-        MenuAndProfileUtility.ShutDownApp();
+        SceneSwapper.ShutDownApp();
+    }
+
+    @FXML private void ClickedOnSettings() {
+        // SceneSwapper.SwapToScene("Template", rootPane);
     }
 }

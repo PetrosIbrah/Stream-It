@@ -1,6 +1,6 @@
 package com.app.Application.VideoPlayer;
 
-import com.app.Application.MenuAndProfileUtility;
+import com.app.Application.SceneSwapper;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
 import com.app.ServerCommunication.VideoPlayerServerComm;
@@ -155,7 +155,7 @@ public class VideoPlayerController {
     }
 
     @FXML private void switchToChoiceScene()  {
-        MenuAndProfileUtility.switchToChoiceDisplay(rootPane, MediaIdentification.GetChoice());
+        SceneSwapper.switchToChoiceDisplay(rootPane, MediaIdentification.GetChoice());
     }
 
     @FXML private void toggleFullScreen() {

@@ -1,8 +1,7 @@
-package com.app;
+package com.app.PicturesAndDetails;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class BackgroundSender {
 

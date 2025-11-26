@@ -1,9 +1,11 @@
-package com.app;
+package com.app.Streaming;
+
+import com.app.Identification.Media;
+import com.app.VideoHandler;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.List;
 
 public class StartStream {
     public static Process Process;

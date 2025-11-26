@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
-import com.app.Application.MenuAndProfileUtility;
+import com.app.Application.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
 import com.app.ServerCommunication.LibraryServerComm;
@@ -109,7 +109,7 @@ public class LogInController {
         LogInServerComm.SocketClose(socket);
 
         if (Result.equals("Log In Accepted")) {
-            MenuAndProfileUtility.switchToHomeScene(rootPane);
+            SceneSwapper.switchToHomeScene(rootPane);
             log.info("Successfully Logged in");
         } else if (Result.equals("Log In NOT Accepted")) {
             log.warn("No Such Account Exists");

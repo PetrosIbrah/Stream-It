@@ -1,4 +1,4 @@
-package com.app;
+package com.app.Libraries;
 
 import com.app.Identification.Accounts;
 import jakarta.persistence.EntityManager;

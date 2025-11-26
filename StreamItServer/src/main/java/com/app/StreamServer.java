@@ -1,5 +1,15 @@
 package com.app;
 
+import com.app.Libraries.LibraryAccess;
+import com.app.Libraries.MoviesAccess;
+import com.app.Libraries.RecommendedAccess;
+import com.app.Libraries.ShowsAccess;
+import com.app.PicturesAndDetails.BackgroundSender;
+import com.app.PicturesAndDetails.ImageSender;
+import com.app.PicturesAndDetails.MediaDetailsSender;
+import com.app.Streaming.AdaptiveStream;
+import com.app.Streaming.StartStream;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -105,6 +115,12 @@ public class StreamServer {
             LibraryAccess.AddItemToLibrary(socket, Username, Password, Item);
         } else if (StageChoice.equals("Remove From library")){
             LibraryAccess.RemoveFromLibrary(socket, Username, Password, Item);
+        } else if (StageChoice.equals("Get All Movies")){
+            MoviesAccess.SendMovies(socket);
+        } else if (StageChoice.equals("Get All Shows")){
+            ShowsAccess.SendShows(socket);
+        } else if (StageChoice.equals("Get Recommended")){
+            RecommendedAccess.SendRecommended(socket);
         }
 
     }
