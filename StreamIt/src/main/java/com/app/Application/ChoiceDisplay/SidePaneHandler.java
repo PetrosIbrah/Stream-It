@@ -1,7 +1,8 @@
 package com.app.Application.ChoiceDisplay;
 
 import com.app.Identification.MediaIdentification;
-import com.app.ServerCommunication.ChoiceSceneServerComm;
+import com.app.Utility.DefaultServerComm;
+import com.app.Utility.ServerCommunication.ChoiceServerComm;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -78,10 +79,10 @@ public class SidePaneHandler {
         String season = "Season " + (seasonIndex + 1);
         String episode = "Episode " + (episodeIndex + 1);
 
-        Socket socket = ChoiceSceneServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
 
-        ChoiceSceneServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle() + "/" + season + "/" + episode);
-        List<String> videolist = ChoiceSceneServerComm.ReceiveVideoList(socket);
+        ChoiceServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle() + "/" + season + "/" + episode);
+        List<String> videolist = ChoiceServerComm.ReceiveVideoList(socket);
 
         SidePane.getChildren().removeIf(node -> !(node instanceof ChoiceBox));
 
@@ -139,9 +140,9 @@ public class SidePaneHandler {
     }
 
     private static void OnVideoClicked (String fullPath) {
-        Socket socket = ChoiceSceneServerComm.Connect();
-        ChoiceSceneServerComm.SendStreamChoice(socket, "StartStream", fullPath);
-        ChoiceSceneServerComm.SocketClose(socket);
+        Socket socket = DefaultServerComm.Connect();
+        ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
+        DefaultServerComm.SocketClose(socket);
         log.info(fullPath);
     }
 }

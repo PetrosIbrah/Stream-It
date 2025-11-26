@@ -1,15 +1,16 @@
-package com.app.LogIn;
+package com.app.Application.LogIn;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
-import com.app.Application.SceneSwapper;
+import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
-import com.app.ServerCommunication.LibraryServerComm;
-import com.app.ServerCommunication.LogInServerComm;
+import com.app.Utility.DefaultServerComm;
+import com.app.Utility.ServerCommunication.LibraryServerComm;
+import com.app.Utility.ServerCommunication.LogInServerComm;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -75,10 +76,10 @@ public class LogInController {
     }
 
     @FXML private void SignUpAction() {
-        Socket socket = LogInServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
         LogInServerComm.SendStageAndCredentials(socket, "Sign Up", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
-        LogInServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
 
         if (Result.equals("Account Created")) {
             log.info("Account successfully created");
@@ -103,10 +104,10 @@ public class LogInController {
     private void SwitchToHomePage ()  {
         ServerIdentification.setUserName(UserFill.getText());
         ServerIdentification.setPassword(PasswordFill.getText());
-        Socket socket = LogInServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
         LogInServerComm.SendStageAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
-        LogInServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
 
         if (Result.equals("Log In Accepted")) {
             SceneSwapper.switchToHomeScene(rootPane);
@@ -119,10 +120,10 @@ public class LogInController {
             InfoText.setText(Result);
             InfoText.setVisible(true);
         }
-        socket = LibraryServerComm.Connect();
+        socket = DefaultServerComm.Connect();
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
-        LibraryServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
     }
 
     private void DeleteRememberMe () {

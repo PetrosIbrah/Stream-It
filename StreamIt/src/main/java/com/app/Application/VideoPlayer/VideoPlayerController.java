@@ -1,9 +1,10 @@
 package com.app.Application.VideoPlayer;
 
-import com.app.Application.SceneSwapper;
+import com.app.Utility.SceneSwapper;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-import com.app.ServerCommunication.VideoPlayerServerComm;
+import com.app.Utility.DefaultServerComm;
+import com.app.Utility.ServerCommunication.VideoPlayerServerComm;
 import fr.bmartel.speedtest.SpeedTestReport;
 import fr.bmartel.speedtest.SpeedTestSocket;
 import fr.bmartel.speedtest.inter.ISpeedTestListener;
@@ -125,9 +126,9 @@ public class VideoPlayerController {
         if (mediaPlayer != null) {
             mediaPlayer.controls().setTime(seekTime);
         }
-        Socket socket = VideoPlayerServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
         VideoPlayerServerComm.SendTimeStamp(socket, "LoadingBar", seekTime);
-        VideoPlayerServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
         restartPlayer();
     }
 
@@ -286,11 +287,11 @@ public class VideoPlayerController {
                 log.info(msg);
                 CD.countDown();
 
-                Socket socket = VideoPlayerServerComm.Connect();
+                Socket socket = DefaultServerComm.Connect();
                 long Time = (long) (progressBar.getProgress() * MediaIdentification.GetDuration());
                 VideoPlayerServerComm.SendAdaptive(socket,"Adaptive", Time, Speed);
                 String Restart = VideoPlayerServerComm.ReceiveRestart(socket);
-                VideoPlayerServerComm.SocketClose(socket);
+                DefaultServerComm.SocketClose(socket);
 
                 if (Restart.equals("Restart")){
                     Percentage =  progressBar.getProgress();

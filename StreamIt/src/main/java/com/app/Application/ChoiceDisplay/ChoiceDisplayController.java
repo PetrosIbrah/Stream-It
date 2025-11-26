@@ -1,11 +1,12 @@
 package com.app.Application.ChoiceDisplay;
 
-import com.app.Application.SceneSwapper;
+import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
-import com.app.ServerCommunication.ChoiceSceneServerComm;
-import com.app.ServerCommunication.LibraryServerComm;
+import com.app.Utility.DefaultServerComm;
+import com.app.Utility.ServerCommunication.ChoiceServerComm;
+import com.app.Utility.ServerCommunication.LibraryServerComm;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -67,9 +68,10 @@ public class ChoiceDisplayController {
         if (MediaIdentification.getType().equalsIgnoreCase("Series")) {
             SidePaneHandler.SetUpChoices(SidePane, pinnedControls);
         } else if (MediaIdentification.getType().equalsIgnoreCase("Movie")) {
-            Socket socket = ChoiceSceneServerComm.Connect();
-            ChoiceSceneServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle());
-            List<String> videolist = ChoiceSceneServerComm.ReceiveVideoList(socket);
+            Socket socket = DefaultServerComm.Connect();
+            ChoiceServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle());
+            List<String> videolist = ChoiceServerComm.ReceiveVideoList(socket);
+            DefaultServerComm.SocketClose(socket);
             SidePaneHandler.SetUpButtons(videolist, SidePane);
         }
 
@@ -97,15 +99,15 @@ public class ChoiceDisplayController {
     }
 
     private void GetBackground(String Choice) {
-        Socket socket = ChoiceSceneServerComm.Connect();
-        ChoiceSceneServerComm.SendStageChoice(socket, "Background", Choice);
-        ChoiceSceneServerComm.GetBackgroundImage(socket, Choice);
-        ChoiceSceneServerComm.SocketClose(socket);
+        Socket socket = DefaultServerComm.Connect();
+        ChoiceServerComm.SendStageChoice(socket, "Background", Choice);
+        ChoiceServerComm.GetBackgroundImage(socket, Choice);
+        DefaultServerComm.SocketClose(socket);
 
-        socket = ChoiceSceneServerComm.Connect();
-        ChoiceSceneServerComm.SendStageChoice(socket, "MediaDetails", formatFileName(Choice));
-        ChoiceSceneServerComm.GetDetails(socket);
-        ChoiceSceneServerComm.SocketClose(socket);
+        socket = DefaultServerComm.Connect();
+        ChoiceServerComm.SendStageChoice(socket, "MediaDetails", formatFileName(Choice));
+        ChoiceServerComm.GetDetails(socket);
+        DefaultServerComm.SocketClose(socket);
     }
 
     private void SetBackgroundImage(String Choice) {
@@ -139,27 +141,27 @@ public class ChoiceDisplayController {
     }
 
     private void AddToLibrary () {
-        Socket socket = LibraryServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
         LibraryServerComm.AddToLibrary(socket, "Add To library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
         log.info(LibraryServerComm.ResultEditLibrary(socket));
-        LibraryServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
 
-        socket = LibraryServerComm.Connect();
+        socket = DefaultServerComm.Connect();
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
-        LibraryServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
     }
 
     private void RemoveFromLibrary () {
-        Socket socket = LibraryServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
         LibraryServerComm.AddToLibrary(socket, "Remove From library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
         log.info(LibraryServerComm.ResultEditLibrary(socket));
-        LibraryServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
 
-        socket = LibraryServerComm.Connect();
+        socket = DefaultServerComm.Connect();
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
-        LibraryServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
     }
 
     @FXML

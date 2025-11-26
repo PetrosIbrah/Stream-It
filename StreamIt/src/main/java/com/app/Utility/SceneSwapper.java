@@ -1,4 +1,4 @@
-package com.app.Application;
+package com.app.Utility;
 
 import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
 import javafx.application.Platform;
@@ -56,73 +56,12 @@ public class SceneSwapper {
             log.error("Unable to swap to Home scene.");
         }
     }
-    /*
-    public static void switchToMoviesScene(AnchorPane rootPane) {
-        try {
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/Menu/Movies.fxml"))
-            );
-            Scene scene = new Scene(root);
-            stage.setTitle("StreamIt");
-            stage.setResizable(true);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-
-            log.info("Successfully initiated Movies scene");
-        } catch (Exception e) {
-            log.error("Unable to swap to Movies scene.");
-        }
-    }
-
-    public static void switchToShowsScene(AnchorPane rootPane) {
-        try {
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/Menu/Shows.fxml"))
-            );
-            Scene scene = new Scene(root);
-            stage.setTitle("StreamIt");
-            stage.setResizable(true);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-
-            log.info("Successfully initiated Shows scene");
-        } catch (Exception e) {
-            log.error("Unable to swap to Shows scene.");
-        }
-    }
-
-    public static void switchToRecommendedScene(AnchorPane rootPane) {
-        try {
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/Menu/Recommended.fxml"))
-            );
-            Scene scene = new Scene(root);
-            stage.setTitle("StreamIt");
-            stage.setResizable(true);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-
-            log.info("Successfully initiated Recommended scene");
-        } catch (Exception e) {
-            log.error("Unable to swap to Recommended scene.");
-        }
-    }
-     */
 
     public static void switchToLogIn(AnchorPane rootPane) {
         try {
             Stage oldStage = (Stage) rootPane.getScene().getWindow();
             Stage stage = new Stage();
-            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/LogIn/LogInScene.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/LogIn/LogInScene.fxml")));
 
             Scene scene = new Scene(root, 600, 367);
 

@@ -28,7 +28,7 @@ public class Main extends Application {
             Image image = new Image(Objects.requireNonNull(getClass().getResource("StreamIt.png")).toExternalForm());
             stage.getIcons().add(image);
 
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LogIn/LogInScene.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Application/LogIn/LogInScene.fxml")));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("StreamIt");

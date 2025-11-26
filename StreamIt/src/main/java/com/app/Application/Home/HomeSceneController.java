@@ -1,12 +1,13 @@
 package com.app.Application.Home;
 
-import com.app.Application.SceneSwapper;
+import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
-import com.app.ServerCommunication.HomePageServerComm;
+import com.app.Utility.DefaultServerComm;
 import com.app.Identification.MediaIdentification;
-import com.app.ServerCommunication.LibraryServerComm;
-import com.app.ServerCommunication.ShowsAndMoviesServerComm;
+import com.app.Utility.ServerCommunication.HomeServerComm;
+import com.app.Utility.ServerCommunication.LibraryServerComm;
+import com.app.Utility.ServerCommunication.CategoriesServerComm;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -37,15 +38,15 @@ public class HomeSceneController {
     @FXML private void initialize()  {
         VisibleProfile = false;
         VisibleMenu = false;
-        Socket socket = HomePageServerComm.Connect();
+        Socket socket = DefaultServerComm.Connect();
 
-        HomePageServerComm.SendStageChoice(socket, "Images");
+        HomeServerComm.SendStageChoice(socket, "Images");
 
-        int ImageCount = HomePageServerComm.GetImageNumber(socket);
+        int ImageCount = HomeServerComm.GetImageNumber(socket);
         MediaIdentification.Init(ImageCount);
-        HomePageServerComm.GetAllImages(socket, ImageCount);
+        HomeServerComm.GetAllImages(socket, ImageCount);
         DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
-        HomePageServerComm.SocketClose(socket);
+        DefaultServerComm.SocketClose(socket);
 
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
     }
@@ -114,14 +115,13 @@ public class HomeSceneController {
             ClickedOnMenu();
             HomeText.setText("Library");
             if (LibraryIdentification.getSavedFileNames() == null) {
-                Socket socket = LibraryServerComm.Connect();
+                Socket socket = DefaultServerComm.Connect();
                 LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
                 LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
-                LibraryServerComm.SocketClose(socket);
+                DefaultServerComm.SocketClose(socket);
             }
             DisplayImages(LibraryIdentification.getSavedFileNames(), GalleryFlowPane);
         }
-        // SceneSwapper.switchToLibraryScene(rootPane);
     }
 
     @FXML private void ClickedOnHome() {
@@ -130,19 +130,18 @@ public class HomeSceneController {
             HomeText.setText("Home");
 
             if (MediaIdentification.GetAllFileNames() == null) {
-                Socket socket = HomePageServerComm.Connect();
+                Socket socket = DefaultServerComm.Connect();
 
-                HomePageServerComm.SendStageChoice(socket, "Images");
+                HomeServerComm.SendStageChoice(socket, "Images");
 
-                int ImageCount = HomePageServerComm.GetImageNumber(socket);
+                int ImageCount = HomeServerComm.GetImageNumber(socket);
                 MediaIdentification.Init(ImageCount);
-                HomePageServerComm.GetAllImages(socket, ImageCount);
+                HomeServerComm.GetAllImages(socket, ImageCount);
 
-                HomePageServerComm.SocketClose(socket);
+                DefaultServerComm.SocketClose(socket);
             }
             DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
         }
-        // SceneSwapper.switchToHomeScene(rootPane);
     }
 
     @FXML private void ClickedOnRecommended() {
@@ -150,14 +149,13 @@ public class HomeSceneController {
             ClickedOnMenu();
             HomeText.setText("Recommened");
             if (LibraryIdentification.getRecommended() == null ) {
-                Socket socket = ShowsAndMoviesServerComm.Connect();
-                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get Recommended");
-                LibraryIdentification.setRecommended(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
-                ShowsAndMoviesServerComm.SocketClose(socket);
+                Socket socket = DefaultServerComm.Connect();
+                CategoriesServerComm.RequestMoviesOrShows(socket, "Get Recommended");
+                LibraryIdentification.setRecommended(CategoriesServerComm.GetAllMoviesOrShows(socket));
+                DefaultServerComm.SocketClose(socket);
             }
             DisplayImages(LibraryIdentification.getRecommended(), GalleryFlowPane);
         }
-        // SceneSwapper.switchToRecommendedScene(rootPane);
     }
 
     @FXML private void ClickedOnMovies() {
@@ -165,14 +163,13 @@ public class HomeSceneController {
             ClickedOnMenu();
             HomeText.setText("Movies");
             if (LibraryIdentification.getMovies() == null) {
-                Socket socket = ShowsAndMoviesServerComm.Connect();
-                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get All Movies");
-                LibraryIdentification.setMovies(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
-                ShowsAndMoviesServerComm.SocketClose(socket);
+                Socket socket = DefaultServerComm.Connect();
+                CategoriesServerComm.RequestMoviesOrShows(socket, "Get All Movies");
+                LibraryIdentification.setMovies(CategoriesServerComm.GetAllMoviesOrShows(socket));
+                DefaultServerComm.SocketClose(socket);
             }
             DisplayImages(LibraryIdentification.getMovies(), GalleryFlowPane);
         }
-        // SceneSwapper.switchToMoviesScene(rootPane);
     }
 
     @FXML private void ClickedOnShows() {
@@ -180,14 +177,13 @@ public class HomeSceneController {
             ClickedOnMenu();
             HomeText.setText("Shows");
             if (LibraryIdentification.getShows() == null) {
-                Socket socket = ShowsAndMoviesServerComm.Connect();
-                ShowsAndMoviesServerComm.RequestMoviesOrShows(socket, "Get All Shows");
-                LibraryIdentification.setShows(ShowsAndMoviesServerComm.GetAllMoviesOrShows(socket));
-                ShowsAndMoviesServerComm.SocketClose(socket);
+                Socket socket = DefaultServerComm.Connect();
+                CategoriesServerComm.RequestMoviesOrShows(socket, "Get All Shows");
+                LibraryIdentification.setShows(CategoriesServerComm.GetAllMoviesOrShows(socket));
+                DefaultServerComm.SocketClose(socket);
             }
             DisplayImages(LibraryIdentification.getShows(), GalleryFlowPane);
         }
-        // SceneSwapper.switchToShowsScene(rootPane);
     }
 
     @FXML private void ClickedOnLogOut() {
@@ -203,6 +199,5 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnSettings() {
-        // SceneSwapper.SwapToScene("Template", rootPane);
     }
 }

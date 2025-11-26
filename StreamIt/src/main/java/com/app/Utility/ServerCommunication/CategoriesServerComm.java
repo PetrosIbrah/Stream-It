@@ -1,27 +1,13 @@
-package com.app.ServerCommunication;
+package com.app.Utility.ServerCommunication;
 
-import com.app.Identification.ServerIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 
-public class ShowsAndMoviesServerComm {
-    private static final Logger log = LogManager.getLogger(ShowsAndMoviesServerComm.class);
-
-    private static final String Host = ServerIdentification.GetHost();
-    private static final int Port = ServerIdentification.GetPort();
-
-    public static Socket Connect () {
-        Socket socket = null;
-        try {
-            socket = new Socket(Host, Port);
-        } catch (Exception e) {
-            log.error("Unable to start communication with server");
-        }
-        return socket;
-    }
+public class CategoriesServerComm {
+    private static final Logger log = LogManager.getLogger(CategoriesServerComm.class);
 
     public static void RequestMoviesOrShows (Socket socket, String Stage) {
         try {
@@ -46,14 +32,6 @@ public class ShowsAndMoviesServerComm {
         } catch (Exception e) {
             log.error("Unable to receive all Movies Or Shows from server.");
             return new String[0];
-        }
-    }
-
-    public static void SocketClose(Socket socket) {
-        try{
-            socket.close();
-        } catch (Exception e){
-            log.error("Unable to shut down server Comm.");
         }
     }
 }
