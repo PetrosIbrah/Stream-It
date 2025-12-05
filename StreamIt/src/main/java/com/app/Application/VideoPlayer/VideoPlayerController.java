@@ -1,5 +1,6 @@
 package com.app.Application.VideoPlayer;
 
+import com.app.Utility.CallableFunctions;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.MediaIdentification;
 import com.app.Identification.ServerIdentification;
@@ -20,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
@@ -38,7 +41,10 @@ public class VideoPlayerController {
 
     private final Image PauseImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/pause.png")));
     private final Image PlayImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Application/VideoPlayer/play.png")));
+    private final Image Record = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Icons/Record.png")));
+    private final Image StopRecording = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/app/Icons/StopRecord.png")));
 
+    @FXML private Pane ErrorPane;
     @FXML private ImageView videoImageView;
     @FXML private ImageView PausePlayIcon;
     @FXML private AnchorPane controlsPane;
@@ -49,6 +55,8 @@ public class VideoPlayerController {
     @FXML private ImageView LoadingImage;
     @FXML private CheckBox AdaptiveCheck;
     @FXML private ProgressBar progressBar;
+    @FXML private Text RecInfo;
+    @FXML private ImageView RecImage;
 
     private MediaPlayerFactory mediaPlayerFactory;
     private EmbeddedMediaPlayer mediaPlayer;
@@ -58,6 +66,8 @@ public class VideoPlayerController {
     private final boolean isMuted = false;
     private PauseTransition hideControlsTransition;
     private Timer progressTimer;
+    private boolean Recording;
+    private final Recorder recorder = new Recorder();
 
     @FXML private void initialize() {
         if (Playing){
@@ -123,12 +133,16 @@ public class VideoPlayerController {
     }
 
     private void ClickedOnProgress (long seekTime) {
+        Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
+        VideoPlayerServerComm.SendTimeStamp(socket, "LoadingBar", seekTime);
+        DefaultServerComm.SocketClose(socket);
         if (mediaPlayer != null) {
             mediaPlayer.controls().setTime(seekTime);
         }
-        Socket socket = DefaultServerComm.Connect();
-        VideoPlayerServerComm.SendTimeStamp(socket, "LoadingBar", seekTime);
-        DefaultServerComm.SocketClose(socket);
         restartPlayer();
     }
 
@@ -148,13 +162,6 @@ public class VideoPlayerController {
         }
     }
 
-    @FXML private void onStop() {
-        if (playerReady) {
-            mediaPlayer.controls().stop();
-            stopProgressUpdater();
-        }
-    }
-
     @FXML private void switchToChoiceScene()  {
         SceneSwapper.switchToChoiceDisplay(rootPane, MediaIdentification.GetChoice());
     }
@@ -162,6 +169,48 @@ public class VideoPlayerController {
     @FXML private void toggleFullScreen() {
         Stage stage = (Stage) FullScreenImage.getScene().getWindow();
         stage.setFullScreen(!stage.isFullScreen());
+    }
+
+    @FXML private void ClickedOnRecord()  {
+        if (Recording) {
+            Recording = false;
+            RecInfo.setText("Record Saved");
+            RecImage.setImage(Record);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    log.warn("Failed to await for 5 seconds to remove record text");
+                }
+                RecInfo.setText("");
+            }).start();
+            log.info("Stopped Recording");
+            recorder.stopRecording();
+        } else {
+            Recording = true;
+            RecInfo.setText("Recording...");
+            RecImage.setImage(StopRecording);
+            log.info("Now recording");
+            String timestamp = new java.text.SimpleDateFormat("dd-MM-yyyy_HH-mm-ss")
+                    .format(new java.util.Date());
+            String FinalFile = CallableFunctions.loadRecordingsPath() + "/" + timestamp + ".mp4";
+
+            try {
+                recorder.startRecording(
+                        "StreamIt",
+                        CallableFunctions.loadAudioDevice(),
+                        FinalFile
+                );
+            } catch (Exception e) {
+                log.error(" ");
+            }
+        }
+    }
+
+    private void onCloserecording() {
+        if (Recording) {
+            recorder.stopRecording();
+        }
     }
 
     private void CheckAdaptive () {
@@ -188,6 +237,7 @@ public class VideoPlayerController {
     }
 
     private void dispose() {
+        onCloserecording();
         AdaptiveCheck.setSelected(false);
         stopProgressUpdater();
 
@@ -288,6 +338,10 @@ public class VideoPlayerController {
                 CD.countDown();
 
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
                 long Time = (long) (progressBar.getProgress() * MediaIdentification.GetDuration());
                 VideoPlayerServerComm.SendAdaptive(socket,"Adaptive", Time, Speed);
                 String Restart = VideoPlayerServerComm.ReceiveRestart(socket);
@@ -322,5 +376,9 @@ public class VideoPlayerController {
 
     private void handle(ActionEvent e) {
         CheckAdaptive();
+    }
+
+    @FXML private void CloseErrorPane () {
+        ErrorPane.setVisible(false);
     }
 }

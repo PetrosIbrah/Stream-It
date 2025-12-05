@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@VideoPlayer.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.Application.VideoPlayer.VideoPlayerController">
 
     <ImageView fx:id="videoImageView" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
-    <AnchorPane fx:id="controlsPane" prefHeight="66.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+    <AnchorPane fx:id="controlsPane" prefHeight="50.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
-        <ImageView fx:id="PausePlayIcon" fitHeight="36.0" fitWidth="35.0" layoutX="14.0" layoutY="23.0" onMouseClicked="#onTogglePlayPause" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-         <image>
-            <Image url="@pause.png" />
-         </image></ImageView>
-
-        <Button fx:id="stopButton" layoutX="1149.0" layoutY="32.0" onAction="#onStop" text="Stop" />
+        <ImageView fx:id="PausePlayIcon" fitHeight="36.0" fitWidth="35.0" layoutX="14.0" layoutY="23.0"
+                   onMouseClicked="#onTogglePlayPause" pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <Image url="@pause.png"/>
+        </ImageView>
 
         <ProgressBar fx:id="progressBar" layoutX="14.0" layoutY="7.0" prefHeight="11.0" prefWidth="1280.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="-5.0" />
 
@@ -30,7 +30,13 @@
         <ImageView fx:id="VolumeImage" fitHeight="36.0" fitWidth="35.0" layoutX="61.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0">
             <Image url="@audio.png" />
         </ImageView>
-      <CheckBox fx:id="AdaptiveCheck" layoutX="289.0" layoutY="34.0" mnemonicParsing="false" text="Adaptive" />
+      <CheckBox fx:id="AdaptiveCheck" layoutX="1153.0" layoutY="41.0" mnemonicParsing="false" text="Adaptive" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="50.0" />
+      <Text fx:id="RecInfo" layoutX="321.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="130.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="280.0" />
+        <ImageView fx:id="RecImage" fitHeight="27.0" fitWidth="29.0" layoutX="299.0" layoutY="40.0"
+                   onMouseClicked="#ClickedOnRecord" pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="954.0">
+            <Image url="@../../Icons/Record.png"/>
+        </ImageView>
 
     </AnchorPane>
 
@@ -42,4 +48,13 @@
     <ImageView fx:id="LoadingImage" fitHeight="148.0" fitWidth="153.0" layoutX="564.0" layoutY="286.0" pickOnBounds="true" preserveRatio="true" visible="false">
         <Image url="@loading-load.gif" />
     </ImageView>
+
+    <Pane fx:id="ErrorPane" prefHeight="61.0" prefWidth="175.0" visible="false" AnchorPane.bottomAnchor="85.0" AnchorPane.rightAnchor="3.0">
+        <ImageView fx:id="ErrorIcon" fitHeight="48.0" fitWidth="60.0" layoutX="14.0" layoutY="6.0" preserveRatio="true">
+            <Image url="@../../Icons/warning.png" />
+        </ImageView>
+
+        <Text fx:id="ErrorText" layoutX="77.0" layoutY="17.0" text="Unable to Connect to Server!" textAlignment="CENTER" wrappingWidth="84.0" />
+        <Text layoutX="161.0" layoutY="18.0" onMouseClicked="#CloseErrorPane" strokeType="OUTSIDE" strokeWidth="0.0" text="X" fx:id="xbutton" />
+    </Pane>
 </AnchorPane>

@@ -18,6 +18,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 public class LogInController {
     private static final Logger log = LogManager.getLogger(LogInController.class);
 
+    @FXML private Pane ErrorPane;
     @FXML private AnchorPane rootPane;
     @FXML private ImageView LoadingGif;
     @FXML private CheckBox RememberCheckBox;
@@ -77,6 +79,10 @@ public class LogInController {
 
     @FXML private void SignUpAction() {
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LogInServerComm.SendStageAndCredentials(socket, "Sign Up", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
         DefaultServerComm.SocketClose(socket);
@@ -101,16 +107,24 @@ public class LogInController {
         }
     }
 
+    @FXML private void CloseErrorPane () {
+        ErrorPane.setVisible(false);
+    }
+
     private void SwitchToHomePage ()  {
         ServerIdentification.setUserName(UserFill.getText());
         ServerIdentification.setPassword(PasswordFill.getText());
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LogInServerComm.SendStageAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
         DefaultServerComm.SocketClose(socket);
 
         if (Result.equals("Log In Accepted")) {
-            SceneSwapper.switchToHomeScene(rootPane);
+            SceneSwapper.switchToSpesificHomeScene(rootPane, "Home");
             log.info("Successfully Logged in");
         } else if (Result.equals("Log In NOT Accepted")) {
             log.warn("No Such Account Exists");
@@ -121,6 +135,10 @@ public class LogInController {
             InfoText.setVisible(true);
         }
         socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
         DefaultServerComm.SocketClose(socket);

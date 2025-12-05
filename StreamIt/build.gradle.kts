@@ -45,6 +45,10 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.25.2")
     implementation("org.apache.logging.log4j:log4j-api:2.25.2")
 
+    // Recordings
+    implementation("org.bytedeco:javacv:1.5.12")
+    implementation("org.bytedeco:javacv-platform:1.5.12")
+
 }
 
 

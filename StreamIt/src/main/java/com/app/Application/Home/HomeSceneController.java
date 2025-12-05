@@ -26,6 +26,7 @@ import java.net.Socket;
 public class HomeSceneController {
     private static final Logger log = LogManager.getLogger(HomeSceneController.class);
 
+    @FXML private Pane ErrorPane;
     @FXML private FlowPane GalleryFlowPane;
     @FXML private AnchorPane rootPane;
     @FXML private Text HomeText;
@@ -35,18 +36,22 @@ public class HomeSceneController {
     private boolean VisibleMenu;
     private boolean VisibleProfile;
 
+    public void InitiazeStartingSceneWith (String Scenename) {
+        initialize();
+        switch (Scenename) {
+            case "Home" -> ClickedOnHome();
+            case "Recommended" -> ClickedOnRecommended();
+            case "Movies" -> ClickedOnMovies();
+            case "Shows" -> ClickedOnShows();
+            case "Library" -> ClickedOnLibrary();
+        }
+        ClickedOnMenu();
+
+    }
+
     @FXML private void initialize()  {
         VisibleProfile = false;
         VisibleMenu = false;
-        Socket socket = DefaultServerComm.Connect();
-
-        HomeServerComm.SendStageChoice(socket, "Images");
-
-        int ImageCount = HomeServerComm.GetImageNumber(socket);
-        MediaIdentification.Init(ImageCount);
-        HomeServerComm.GetAllImages(socket, ImageCount);
-        DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
-        DefaultServerComm.SocketClose(socket);
 
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
     }
@@ -112,25 +117,30 @@ public class HomeSceneController {
 
     @FXML private void ClickedOnLibrary() {
         if (!HomeText.getText().equals("Library")) {
-            ClickedOnMenu();
-            HomeText.setText("Library");
             if (LibraryIdentification.getSavedFileNames() == null) {
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
                 LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
                 LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
                 DefaultServerComm.SocketClose(socket);
             }
+            ClickedOnMenu();
+            HomeText.setText("Library");
             DisplayImages(LibraryIdentification.getSavedFileNames(), GalleryFlowPane);
         }
     }
 
     @FXML private void ClickedOnHome() {
         if (!HomeText.getText().equals("Home")) {
-            ClickedOnMenu();
-            HomeText.setText("Home");
-
             if (MediaIdentification.GetAllFileNames() == null) {
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
 
                 HomeServerComm.SendStageChoice(socket, "Images");
 
@@ -140,50 +150,69 @@ public class HomeSceneController {
 
                 DefaultServerComm.SocketClose(socket);
             }
+            ClickedOnMenu();
+            HomeText.setText("Home");
             DisplayImages(MediaIdentification.GetAllFileNames(), GalleryFlowPane);
         }
     }
 
     @FXML private void ClickedOnRecommended() {
         if (!HomeText.getText().equals("Recommended")) {
-            ClickedOnMenu();
-            HomeText.setText("Recommened");
+
             if (LibraryIdentification.getRecommended() == null ) {
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
                 CategoriesServerComm.RequestMoviesOrShows(socket, "Get Recommended");
                 LibraryIdentification.setRecommended(CategoriesServerComm.GetAllMoviesOrShows(socket));
                 DefaultServerComm.SocketClose(socket);
             }
+            ClickedOnMenu();
+            HomeText.setText("Recommened");
             DisplayImages(LibraryIdentification.getRecommended(), GalleryFlowPane);
         }
     }
 
     @FXML private void ClickedOnMovies() {
         if (!HomeText.getText().equals("Movies")) {
-            ClickedOnMenu();
-            HomeText.setText("Movies");
             if (LibraryIdentification.getMovies() == null) {
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
                 CategoriesServerComm.RequestMoviesOrShows(socket, "Get All Movies");
                 LibraryIdentification.setMovies(CategoriesServerComm.GetAllMoviesOrShows(socket));
                 DefaultServerComm.SocketClose(socket);
             }
+            ClickedOnMenu();
+            HomeText.setText("Movies");
             DisplayImages(LibraryIdentification.getMovies(), GalleryFlowPane);
         }
     }
 
     @FXML private void ClickedOnShows() {
         if (!HomeText.getText().equals("Shows")) {
-            ClickedOnMenu();
-            HomeText.setText("Shows");
             if (LibraryIdentification.getShows() == null) {
                 Socket socket = DefaultServerComm.Connect();
+                if (socket == null) {
+                    ErrorPane.setVisible(true);
+                    return;
+                }
                 CategoriesServerComm.RequestMoviesOrShows(socket, "Get All Shows");
                 LibraryIdentification.setShows(CategoriesServerComm.GetAllMoviesOrShows(socket));
                 DefaultServerComm.SocketClose(socket);
             }
+            ClickedOnMenu();
+            HomeText.setText("Shows");
             DisplayImages(LibraryIdentification.getShows(), GalleryFlowPane);
         }
+    }
+
+    @FXML private void ClickedOnRecordings() {
+        SceneSwapper.switchToRecordings(rootPane);
     }
 
     @FXML private void ClickedOnLogOut() {
@@ -199,5 +228,9 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnSettings() {
+    }
+
+    @FXML private void CloseErrorPane () {
+        ErrorPane.setVisible(false);
     }
 }

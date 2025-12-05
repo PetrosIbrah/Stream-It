@@ -17,7 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import java.util.Objects;
 public class ChoiceDisplayController {
     private static final Logger log = LogManager.getLogger(ChoiceDisplayController.class);
 
+    @FXML private Pane ErrorPane;
     @FXML private AnchorPane rootPane;
     @FXML private TextFlow textflowDesc;
     @FXML private ImageView ChoiceImage;
@@ -69,6 +69,10 @@ public class ChoiceDisplayController {
             SidePaneHandler.SetUpChoices(SidePane, pinnedControls);
         } else if (MediaIdentification.getType().equalsIgnoreCase("Movie")) {
             Socket socket = DefaultServerComm.Connect();
+            if (socket == null) {
+                ErrorPane.setVisible(true);
+                return;
+            }
             ChoiceServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle());
             List<String> videolist = ChoiceServerComm.ReceiveVideoList(socket);
             DefaultServerComm.SocketClose(socket);
@@ -142,11 +146,19 @@ public class ChoiceDisplayController {
 
     private void AddToLibrary () {
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LibraryServerComm.AddToLibrary(socket, "Add To library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
         log.info(LibraryServerComm.ResultEditLibrary(socket));
         DefaultServerComm.SocketClose(socket);
 
         socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
         DefaultServerComm.SocketClose(socket);
@@ -154,18 +166,25 @@ public class ChoiceDisplayController {
 
     private void RemoveFromLibrary () {
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LibraryServerComm.AddToLibrary(socket, "Remove From library", ServerIdentification.getUserName(), ServerIdentification.getPassword(), MediaIdentification.GetChoice());
         log.info(LibraryServerComm.ResultEditLibrary(socket));
         DefaultServerComm.SocketClose(socket);
 
         socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
         LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
         LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
         DefaultServerComm.SocketClose(socket);
     }
 
-    @FXML
-    private void initialize()  {
+    @FXML private void initialize()  {
     }
 
     @FXML private void ClickedOnMenu() {
@@ -193,11 +212,23 @@ public class ChoiceDisplayController {
     }
 
     @FXML private void ClickedOnLibrary() {
-        SceneSwapper.switchToLibraryScene(rootPane);
+        SceneSwapper.switchToSpesificHomeScene(rootPane,"Library");
+    }
+
+    @FXML private void ClickedOnRecommended() {
+        SceneSwapper.switchToSpesificHomeScene(rootPane,"Recommended");
+    }
+
+    @FXML private void ClickedOnMovies() {
+        SceneSwapper.switchToSpesificHomeScene(rootPane,"Movies");
+    }
+
+    @FXML private void ClickedOnShows() {
+        SceneSwapper.switchToSpesificHomeScene(rootPane,"Shows");
     }
 
     @FXML private void ClickedOnHome() {
-        SceneSwapper.switchToHomeScene(rootPane);
+        SceneSwapper.switchToSpesificHomeScene(rootPane, "Home");
     }
 
     @FXML private void ClickedOnLogOut() {
@@ -210,5 +241,9 @@ public class ChoiceDisplayController {
 
     @FXML private void ClickedOnExit() {
         SceneSwapper.ShutDownApp();
+    }
+
+    @FXML private void CloseErrorPane () {
+        ErrorPane.setVisible(false);
     }
 }

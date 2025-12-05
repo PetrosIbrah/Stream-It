@@ -80,6 +80,9 @@ public class SidePaneHandler {
         String episode = "Episode " + (episodeIndex + 1);
 
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            return;
+        }
 
         ChoiceServerComm.SendStreamChoice(socket, "Videos", MediaIdentification.getTitle() + "/" + season + "/" + episode);
         List<String> videolist = ChoiceServerComm.ReceiveVideoList(socket);
@@ -141,6 +144,9 @@ public class SidePaneHandler {
 
     private static void OnVideoClicked (String fullPath) {
         Socket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            return;
+        }
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
         DefaultServerComm.SocketClose(socket);
         log.info(fullPath);

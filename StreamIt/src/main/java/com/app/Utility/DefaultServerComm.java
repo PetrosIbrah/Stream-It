@@ -4,6 +4,7 @@ import com.app.Identification.ServerIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class DefaultServerComm {
@@ -13,11 +14,13 @@ public class DefaultServerComm {
     private static final int Port = ServerIdentification.GetPort();
 
     public static Socket Connect () {
-        Socket socket = null;
+        Socket socket;
         try {
-            socket = new Socket(Host, Port);
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(Host, Port), 200);
         } catch (Exception e) {
             log.error("Unable to start communication with server");
+            return null;
         }
         return socket;
     }

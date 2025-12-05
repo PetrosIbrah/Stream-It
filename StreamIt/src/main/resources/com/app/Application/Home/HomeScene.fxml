@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Home.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.Application.Home.HomeSceneController">
-   <Text fx:id="HomeText" layoutX="86.0" layoutY="55.0" text="Home" textAlignment="CENTER" wrappingWidth="1126.6484375" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="108.0">
+   <Text fx:id="HomeText" layoutX="86.0" layoutY="55.0" textAlignment="CENTER" wrappingWidth="1126.6484375" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="108.0">
       <font>
          <Font size="48.0" />
       </font>
@@ -48,11 +48,21 @@
    <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="198.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
       <Button maxWidth="Infinity" onAction="#ClickedOnSettings" text="Settings" VBox.vgrow="ALWAYS" />
       <Separator />
-      <Button maxWidth="Infinity" text="Recordings" VBox.vgrow="ALWAYS" />
+      <Button maxWidth="Infinity" onAction="#ClickedOnRecordings" text="Recordings" VBox.vgrow="ALWAYS" />
       <Button maxWidth="Infinity" text="Profile Options" VBox.vgrow="ALWAYS" />
       <Separator />
       <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
       <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />
    </VBox>
+
+   <Pane fx:id="ErrorPane" prefHeight="61.0" prefWidth="175.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="3.0">
+      <ImageView fx:id="ErrorIcon" fitHeight="48.0" fitWidth="60.0" layoutX="14.0" layoutY="6.0" preserveRatio="true">
+         <Image url="@../../Icons/warning.png"/>
+      </ImageView>
+
+      <Text fx:id="ErrorText" layoutX="77.0" layoutY="17.0" text="Unable to Connect to Server!" textAlignment="CENTER" wrappingWidth="84.0" />
+      <Text layoutX="161.0" layoutY="18.0" onMouseClicked="#CloseErrorPane" strokeType="OUTSIDE" strokeWidth="0.0" text="X" fx:id="xbutton" />
+   </Pane>
+
 
 </AnchorPane>

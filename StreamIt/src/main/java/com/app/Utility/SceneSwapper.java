@@ -1,6 +1,7 @@
 package com.app.Utility;
 
 import com.app.Application.ChoiceDisplay.ChoiceDisplayController;
+import com.app.Application.Home.HomeSceneController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,46 +15,36 @@ import java.util.Objects;
 public class SceneSwapper {
     private static final Logger log = LogManager.getLogger(SceneSwapper.class);
 
-    public static void switchToLibraryScene(AnchorPane rootPane) {
+    public static void switchToSpesificHomeScene(AnchorPane rootPane, String Scenename) {
+        String  msg = "Successfully initiated " + Scenename + " scene";
+        String  errmsg = "Unable to swap to " + Scenename + " scene.";
+
         try {
             Stage stage = (Stage) rootPane.getScene().getWindow();
 
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(
-                            SceneSwapper.class.getResource("/com/app/Application/Menu/Library.fxml")
-                    )
-            );
+            FXMLLoader loader = new FXMLLoader(SceneSwapper.class.getResource("/com/app/Application/Home/HomeScene.fxml"));
+            Parent root = loader.load();
 
-            Scene scene = new Scene(root);
+            HomeSceneController controller = loader.getController();
+
+            controller.InitiazeStartingSceneWith(Scenename);
+
+            Scene scene = new Scene(root, 1280, 720);
+
+            stage.setScene(scene);
             stage.setTitle("StreamIt");
             stage.setResizable(true);
-            stage.setScene(scene);
+            stage.setWidth(1280);
+            stage.setHeight(720);
+            stage.setMinWidth(854);
+            stage.setMinHeight(480);
             stage.centerOnScreen();
             stage.show();
 
-            log.info("Successfully initiated Library scene");
+
+            log.info(msg);
         } catch (Exception e) {
-            log.error("Unable to swap to Library scene.");
-        }
-    }
-
-    public static void switchToHomeScene(AnchorPane rootPane) {
-        try {
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-
-            Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/Home/HomeScene.fxml"))
-            );
-            Scene scene = new Scene(root);
-            stage.setTitle("StreamIt");
-            stage.setResizable(true);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
-
-            log.info("Successfully initiated Home scene");
-        } catch (Exception e) {
-            log.error("Unable to swap to Home scene.");
+            log.error(errmsg);
         }
     }
 
@@ -102,6 +93,26 @@ public class SceneSwapper {
             log.info("Successfully initiated Choice scene");
         } catch (Exception e) {
             log.error("Unable to swap to Choice scene.");
+        }
+    }
+
+    public static void switchToRecordings(AnchorPane rootPane) {
+        try {
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+
+            Parent root = FXMLLoader.load(
+                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Profile/Recordings/Recordings.fxml"))
+            );
+            Scene scene = new Scene(root);
+            stage.setTitle("StreamIt");
+            stage.setResizable(true);
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+
+            log.info("Successfully initiated Recordings scene");
+        } catch (Exception e) {
+            log.error("Unable to swap to Recordings scene.");
         }
     }
 

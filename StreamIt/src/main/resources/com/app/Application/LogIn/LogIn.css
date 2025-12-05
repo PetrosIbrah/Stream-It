@@ -75,3 +75,39 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0.3, 0, 2);
 }
 
+#ErrorPane {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #3a0f0f 0%,
+        #4d1111 50%,
+        #5c1414 100%
+    );
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: rgba(255, 80, 80, 0.8);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.45), 12, 0.4, 0, 2);
+    -fx-padding: 8;
+}
+
+#ErrorIcon {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.3, 0, 1);
+}
+
+#ErrorText {
+    -fx-fill: #ff8080;
+    -fx-text-fill: #ff8080;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.5), 8, 0.2, 0, 0);
+}
+
+@keyframes errorPulse {
+    0%   { -fx-opacity: 1; }
+    50%  { -fx-opacity: 0.75; }
+    100% { -fx-opacity: 1; }
+}
+
+.errorPulse {
+    -fx-animation: errorPulse 1.2s infinite;
+}
