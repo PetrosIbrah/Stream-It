@@ -1,4 +1,4 @@
-package com.app.Libraries;
+package com.app.AccountUsage;
 
 import com.app.Identification.Accounts;
 import jakarta.persistence.EntityManager;
@@ -6,6 +6,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import com.app.Identification.Library;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +15,8 @@ import java.net.Socket;
 import java.util.List;
 
 public class LibraryAccess {
+    private static final Logger log = LogManager.getLogger(LibraryAccess.class);
+
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("StreamIt-PR");
 
     public static void ReturnAllLibraryItems (Socket socket, String Username, String Password){
@@ -20,9 +24,8 @@ public class LibraryAccess {
         SendLibraryToClient(socket, Library);
     }
 
-    public static String[] GetFromDatabase (String Username, String Password) {
-        EntityManager em = emf.createEntityManager();
-        try {
+    private static String[] GetFromDatabase (String Username, String Password) {
+        try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Accounts> userQuery = em.createQuery(
                     "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
             );
@@ -34,7 +37,7 @@ public class LibraryAccess {
                 return new String[0];
             }
 
-            Accounts user = users.get(0);
+            Accounts user = users.getFirst();
 
             TypedQuery<String> libQuery = em.createQuery(
                     "SELECT l.medianame FROM Library l WHERE l.user = :user", String.class
@@ -45,14 +48,12 @@ public class LibraryAccess {
             return items.toArray(new String[0]);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to get library items from Database");
             return new String[0];
-        } finally {
-            em.close();
         }
     }
 
-    public static void SendLibraryToClient (Socket socket, String[] Library){
+    private static void SendLibraryToClient (Socket socket, String[] Library){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -65,7 +66,7 @@ public class LibraryAccess {
             dos.flush();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to communicate with the client, to send library");
         }
     }
 
@@ -74,12 +75,12 @@ public class LibraryAccess {
         SendResult(socket, AddItem(Username, Password, Item));
     }
 
-    public static void SendResult(Socket socket, String Msg){
+    private static void SendResult(Socket socket, String Msg){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to communicate with the client");
         }
     }
 
@@ -100,7 +101,7 @@ public class LibraryAccess {
                 return "User not found.";
             }
 
-            Accounts user = users.get(0);
+            Accounts user = users.getFirst();
 
             TypedQuery<Library> libQuery = em.createQuery(
                     "SELECT l FROM Library l WHERE l.user = :user AND l.medianame = :item", Library.class
@@ -120,7 +121,8 @@ public class LibraryAccess {
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            return "Unexpected error: " + e.getMessage();
+            log.error("Unable to add item");
+            return "Unable to add item";
         } finally {
             em.close();
         }
@@ -148,7 +150,7 @@ public class LibraryAccess {
                 return "User not found.";
             }
 
-            Accounts user = users.get(0);
+            Accounts user = users.getFirst();
 
             TypedQuery<Library> libQuery = em.createQuery(
                     "SELECT l FROM Library l WHERE l.user = :user AND l.medianame = :item", Library.class
@@ -162,7 +164,7 @@ public class LibraryAccess {
                 return "Item not found in library.";
             }
 
-            Library libItem = results.get(0);
+            Library libItem = results.getFirst();
 
             em.remove(libItem);
 
@@ -171,7 +173,8 @@ public class LibraryAccess {
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            return "Unexpected error: " + e.getMessage();
+            log.error("Unable to remove from library");
+            return "Unable to remove from library";
         } finally {
             em.close();
         }

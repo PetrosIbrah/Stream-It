@@ -1,51 +1,61 @@
 package com.app.Streaming;
 
 import com.app.Identification.Media;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 public class AdaptiveStream {
+    private static final Logger log = LogManager.getLogger(AdaptiveStream.class);
+
     public static void Adapt (Socket socket, String Ms, double Speed) {
         String Restart = "No";
         double kb = Speed * 1000;
         String Resolution = getResolution(Media.getStreamingFile());
         String OldResolution = Resolution;
-        if (Resolution.equals("240p")) {
-            if (kb > 700) {
-                Resolution = "360p";
+        switch (Resolution) {
+            case "240p" -> {
+                if (kb > 700) {
+                    Resolution = "360p";
+                }
             }
-        } else if (Resolution.equals("360p")) {
-            if (kb > 1000) {
-                Resolution = "480p";
-            } else if (kb < 750) {
-                Resolution = "240p";
+            case "360p" -> {
+                if (kb > 1000) {
+                    Resolution = "480p";
+                } else if (kb < 750) {
+                    Resolution = "240p";
+                }
             }
-        } else if (Resolution.equals("480p")) {
-            if (kb > 2000) {
-                Resolution = "720p";
-            } else if (kb < 1000) {
-                Resolution = "360p";
+            case "480p" -> {
+                if (kb > 2000) {
+                    Resolution = "720p";
+                } else if (kb < 1000) {
+                    Resolution = "360p";
+                }
             }
-        } else if (Resolution.equals("720p")) {
-            if (kb > 4000) {
-                Resolution = "1080p";
-            } else if (kb < 2500) {
-                Resolution = "480p";
+            case "720p" -> {
+                if (kb > 4000) {
+                    Resolution = "1080p";
+                } else if (kb < 2500) {
+                    Resolution = "480p";
+                }
             }
-        } else if (Resolution.equals("1080p")) {
-            if (kb < 4500) {
-                Resolution = "480p";
+            case "1080p" -> {
+                if (kb < 4500) {
+                    Resolution = "480p";
+                }
             }
+            case null, default -> {}
         }
 
+        assert OldResolution != null;
         if (!OldResolution.equals(Resolution)) {
             String NewVideo = replaceResolution(Media.getStreamingFile(), Resolution);
             Media.setStreamingFile(NewVideo);
-            new Thread(() -> {
-                StartStream.UpdateStream(socket, Ms);
-            }).start();
+            new Thread(() -> StartStream.UpdateStream(socket, Ms)).start();
             Restart = "Restart";
         }
         SendRestart(socket, Restart);
@@ -78,7 +88,7 @@ public class AdaptiveStream {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send message to client to restart stream");
         }
     }
 }

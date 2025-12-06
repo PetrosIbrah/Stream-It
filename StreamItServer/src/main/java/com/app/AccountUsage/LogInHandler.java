@@ -1,12 +1,14 @@
-package com.app;
+package com.app.AccountUsage;
 
-import com.app.Repositories.AccountsRepo;
-
+import com.app.AccountUsage.LogInSignUp.AccountsRepo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 public class LogInHandler {
+    private static final Logger log = LogManager.getLogger(LogInHandler.class);
 
     public static void LogIn (Socket socket, String Username, String Password){
         SendLogInResult(socket, AccountsRepo.CheckLogIn(Username, Password));
@@ -21,7 +23,7 @@ public class LogInHandler {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send Log in result properly.");
         }
     }
 }

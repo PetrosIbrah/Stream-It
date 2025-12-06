@@ -7,6 +7,7 @@ public class Recommended {
         return Recommended;
     }
 
+    @SuppressWarnings("unused")
     public void setRecommended(String[] recommended) {
         this.Recommended = recommended;
     }

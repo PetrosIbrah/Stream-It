@@ -1,8 +1,13 @@
-package  com.app.Repositories;
+package com.app.AccountUsage.LogInSignUp;
+
 import jakarta.persistence.*;
 import com.app.Identification.Accounts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AccountsRepo {
+    private static final Logger log = LogManager.getLogger(AccountsRepo.class);
+
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("StreamIt-PR");
 
     public static String SaveAccount(String username, String password) {
@@ -35,9 +40,8 @@ public class AccountsRepo {
     }
 
     public static String CheckLogIn(String username, String password) {
-        EntityManager em = emf.createEntityManager();
 
-        try {
+        try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Long> query = em.createQuery(
                     "SELECT COUNT(a) FROM Accounts a WHERE a.username = :uname AND a.password = :pwd",
                     Long.class
@@ -45,30 +49,16 @@ public class AccountsRepo {
             query.setParameter("uname", username);
             query.setParameter("pwd", password);
 
-            if( query.getSingleResult() > 0){
+            if (query.getSingleResult() > 0) {
+                log.info("Log In Accepted");
                 return "Log In Accepted";
             } else {
+                log.info("Log In NOT Accepted");
                 return "Log In NOT Accepted";
             }
         } catch (Exception e) {
+            log.error("Unexpected Log in Error");
             return "Unexpected Error";
-        } finally {
-            em.close();
         }
-    }
-
-
-
-    public Accounts getAccountByUsername(String username) {
-        EntityManager em = emf.createEntityManager();
-        Accounts account = null;
-        try {
-            TypedQuery<Accounts> query = em.createQuery("SELECT a FROM Accounts a WHERE a.username = :uname", Accounts.class);
-            query.setParameter("uname", username);
-            account = query.getResultStream().findFirst().orElse(null);
-        } finally {
-            em.close();
-        }
-        return account;
     }
 }

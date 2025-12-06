@@ -8,6 +8,7 @@ public class Movies {
         return Movies;
     }
 
+    @SuppressWarnings("unused")
     public void setMovies(String[] movies) {
         this.Movies = movies;
     }

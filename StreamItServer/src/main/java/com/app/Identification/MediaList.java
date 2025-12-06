@@ -9,6 +9,7 @@ public class MediaList {
         return Media;
     }
 
+    @SuppressWarnings("unused")
     public void setMedia(List<Media> allMedia) {
         this.Media = allMedia;
     }

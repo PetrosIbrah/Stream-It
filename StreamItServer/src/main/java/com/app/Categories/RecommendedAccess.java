@@ -1,20 +1,23 @@
-package com.app.Libraries;
+package com.app.Categories;
 
 import com.app.Identification.Recommended;
 import com.google.gson.Gson;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 
 public class RecommendedAccess {
+    private static final Logger log = LogManager.getLogger(RecommendedAccess.class);
+
     public static void SendRecommended (Socket socket) {
         Recommended recommended = JsonWrap();
         SendMoviesToClient(socket, recommended);
     }
 
-    public static void SendMoviesToClient (Socket socket, Recommended recommended){
+    private static void SendMoviesToClient (Socket socket, Recommended recommended){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -25,13 +28,12 @@ public class RecommendedAccess {
             }
 
             dos.flush();
-
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send recommended to client");
         }
     }
 
-    public static Recommended JsonWrap() {
+    private static Recommended JsonWrap() {
         Recommended wrapper = null;
         try {
             Gson gson = new Gson();
@@ -41,7 +43,7 @@ public class RecommendedAccess {
 
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to read Recommended.json");
         }
         return wrapper;
     }

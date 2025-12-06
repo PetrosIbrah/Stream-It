@@ -1,16 +1,18 @@
 package com.app.Streaming;
 
 import com.app.Identification.Media;
-import com.app.VideoHandler;
-
+import com.app.InitiatingClasses.VideoHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class StartStream {
+    private static final Logger log = LogManager.getLogger(StartStream.class);
+
     public static Process Process;
     public static String ClientChoice = null;
-    public static void Stream (Socket socket, String Choice) {
+    public static void Stream (Socket ignoredSocket, String Choice) {
         ClientChoice = Choice;
         Media.setStreamingFile(Choice);
         File Streamable = new File( Choice);
@@ -18,22 +20,18 @@ public class StartStream {
         if (Streamable.exists()) {
             TCPStream(Streamable, "0");
         } else {
-            System.out.println("Didnt found");
+            log.warn("Didnt find file that client requested.");
         }
-
-
     }
 
-    public static void UpdateStream (Socket socket, String Ms) {
+    public static void UpdateStream (Socket ignoredSocket, String Ms) {
         File Streamable = new File(Media.getStreamingFile());
         StopPlayer();
         if (Streamable.exists()) {
             TCPStream(Streamable, msToSecondsFraction(Ms));
         } else {
-            System.out.println("Didnt found");
+            log.warn("Didnt find file that client requested");
         }
-
-
     }
 
     public static void StopPlayer() {
@@ -42,7 +40,7 @@ public class StartStream {
             try {
                 Process.waitFor();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("Unable to stop ffmpeg");
             }
         }
         Process = null;
@@ -50,9 +48,9 @@ public class StartStream {
 
     public static void TCPStream(File Streamed, String StartTime) {
         try {
-            String ClientIp = InetAddress.getLocalHost().getHostAddress();
 
-            ProcessBuilder Command = new ProcessBuilder( VideoHandler.Getffmpegloc(),
+            ProcessBuilder Command = new ProcessBuilder(
+                    VideoHandler.Getffmpegloc(),
                     "-loglevel", "quiet",
                     "-ss", StartTime,
                     "-i", Streamed.getAbsolutePath(),
@@ -60,22 +58,22 @@ public class StartStream {
                     "-preset", "fast",
                     "-crf", "18",
                     "-b:v", "5000k",
-                    "-pix_fmt",
-                    "yuv420p",
+                    "-pix_fmt", "yuv420p",
                     "-f", "mpegts",
-                    "tcp://0.0.0.0:7778?listen"
-            );
+                    "tcp://0.0.0.0:7778?listen");
+
             Command.inheritIO();
             Command.redirectErrorStream(true);
             Process = Command.start();
 
-            System.out.println("Successful TCP Server-end streaming");
+            log.info("Successful TCP Server-end streaming");
             int exitCode = Process.waitFor();
             if (exitCode != 0) {
-                System.out.println("Server exited with code: " + exitCode);
+                String msg = "Server exited with code: " + exitCode;
+                log.warn(msg);
             }
         } catch (Exception e) {
-            System.out.println("Unsuccessful TCP Server-end streaming: " + e.getMessage());
+            log.fatal("Unsuccessful TCP Server-end streaming.");
         }
     }
 

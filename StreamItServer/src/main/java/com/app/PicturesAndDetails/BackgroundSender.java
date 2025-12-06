@@ -1,9 +1,12 @@
 package com.app.PicturesAndDetails;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class BackgroundSender {
+    private static final Logger log = LogManager.getLogger(BackgroundSender.class);
 
     public static void SendBackground (Socket socket, String Choice) {
         String BackgroundImage = "BackgroundPictures/" + Choice;
@@ -11,7 +14,7 @@ public class BackgroundSender {
 
     }
 
-    public static void SendBackRoundPicture(Socket socket, String ImageUrl)  {
+    private static void SendBackRoundPicture(Socket socket, String ImageUrl)  {
         File image = new File(ImageUrl);
 
         try {
@@ -27,14 +30,11 @@ public class BackgroundSender {
                 }
                 fis.close();
             } else {
-                System.out.println("Error Finding Image");
+                log.error("Unable to find background image");
             }
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to send Background image to client");
         }
 
     }
-
-
-
 }

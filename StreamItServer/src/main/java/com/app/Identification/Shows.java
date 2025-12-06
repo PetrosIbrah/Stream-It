@@ -8,6 +8,7 @@ public class Shows {
         return Shows;
     }
 
+    @SuppressWarnings("unused")
     public void setShows(String[] shows) {
         this.Shows = shows;
     }

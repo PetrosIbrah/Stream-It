@@ -291,8 +291,10 @@ public class VideoPlayerController {
     private void restartPlayer() {
         Platform.runLater(() -> {
             if (mediaPlayer != null) {
+
                 mediaPlayer.controls().stop();
                 mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
+
                 PausePlayIcon.setImage(PauseImage);
                 startProgressUpdater();
                 LoadingImage.setVisible(false);

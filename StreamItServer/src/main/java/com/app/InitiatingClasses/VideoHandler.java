@@ -1,20 +1,22 @@
-package com.app;
+package com.app.InitiatingClasses;
 
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import java.net.Socket;
 
 public class VideoHandler {
+    private static final Logger log = LogManager.getLogger(VideoHandler.class);
+
     private static String ffmpegloc = System.getenv("ffmpeg");
     private static String ffprobeloc = System.getenv("ffprobe");
 
@@ -25,19 +27,19 @@ public class VideoHandler {
         return ffmpegloc;
     }
 
-    public static String Getffprobeloc () {
+    private static String Getffprobeloc () {
         if (ffprobeloc == null || ffprobeloc.isEmpty()) {
             ffprobeloc = "ffprobe";
         }
         return ffprobeloc;
     }
 
-    public static void SendDetails (Socket socket, String Choice) {
+    protected static void SendDetails (Socket socket, String Choice) {
         List<String> VideoList = GetAllAvailableVideos(Choice);
         SendVideos(socket, VideoList);
     }
 
-    public static List<String> GetAllAvailableVideos (String Choice) {
+    private static List<String> GetAllAvailableVideos (String Choice) {
         List<String> VideoList = null ;
         try (Stream<Path> walk = Files.walk(Paths.get("AvailableVideos/" + Choice))) {
             VideoList = walk
@@ -46,12 +48,12 @@ public class VideoHandler {
                     .filter(path -> path.endsWith(".mp4") || path.endsWith(".mkv") || path.endsWith(".avi"))
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to See all available videos.");
         }
         return VideoList;
     }
 
-    public static void SendVideos(Socket socket, List<String> VideoList) {
+    private static void SendVideos(Socket socket, List<String> VideoList) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -62,18 +64,15 @@ public class VideoHandler {
                 vid = videoPath;
 
             }
-            System.out.println(getVideoLength(vid));
             out.println(getVideoLength(vid));
-            System.out.println("Sent " + VideoList.size() + " videos successfully.");
+            String msg = "Sent " + VideoList.size() + " videos successfully.";
+            log.info(msg);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to send video list to client.");
         }
     }
 
-
-
-    public static long getVideoLength(String filePath) {
-
+    private static long getVideoLength(String filePath) {
         double seconds = 0;
         try {
             ProcessBuilder pb = new ProcessBuilder(
@@ -90,12 +89,12 @@ public class VideoHandler {
 
             seconds = Double.parseDouble(line);
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Unable to extract video length.");
         }
         return (long) (seconds * 1000);
     }
 
-    public static void VideoPopulation() {
+    protected static void VideoPopulation() {
         try {
             FFmpegExecutor executor;
             FFmpeg ffmpeg = new FFmpeg(Getffmpegloc ());
@@ -113,7 +112,7 @@ public class VideoHandler {
                         .filter(Files::isRegularFile)
                         .map(path -> path.toString().replace("\\", "/"))
                         .filter(path -> path.endsWith(".mp4") || path.endsWith(".mkv") || path.endsWith(".avi"))
-                        .collect(Collectors.toList());
+                        .toList();
             }
 
             for (String Input : VideoList) {
@@ -155,14 +154,15 @@ public class VideoHandler {
 
                         executor = new FFmpegExecutor(ffmpeg, ffprobe);
                         executor.createJob(builder).run();
-                        System.out.println("Converted [" + Output + "] successfully.");
+                        String msg = "Converted [" + Output + "] successfully.";
+                        log.info(msg);
                     }
                 }
             }
 
-            System.out.println("Checked all videos and made new if needed.");
+            log.info("Checked all videos and made new if needed.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to Upscale and downscale videos.");
         }
     }
 

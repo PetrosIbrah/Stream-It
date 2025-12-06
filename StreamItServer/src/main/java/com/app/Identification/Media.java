@@ -10,21 +10,24 @@ public class Media {
     private static String StreamingFile = null;
 
     public String getTitle() { return Title; }
+    @SuppressWarnings("unused")
     public void setTitle(String title) { this.Title = title; }
 
     public String getType() { return Type; }
+    @SuppressWarnings("unused")
     public void setType(String type) { this.Type = type; }
 
     public String getDescription() { return Description; }
+    @SuppressWarnings("unused")
     public void setDescription(String description) { this.Description = description; }
 
     public List<Integer> getSeasons() { return Seasons; }
+    @SuppressWarnings("unused")
     public void setSeasons(List<Integer> seasons) { this.Seasons = seasons; }
 
     public static String getStreamingFile() {
         return StreamingFile;
     }
-
     public static void setStreamingFile(String streamingFile) {
         StreamingFile = streamingFile;
     }

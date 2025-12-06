@@ -1,9 +1,13 @@
 package com.app.PicturesAndDetails;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.Socket;
 
 public class ImageSender {
+    private static final Logger log = LogManager.getLogger(ImageSender.class);
+
     public static void SendAllImages(Socket socket) {
         String imageFolder = "ReferencePictures/";
 
@@ -12,7 +16,8 @@ public class ImageSender {
             File[] files = folder.listFiles();
 
             if (files == null || files.length == 0) {
-                System.out.println("No files found in " + imageFolder);
+                String msg = "No files found in " + imageFolder;
+                log.warn(msg);
                 return;
             }
 
@@ -36,22 +41,10 @@ public class ImageSender {
             }
             dos.flush();
 
-            System.out.println("All files sent successfully.");
+            log.info("All Main images sent successfully.");
 
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public static void SendImageNumbers (Socket socket, int FilesNum){
-        try {
-            OutputStream os = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(os, true);
-            String Msg = String.valueOf(FilesNum);
-            writer.println(Msg);
-        } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send Main images");
         }
     }
 }

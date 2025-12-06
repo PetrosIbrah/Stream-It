@@ -1,19 +1,23 @@
-package com.app.Libraries;
+package com.app.Categories;
 
 import com.app.Identification.Shows;
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 
 public class ShowsAccess {
+    private static final Logger log = LogManager.getLogger(ShowsAccess.class);
+
     public static void SendShows (Socket socket) {
         Shows shows = JsonWrap();
         SendMoviesToClient(socket, shows);
     }
 
-    public static void SendMoviesToClient (Socket socket, Shows shows){
+    private static void SendMoviesToClient (Socket socket, Shows shows){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -26,11 +30,11 @@ public class ShowsAccess {
             dos.flush();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to send Shows to client");
         }
     }
 
-    public static Shows JsonWrap() {
+    private static Shows JsonWrap() {
         Shows wrapper = null;
         try {
             Gson gson = new Gson();
@@ -40,7 +44,7 @@ public class ShowsAccess {
 
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Unable to read Shows.json");
         }
         return wrapper;
     }
