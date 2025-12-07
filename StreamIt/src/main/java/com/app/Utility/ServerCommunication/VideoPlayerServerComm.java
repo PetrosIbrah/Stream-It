@@ -14,6 +14,7 @@ public class VideoPlayerServerComm {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
             out.println(TimeStamp);
+            out.println(MediaIdentification.getStreamableFile());
         } catch (IOException e) {
             log.error("Unable to send media time stamp to server");
         }
@@ -24,6 +25,10 @@ public class VideoPlayerServerComm {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Restart = reader.readLine();
+            if (Restart.equals("Restart")){
+                MediaIdentification.setStreamableFile(reader.readLine());
+            }
+            System.out.println("Restart Value: "+ Restart);
         } catch (Exception e) {
             log.error("Unable to receive restart result from server");
         }

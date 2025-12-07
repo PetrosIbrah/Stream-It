@@ -73,8 +73,14 @@ public class Recorder {
         String display = System.getenv("DISPLAY");
         if (display == null) display = ":0";
 
-        videoGrabber = new FFmpegFrameGrabber(display + ".0");
-        videoGrabber.setFormat("x11grab");
+        String sessionType = System.getenv("XDG_SESSION_TYPE");
+        if ("wayland".equals(sessionType)) {
+            videoGrabber = new FFmpegFrameGrabber("0");
+            videoGrabber.setFormat("pipewire");
+        } else {
+            videoGrabber = new FFmpegFrameGrabber(display + ".0");
+            videoGrabber.setFormat("x11grab");
+        }
         videoGrabber.setFrameRate(30);
         try {videoGrabber.start();} catch (Exception e) {
             log.error("Linux - Unable to grab video.");

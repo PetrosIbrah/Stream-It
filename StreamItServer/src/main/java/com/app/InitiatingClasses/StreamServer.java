@@ -17,13 +17,12 @@ import java.io.*;
 
 public class StreamServer {
     private static final Logger log = LogManager.getLogger(StreamServer.class);
-    private static String Choice;
-    private static double Speed;
-    private static String Username;
-    private static String Password;
-    private static String Streamble;
-
-    private static String Item;
+    private String Choice;
+    private double Speed;
+    private String Streamble;
+    private String Username;
+    private String Password;
+    private String Item;
 
     public static void StartSever (int Port) {
         String password = System.getenv("KEYSTORE_PASSWORD");
@@ -42,14 +41,17 @@ public class StreamServer {
                 SSLSocket socket = (SSLSocket) serverSocket.accept();
                 log.info("Client Connected.");
 
-                new Thread(() -> handleClient(socket)).start();
+                new Thread(() -> {
+                    StreamServer clientServer = new StreamServer();
+                    clientServer.handleClient(socket);
+                }).start();
             }
         } catch (Exception e) {
             log.fatal("Failed to start server");
         }
     }
 
-    private static void handleClient(SSLSocket socket) {
+    private void handleClient(SSLSocket socket) {
         String StageChoice;
         StageChoice = ReceiveStageChoice(socket);
         String msg = "Client requested stage choice of `" + StageChoice + "`";
@@ -63,13 +65,18 @@ public class StreamServer {
         }
     }
 
-    private static String ReceiveStageChoice(SSLSocket socket) {
+    private String ReceiveStageChoice(SSLSocket socket) {
         String StageChoice;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             StageChoice = reader.readLine();
             switch (StageChoice) {
-                case "Background", "MediaDetails", "Videos", "StartStream", "LoadingBar" -> Choice = reader.readLine();
+                case "Background", "MediaDetails", "Videos", "StartStream", "LoadingBar" -> {
+                    Choice = reader.readLine();
+                    if (StageChoice.equals("LoadingBar")) {
+                        Streamble = reader.readLine();
+                    }
+                }
                 case "Adaptive" -> {
                     Choice = reader.readLine();
                     String tmpSpeed = reader.readLine();
@@ -92,15 +99,24 @@ public class StreamServer {
         return StageChoice;
     }
 
-    private static void ChooseFunction (String StageChoice, SSLSocket socket) {
+    private void ChooseFunction (String StageChoice, SSLSocket socket) {
         switch (StageChoice) {
             case "Images" -> ImageSender.SendAllImages(socket);
             case "Background" -> BackgroundSender.SendBackground(socket, Choice);
             case "MediaDetails" -> MediaDetailsSender.SendDetails(socket, Choice);
             case "Videos" -> VideoHandler.SendDetails(socket, Choice);
-            case "StartStream" -> StartStream.Stream(socket, Choice);
-            case "LoadingBar" -> StartStream.UpdateStream(socket, Choice);
-            case "Adaptive" -> AdaptiveStream.Adapt(socket, Choice, Speed, Streamble);
+            case "StartStream" -> {
+                StartStream stream = new StartStream();
+                stream.Stream(socket, Choice);
+            }
+            case "LoadingBar" -> {
+                StartStream stream = new StartStream();
+                stream.UpdateStream(socket, Choice, Streamble);
+            }
+            case "Adaptive" -> {
+                AdaptiveStream adaptive = new AdaptiveStream();
+                adaptive.Adapt(socket, Choice, Speed, Streamble);
+            }
             case "Sign Up" -> LogInHandler.SignUp(socket, Username, Password);
             case "Log In" -> LogInHandler.LogIn(socket, Username, Password);
             case "Get All From Library" -> LibraryAccess.ReturnAllLibraryItems(socket, Username, Password);

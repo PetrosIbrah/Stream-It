@@ -10,9 +10,9 @@ import java.io.*;
 public class StartStream {
     private static final Logger log = LogManager.getLogger(StartStream.class);
 
-    public static Process Process;
-    public static String ClientChoice = null;
-    public static void Stream (SSLSocket ignoredSocket, String Choice) {
+    public Process Process;
+    public String ClientChoice = null;
+    public void Stream (SSLSocket ignoredSocket, String Choice) {
         ClientChoice = Choice;
         Media.setStreamingFile(Choice);
         File Streamable = new File( Choice);
@@ -24,8 +24,8 @@ public class StartStream {
         }
     }
 
-    public static void UpdateStream (SSLSocket ignoredSocket, String Ms) {
-        File Streamable = new File(Media.getStreamingFile());
+    public void UpdateStream (SSLSocket ignoredSocket, String Ms, String Streamble) {
+        File Streamable = new File(Streamble);
         StopPlayer();
         if (Streamable.exists()) {
             TCPStream(Streamable, msToSecondsFraction(Ms));
@@ -34,7 +34,7 @@ public class StartStream {
         }
     }
 
-    public static void StopPlayer() {
+    public void StopPlayer() {
         if (Process != null && Process.isAlive()) {
             Process.destroy();
             try {
@@ -46,7 +46,7 @@ public class StartStream {
         Process = null;
     }
 
-    public static void TCPStream(File Streamed, String StartTime) {
+    public void TCPStream(File Streamed, String StartTime) {
         try {
             ProcessBuilder Command = new ProcessBuilder(
                     VideoHandler.Getffmpegloc(),

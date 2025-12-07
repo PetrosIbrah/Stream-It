@@ -100,6 +100,9 @@ public class LoadBalancer {
                 }
                 case "Background", "MediaDetails", "Videos", "StartStream", "LoadingBar" -> {
                     WriteToServer.println(ReadFromClient.readLine());
+                    if (Stage.equals("LoadingBar")){
+                        WriteToServer.println(ReadFromClient.readLine());
+                    }
 
                     switch (Stage) {
                         case "Background" -> {
@@ -159,6 +162,9 @@ public class LoadBalancer {
 
                     String Restart = ReadFromServer.readLine();
                     WriteToClient.println(Restart);
+                    if (Restart.equals("Restart")){
+                        WriteToClient.println(ReadFromServer.readLine());
+                    }
                 }
                 case "Log In", "Sign Up", "Get All From Library" -> {
                     // Username

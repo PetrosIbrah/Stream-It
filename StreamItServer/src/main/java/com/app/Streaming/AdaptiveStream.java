@@ -9,11 +9,11 @@ import java.io.PrintWriter;
 
 public class AdaptiveStream {
     private static final Logger log = LogManager.getLogger(AdaptiveStream.class);
-
-    public static void Adapt (SSLSocket socket, String Ms, double Speed, String Steamable) {
+    public void Adapt (SSLSocket socket, String Ms, double Speed, String Steamable) {
+        String NewVideo;
         String Restart = "No";
         double kb = Speed * 1000;
-        String Resolution = getResolution(Media.getStreamingFile());
+        String Resolution = getResolution(Steamable);
         String OldResolution = Resolution;
         switch (Resolution) {
             case "240p" -> {
@@ -52,15 +52,20 @@ public class AdaptiveStream {
 
         assert OldResolution != null;
         if (!OldResolution.equals(Resolution)) {
-            String NewVideo = replaceResolution(Steamable, Resolution);
+            NewVideo = replaceResolution(Steamable, Resolution);
             Media.setStreamingFile(NewVideo);
-            new Thread(() -> StartStream.UpdateStream(socket, Ms)).start();
+            new Thread(() -> {
+                StartStream stream = new StartStream();
+                stream.UpdateStream(socket, Ms, NewVideo);
+            }).start();
             Restart = "Restart";
+        } else {
+            NewVideo = null;
         }
-        SendRestart(socket, Restart);
+        SendRestart(socket, Restart, NewVideo);
     }
 
-    public static String replaceResolution(String filePath, String newResolution) {
+    public String replaceResolution(String filePath, String newResolution) {
         String currentResolution = getResolution(filePath);
 
         if (currentResolution == null) {
@@ -70,7 +75,7 @@ public class AdaptiveStream {
         return filePath.replace(currentResolution, newResolution);
     }
 
-    public static String getResolution(String filePath) {
+    public String getResolution(String filePath) {
         String[] resolutions = {"1080p", "720p", "480p", "360p", "240p"};
 
         for (String res : resolutions) {
@@ -82,10 +87,13 @@ public class AdaptiveStream {
         return null;
     }
 
-    public static void SendRestart(SSLSocket socket, String Restart){
+    public void SendRestart(SSLSocket socket, String Restart, String NewVid){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);
+            if (Restart.equals("Restart")) {
+                out.println(NewVid);
+            }
         } catch (IOException e) {
             log.error("Unable to send message to client to restart stream");
         }
