@@ -5,19 +5,19 @@ import com.app.Identification.MediaList;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 public class MediaDetailsSender {
     private static final Logger log = LogManager.getLogger(MediaDetailsSender.class);
 
-    public static void SendDetails (Socket socket, String Choice) {
+    public static void SendDetails (SSLSocket socket, String Choice) {
         MediaList wrapper = JsonWrap();
         SendInfo(socket, wrapper, Choice);
     }
 
-    public static void SendInfo (Socket socket, MediaList wrapper, String Choice) {
+    public static void SendInfo (SSLSocket socket, MediaList wrapper, String Choice) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -27,7 +27,6 @@ public class MediaDetailsSender {
                     out.println(media.getTitle());
                     out.println(media.getType());
                     out.println(media.getDescription());
-
 
                     if (media.getType().equalsIgnoreCase("Series")) {
                         out.println(media.getSeasons().size());
@@ -48,7 +47,7 @@ public class MediaDetailsSender {
         MediaList wrapper = null;
         try {
             Gson gson = new Gson();
-            FileReader reader = new FileReader("Media.json");
+            FileReader reader = new FileReader("Datasets/Media.json");
 
             wrapper = gson.fromJson(reader, MediaList.class);
 

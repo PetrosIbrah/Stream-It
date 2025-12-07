@@ -5,6 +5,7 @@ import java.util.List;
 public class MediaIdentification {
     private static String[] FileNames;
     private static String Choice;
+    private static String StreamableFile;
 
     public static void Init (int ImageCount) {
         FileNames = new String[ImageCount];
@@ -46,4 +47,7 @@ public class MediaIdentification {
 
     public static long GetDuration() {return Duration;}
     public static void setDuration(long duration) {Duration = duration;}
+
+    public static String getStreamableFile() {return StreamableFile;}
+    public static void setStreamableFile(String streamableFile) {StreamableFile = streamableFile;}
 }

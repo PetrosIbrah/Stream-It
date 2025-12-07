@@ -3,13 +3,14 @@ package com.app.Utility.ServerCommunication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
+// import java.net.Socket;
 
 public class CategoriesServerComm {
     private static final Logger log = LogManager.getLogger(CategoriesServerComm.class);
 
-    public static void RequestMoviesOrShows (Socket socket, String Stage) {
+    public static void RequestMoviesOrShows (SSLSocket socket, String Stage) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
@@ -19,7 +20,7 @@ public class CategoriesServerComm {
         }
     }
 
-    public static String[] GetAllMoviesOrShows(Socket socket) {
+    public static String[] GetAllMoviesOrShows(SSLSocket socket) {
         try {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
 

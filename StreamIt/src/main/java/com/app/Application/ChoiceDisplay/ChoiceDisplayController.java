@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
@@ -68,7 +70,7 @@ public class ChoiceDisplayController {
         if (MediaIdentification.getType().equalsIgnoreCase("Series")) {
             SidePaneHandler.SetUpChoices(SidePane, pinnedControls);
         } else if (MediaIdentification.getType().equalsIgnoreCase("Movie")) {
-            Socket socket = DefaultServerComm.Connect();
+            SSLSocket socket = DefaultServerComm.Connect();
             if (socket == null) {
                 ErrorPane.setVisible(true);
                 return;
@@ -103,7 +105,7 @@ public class ChoiceDisplayController {
     }
 
     private void GetBackground(String Choice) {
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         ChoiceServerComm.SendStageChoice(socket, "Background", Choice);
         ChoiceServerComm.GetBackgroundImage(socket, Choice);
         DefaultServerComm.SocketClose(socket);
@@ -145,7 +147,7 @@ public class ChoiceDisplayController {
     }
 
     private void AddToLibrary () {
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             ErrorPane.setVisible(true);
             return;
@@ -165,7 +167,7 @@ public class ChoiceDisplayController {
     }
 
     private void RemoveFromLibrary () {
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             ErrorPane.setVisible(true);
             return;

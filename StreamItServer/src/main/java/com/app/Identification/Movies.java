@@ -1,6 +1,5 @@
 package com.app.Identification;
 
-
 public class Movies {
     private String[] Movies;
 

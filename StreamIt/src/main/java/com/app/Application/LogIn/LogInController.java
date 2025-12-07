@@ -23,6 +23,8 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.net.ssl.SSLSocket;
+
 public class LogInController {
     private static final Logger log = LogManager.getLogger(LogInController.class);
 
@@ -78,7 +80,7 @@ public class LogInController {
     }
 
     @FXML private void SignUpAction() {
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             ErrorPane.setVisible(true);
             return;
@@ -114,7 +116,7 @@ public class LogInController {
     private void SwitchToHomePage ()  {
         ServerIdentification.setUserName(UserFill.getText());
         ServerIdentification.setPassword(PasswordFill.getText());
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             ErrorPane.setVisible(true);
             return;

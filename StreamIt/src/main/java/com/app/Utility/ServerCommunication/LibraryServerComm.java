@@ -2,13 +2,13 @@ package com.app.Utility.ServerCommunication;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 
 public class LibraryServerComm {
     private static final Logger log = LogManager.getLogger(LibraryServerComm.class);
 
-    public static void RequestFromLibrary (Socket socket, String Stage, String Username, String Password) {
+    public static void RequestFromLibrary (SSLSocket socket, String Stage, String Username, String Password) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
@@ -19,7 +19,7 @@ public class LibraryServerComm {
         }
     }
 
-    public static void AddToLibrary (Socket socket, String Stage, String Username, String Password, String ToAdd) {
+    public static void AddToLibrary (SSLSocket socket, String Stage, String Username, String Password, String ToAdd) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
@@ -31,7 +31,7 @@ public class LibraryServerComm {
         }
     }
 
-    public static String[] GetAllLibraryItems(Socket socket) {
+    public static String[] GetAllLibraryItems(SSLSocket socket) {
         try {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
 
@@ -47,7 +47,7 @@ public class LibraryServerComm {
         }
     }
 
-    public static String ResultEditLibrary (Socket socket) {
+    public static String ResultEditLibrary (SSLSocket socket) {
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             return reader.readLine();

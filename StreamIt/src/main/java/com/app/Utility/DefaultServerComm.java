@@ -3,9 +3,8 @@ package com.app.Utility;
 import com.app.Identification.ServerIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class DefaultServerComm {
     private static final Logger log = LogManager.getLogger(DefaultServerComm.class);
@@ -13,11 +12,16 @@ public class DefaultServerComm {
     private static final String Host = ServerIdentification.GetHost();
     private static final int Port = ServerIdentification.GetPort();
 
-    public static Socket Connect () {
-        Socket socket;
+    public static SSLSocket Connect () {
+
+        SSLSocket socket;
         try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(Host, Port), 200);
+            System.setProperty("javax.net.ssl.trustStore", "TrustedStreamItStore.jks");
+            System.setProperty("javax.net.ssl.trustStorePassword", "ClientPassword"); // :)
+            System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
+            SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            socket = (SSLSocket) sslSocketFactory.createSocket(Host, Port);
+            socket.startHandshake();
         } catch (Exception e) {
             log.error("Unable to start communication with server");
             return null;
@@ -25,7 +29,7 @@ public class DefaultServerComm {
         return socket;
     }
 
-    public static void SocketClose(Socket socket) {
+    public static void SocketClose(SSLSocket socket) {
         try{
             socket.close();
         } catch (Exception e){

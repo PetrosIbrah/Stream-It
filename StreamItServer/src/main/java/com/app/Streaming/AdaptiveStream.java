@@ -3,15 +3,14 @@ package com.app.Streaming;
 import com.app.Identification.Media;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 public class AdaptiveStream {
     private static final Logger log = LogManager.getLogger(AdaptiveStream.class);
 
-    public static void Adapt (Socket socket, String Ms, double Speed) {
+    public static void Adapt (SSLSocket socket, String Ms, double Speed, String Steamable) {
         String Restart = "No";
         double kb = Speed * 1000;
         String Resolution = getResolution(Media.getStreamingFile());
@@ -53,7 +52,7 @@ public class AdaptiveStream {
 
         assert OldResolution != null;
         if (!OldResolution.equals(Resolution)) {
-            String NewVideo = replaceResolution(Media.getStreamingFile(), Resolution);
+            String NewVideo = replaceResolution(Steamable, Resolution);
             Media.setStreamingFile(NewVideo);
             new Thread(() -> StartStream.UpdateStream(socket, Ms)).start();
             Restart = "Restart";
@@ -83,7 +82,7 @@ public class AdaptiveStream {
         return null;
     }
 
-    public static void SendRestart(Socket socket, String Restart){
+    public static void SendRestart(SSLSocket socket, String Restart){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);

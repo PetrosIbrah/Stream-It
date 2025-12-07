@@ -4,20 +4,20 @@ import com.app.Identification.Movies;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
 
 public class MoviesAccess {
     private static final Logger log = LogManager.getLogger(MoviesAccess.class);
 
-    public static void SendMovies (Socket socket) {
+    public static void SendMovies (SSLSocket socket) {
         Movies movies = JsonWrap();
         SendMoviesToClient(socket, movies);
     }
 
-    private static void SendMoviesToClient (Socket socket, Movies movies){
+    private static void SendMoviesToClient (SSLSocket socket, Movies movies){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -38,7 +38,7 @@ public class MoviesAccess {
         Movies wrapper = null;
         try {
             Gson gson = new Gson();
-            FileReader reader = new FileReader("Movies.json");
+            FileReader reader = new FileReader("Datasets/Movies.json");
 
             wrapper = gson.fromJson(reader, Movies.class);
 

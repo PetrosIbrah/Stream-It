@@ -17,8 +17,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.File;
-import java.net.Socket;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,7 +79,7 @@ public class SidePaneHandler {
         String season = "Season " + (seasonIndex + 1);
         String episode = "Episode " + (episodeIndex + 1);
 
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             return;
         }
@@ -143,12 +143,13 @@ public class SidePaneHandler {
     }
 
     private static void OnVideoClicked (String fullPath) {
-        Socket socket = DefaultServerComm.Connect();
+        MediaIdentification.setStreamableFile(fullPath);
+
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             return;
         }
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
         DefaultServerComm.SocketClose(socket);
-        log.info(fullPath);
     }
 }

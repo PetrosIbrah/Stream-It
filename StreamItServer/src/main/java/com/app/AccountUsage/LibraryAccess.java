@@ -8,10 +8,10 @@ import jakarta.persistence.TypedQuery;
 import com.app.Identification.Library;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.List;
 
 public class LibraryAccess {
@@ -19,7 +19,7 @@ public class LibraryAccess {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("StreamIt-PR");
 
-    public static void ReturnAllLibraryItems (Socket socket, String Username, String Password){
+    public static void ReturnAllLibraryItems (SSLSocket socket, String Username, String Password){
         String[] Library = GetFromDatabase(Username, Password);
         SendLibraryToClient(socket, Library);
     }
@@ -53,7 +53,7 @@ public class LibraryAccess {
         }
     }
 
-    private static void SendLibraryToClient (Socket socket, String[] Library){
+    private static void SendLibraryToClient (SSLSocket socket, String[] Library){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -71,11 +71,11 @@ public class LibraryAccess {
     }
 
 
-    public static void AddItemToLibrary (Socket socket, String Username, String Password, String Item){
+    public static void AddItemToLibrary (SSLSocket socket, String Username, String Password, String Item){
         SendResult(socket, AddItem(Username, Password, Item));
     }
 
-    private static void SendResult(Socket socket, String Msg){
+    private static void SendResult(SSLSocket socket, String Msg){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Msg);
@@ -129,7 +129,7 @@ public class LibraryAccess {
     }
 
 
-    public static void RemoveFromLibrary(Socket socket, String Username, String Password, String Item){
+    public static void RemoveFromLibrary(SSLSocket socket, String Username, String Password, String Item){
         SendResult(socket, RemoveItem(Username, Password, Item));
     }
 

@@ -20,6 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.Socket;
 
@@ -118,7 +120,7 @@ public class HomeSceneController {
     @FXML private void ClickedOnLibrary() {
         if (!HomeText.getText().equals("Library")) {
             if (LibraryIdentification.getSavedFileNames() == null) {
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;
@@ -136,7 +138,7 @@ public class HomeSceneController {
     @FXML private void ClickedOnHome() {
         if (!HomeText.getText().equals("Home")) {
             if (MediaIdentification.GetAllFileNames() == null) {
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;
@@ -160,7 +162,7 @@ public class HomeSceneController {
         if (!HomeText.getText().equals("Recommended")) {
 
             if (LibraryIdentification.getRecommended() == null ) {
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;
@@ -178,7 +180,7 @@ public class HomeSceneController {
     @FXML private void ClickedOnMovies() {
         if (!HomeText.getText().equals("Movies")) {
             if (LibraryIdentification.getMovies() == null) {
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;
@@ -196,7 +198,7 @@ public class HomeSceneController {
     @FXML private void ClickedOnShows() {
         if (!HomeText.getText().equals("Shows")) {
             if (LibraryIdentification.getShows() == null) {
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;

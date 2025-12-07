@@ -7,12 +7,12 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.net.Socket;
 
 public class VideoHandler {
     private static final Logger log = LogManager.getLogger(VideoHandler.class);
@@ -34,14 +34,14 @@ public class VideoHandler {
         return ffprobeloc;
     }
 
-    protected static void SendDetails (Socket socket, String Choice) {
+    protected static void SendDetails (SSLSocket socket, String Choice) {
         List<String> VideoList = GetAllAvailableVideos(Choice);
         SendVideos(socket, VideoList);
     }
 
     private static List<String> GetAllAvailableVideos (String Choice) {
         List<String> VideoList = null ;
-        try (Stream<Path> walk = Files.walk(Paths.get("AvailableVideos/" + Choice))) {
+        try (Stream<Path> walk = Files.walk(Paths.get("VideosAndPictures/AvailableVideos/" + Choice))) {
             VideoList = walk
                     .filter(Files::isRegularFile)
                     .map(path -> path.toString().replace("\\", "/"))
@@ -53,7 +53,7 @@ public class VideoHandler {
         return VideoList;
     }
 
-    private static void SendVideos(Socket socket, List<String> VideoList) {
+    private static void SendVideos(SSLSocket socket, List<String> VideoList) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -107,7 +107,7 @@ public class VideoHandler {
             String[] widths = {"426", "640", "854", "1280", "1920"};
 
             List<String> VideoList;
-            try (Stream<Path> walk = Files.walk(Paths.get("AvailableVideos"))) {
+            try (Stream<Path> walk = Files.walk(Paths.get("VideosAndPictures/AvailableVideos"))) {
                 VideoList = walk
                         .filter(Files::isRegularFile)
                         .map(path -> path.toString().replace("\\", "/"))

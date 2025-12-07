@@ -4,15 +4,15 @@ import com.app.Identification.Media;
 import com.app.InitiatingClasses.VideoHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 
 public class StartStream {
     private static final Logger log = LogManager.getLogger(StartStream.class);
 
     public static Process Process;
     public static String ClientChoice = null;
-    public static void Stream (Socket ignoredSocket, String Choice) {
+    public static void Stream (SSLSocket ignoredSocket, String Choice) {
         ClientChoice = Choice;
         Media.setStreamingFile(Choice);
         File Streamable = new File( Choice);
@@ -24,7 +24,7 @@ public class StartStream {
         }
     }
 
-    public static void UpdateStream (Socket ignoredSocket, String Ms) {
+    public static void UpdateStream (SSLSocket ignoredSocket, String Ms) {
         File Streamable = new File(Media.getStreamingFile());
         StopPlayer();
         if (Streamable.exists()) {
@@ -48,7 +48,6 @@ public class StartStream {
 
     public static void TCPStream(File Streamed, String StartTime) {
         try {
-
             ProcessBuilder Command = new ProcessBuilder(
                     VideoHandler.Getffmpegloc(),
                     "-loglevel", "quiet",
@@ -83,6 +82,4 @@ public class StartStream {
             long fraction = ms % 1000;
             return seconds + "." + String.format("%03d", fraction);
     }
-
-
 }

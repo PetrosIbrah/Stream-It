@@ -3,13 +3,15 @@ package com.app.Utility.ServerCommunication;
 import com.app.Identification.MediaIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
+// import java.net.Socket;
 
 public class HomeServerComm {
     private static final Logger log = LogManager.getLogger(HomeServerComm.class);
 
-    public static void SendStageChoice (Socket socket, String Msg){
+    public static void SendStageChoice (SSLSocket socket, String Msg){
         try {
             OutputStream os = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(os, true);
@@ -19,7 +21,7 @@ public class HomeServerComm {
         }
     }
 
-    public static int GetImageNumber(Socket socket) {
+    public static int GetImageNumber(SSLSocket socket) {
         try {
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             return dis.readInt();
@@ -29,7 +31,7 @@ public class HomeServerComm {
         }
     }
 
-    public static void GetAllImages(Socket socket, int ImageCount) {
+    public static void GetAllImages(SSLSocket socket, int ImageCount) {
         try {
             File dir = new File("ReferencePictures");
             if (!dir.exists()) {

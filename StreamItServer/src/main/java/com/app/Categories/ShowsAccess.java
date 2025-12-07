@@ -4,20 +4,20 @@ import com.app.Identification.Shows;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
 
 public class ShowsAccess {
     private static final Logger log = LogManager.getLogger(ShowsAccess.class);
 
-    public static void SendShows (Socket socket) {
+    public static void SendShows (SSLSocket socket) {
         Shows shows = JsonWrap();
         SendMoviesToClient(socket, shows);
     }
 
-    private static void SendMoviesToClient (Socket socket, Shows shows){
+    private static void SendMoviesToClient (SSLSocket socket, Shows shows){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -38,7 +38,7 @@ public class ShowsAccess {
         Shows wrapper = null;
         try {
             Gson gson = new Gson();
-            FileReader reader = new FileReader("Shows.json");
+            FileReader reader = new FileReader("Datasets/Shows.json");
 
             wrapper = gson.fromJson(reader, Shows.class);
 

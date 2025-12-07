@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurface;
-import java.net.Socket;
+import javax.net.ssl.SSLSocket;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -133,7 +133,7 @@ public class VideoPlayerController {
     }
 
     private void ClickedOnProgress (long seekTime) {
-        Socket socket = DefaultServerComm.Connect();
+        SSLSocket socket = DefaultServerComm.Connect();
         if (socket == null) {
             ErrorPane.setVisible(true);
             return;
@@ -339,7 +339,7 @@ public class VideoPlayerController {
                 log.info(msg);
                 CD.countDown();
 
-                Socket socket = DefaultServerComm.Connect();
+                SSLSocket socket = DefaultServerComm.Connect();
                 if (socket == null) {
                     ErrorPane.setVisible(true);
                     return;

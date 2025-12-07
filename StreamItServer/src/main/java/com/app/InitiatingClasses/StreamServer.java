@@ -12,9 +12,8 @@ import com.app.Streaming.AdaptiveStream;
 import com.app.Streaming.StartStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.*;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class StreamServer {
     private static final Logger log = LogManager.getLogger(StreamServer.class);
@@ -22,28 +21,35 @@ public class StreamServer {
     private static double Speed;
     private static String Username;
     private static String Password;
+    private static String Streamble;
 
     private static String Item;
 
     public static void StartSever (int Port) {
-        VideoHandler.VideoPopulation();
+        String password = System.getenv("KEYSTORE_PASSWORD");
+        System.setProperty("javax.net.ssl.keyStore", "Encryption/StreamItKeyStore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", password);
 
-        try (ServerSocket serverSocket = new ServerSocket(Port)) {
+
+        try {
+            SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+            SSLServerSocket serverSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(Port);
+            serverSocket.setNeedClientAuth(false);
             String msg = "Server listening on port " + Port;
             log.info(msg);
 
             for(;;) {
-                Socket socket = serverSocket.accept();
+                SSLSocket socket = (SSLSocket) serverSocket.accept();
                 log.info("Client Connected.");
 
                 new Thread(() -> handleClient(socket)).start();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.fatal("Failed to start server");
         }
     }
 
-    private static void handleClient(Socket socket) {
+    private static void handleClient(SSLSocket socket) {
         String StageChoice;
         StageChoice = ReceiveStageChoice(socket);
         String msg = "Client requested stage choice of `" + StageChoice + "`";
@@ -57,7 +63,7 @@ public class StreamServer {
         }
     }
 
-    private static String ReceiveStageChoice(Socket socket) {
+    private static String ReceiveStageChoice(SSLSocket socket) {
         String StageChoice;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -68,6 +74,7 @@ public class StreamServer {
                     Choice = reader.readLine();
                     String tmpSpeed = reader.readLine();
                     Speed = Double.parseDouble(tmpSpeed);
+                    Streamble = reader.readLine();
                 }
                 case "Log In", "Sign Up", "Get All From Library" -> {
                     Username = reader.readLine();
@@ -85,7 +92,7 @@ public class StreamServer {
         return StageChoice;
     }
 
-    private static void ChooseFunction (String StageChoice, Socket socket) {
+    private static void ChooseFunction (String StageChoice, SSLSocket socket) {
         switch (StageChoice) {
             case "Images" -> ImageSender.SendAllImages(socket);
             case "Background" -> BackgroundSender.SendBackground(socket, Choice);
@@ -93,7 +100,7 @@ public class StreamServer {
             case "Videos" -> VideoHandler.SendDetails(socket, Choice);
             case "StartStream" -> StartStream.Stream(socket, Choice);
             case "LoadingBar" -> StartStream.UpdateStream(socket, Choice);
-            case "Adaptive" -> AdaptiveStream.Adapt(socket, Choice, Speed);
+            case "Adaptive" -> AdaptiveStream.Adapt(socket, Choice, Speed, Streamble);
             case "Sign Up" -> LogInHandler.SignUp(socket, Username, Password);
             case "Log In" -> LogInHandler.LogIn(socket, Username, Password);
             case "Get All From Library" -> LibraryAccess.ReturnAllLibraryItems(socket, Username, Password);
@@ -105,5 +112,4 @@ public class StreamServer {
         }
 
     }
-
 }

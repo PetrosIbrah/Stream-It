@@ -3,15 +3,16 @@ package com.app.Utility.ServerCommunication;
 import com.app.Identification.MediaIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChoiceServerComm {
     private static final Logger log = LogManager.getLogger(ChoiceServerComm.class);
 
-    public static void SendStageChoice(Socket socket, String Stage, String Choice){
+    public static void SendStageChoice(SSLSocket socket, String Stage, String Choice){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
@@ -21,9 +22,9 @@ public class ChoiceServerComm {
         }
     }
 
-    public static void GetBackgroundImage(Socket socket, String Choice) {
+    public static void GetBackgroundImage(SSLSocket socket, String Choice) {
         try {
-            InputStream is = socket.getInputStream();
+            //InputStream is = socket.getInputStream();
             File dir = new File("BackgroundPictures");
 
             if (!dir.exists()) {
@@ -50,15 +51,13 @@ public class ChoiceServerComm {
                 fos.write(buffer, 0, bytesRead);
                 remaining -= bytesRead;
             }
-            fos.close();
-            is.close();
             log.info("All files received successfully.");
         } catch (Exception e) {
             log.error("Unable to receive the backgroung image.");
         }
     }
 
-    public static void GetDetails(Socket socket) {
+    public static void GetDetails(SSLSocket socket) {
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             MediaIdentification.setTitle(in.readLine());
@@ -80,7 +79,7 @@ public class ChoiceServerComm {
         }
     }
 
-    public static void SendStreamChoice(Socket socket, String Stage, String StreamChoice){
+    public static void SendStreamChoice(SSLSocket socket, String Stage, String StreamChoice){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Stage);
@@ -90,7 +89,7 @@ public class ChoiceServerComm {
         }
     }
 
-    public static List<String> ReceiveVideoList (Socket socket){
+    public static List<String> ReceiveVideoList (SSLSocket socket){
         List<String> videos = new ArrayList<>();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -111,4 +110,5 @@ public class ChoiceServerComm {
         }
         return videos;
     }
+
 }

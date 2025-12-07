@@ -2,14 +2,14 @@ package com.app.PicturesAndDetails;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 
 public class ImageSender {
     private static final Logger log = LogManager.getLogger(ImageSender.class);
 
-    public static void SendAllImages(Socket socket) {
-        String imageFolder = "ReferencePictures/";
+    public static void SendAllImages(SSLSocket socket) {
+        String imageFolder = "VideosAndPictures/ReferencePictures/";
 
         try {
             File folder = new File(imageFolder);

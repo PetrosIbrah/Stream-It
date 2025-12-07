@@ -4,20 +4,20 @@ import com.app.Identification.Recommended;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
 
 public class RecommendedAccess {
     private static final Logger log = LogManager.getLogger(RecommendedAccess.class);
 
-    public static void SendRecommended (Socket socket) {
+    public static void SendRecommended (SSLSocket socket) {
         Recommended recommended = JsonWrap();
         SendMoviesToClient(socket, recommended);
     }
 
-    private static void SendMoviesToClient (Socket socket, Recommended recommended){
+    private static void SendMoviesToClient (SSLSocket socket, Recommended recommended){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -37,7 +37,7 @@ public class RecommendedAccess {
         Recommended wrapper = null;
         try {
             Gson gson = new Gson();
-            FileReader reader = new FileReader("Recommended.json");
+            FileReader reader = new FileReader("Datasets/Recommended.json");
 
             wrapper = gson.fromJson(reader, Recommended.class);
 
