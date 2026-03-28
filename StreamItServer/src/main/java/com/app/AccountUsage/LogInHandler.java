@@ -10,15 +10,15 @@ import java.io.PrintWriter;
 public class LogInHandler {
     private static final Logger log = LogManager.getLogger(LogInHandler.class);
 
-    public static void LogIn (SSLSocket socket, String Username, String Password){
+    public void LogIn (SSLSocket socket, String Username, String Password){
         SendLogInResult(socket, AccountsRepo.CheckLogIn(Username, Password));
     }
 
-    public static void SignUp (SSLSocket socket, String Username, String Password){
+    public void SignUp (SSLSocket socket, String Username, String Password){
         SendLogInResult(socket, AccountsRepo.SaveAccount(Username, Password));
     }
 
-    public static void SendLogInResult(SSLSocket socket, String Restart){
+    public void SendLogInResult(SSLSocket socket, String Restart){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);

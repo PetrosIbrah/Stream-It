@@ -13,6 +13,13 @@ public class StartStream {
     public Process Process;
     public String ClientChoice = null;
     public void Stream (SSLSocket ignoredSocket, String Choice) {
+        try {
+            PrintWriter out = new PrintWriter(ignoredSocket.getOutputStream(), true);
+            out.println("Ok");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         ClientChoice = Choice;
         Media.setStreamingFile(Choice);
         File Streamable = new File( Choice);

@@ -12,12 +12,12 @@ import java.io.PrintWriter;
 public class MediaDetailsSender {
     private static final Logger log = LogManager.getLogger(MediaDetailsSender.class);
 
-    public static void SendDetails (SSLSocket socket, String Choice) {
+    public void SendDetails (SSLSocket socket, String Choice) {
         MediaList wrapper = JsonWrap();
         SendInfo(socket, wrapper, Choice);
     }
 
-    public static void SendInfo (SSLSocket socket, MediaList wrapper, String Choice) {
+    public void SendInfo (SSLSocket socket, MediaList wrapper, String Choice) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 

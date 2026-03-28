@@ -19,12 +19,12 @@ public class LibraryAccess {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("StreamIt-PR");
 
-    public static void ReturnAllLibraryItems (SSLSocket socket, String Username, String Password){
+    public void ReturnAllLibraryItems (SSLSocket socket, String Username, String Password){
         String[] Library = GetFromDatabase(Username, Password);
         SendLibraryToClient(socket, Library);
     }
 
-    private static String[] GetFromDatabase (String Username, String Password) {
+    private String[] GetFromDatabase (String Username, String Password) {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Accounts> userQuery = em.createQuery(
                     "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
@@ -53,7 +53,7 @@ public class LibraryAccess {
         }
     }
 
-    private static void SendLibraryToClient (SSLSocket socket, String[] Library){
+    private void SendLibraryToClient (SSLSocket socket, String[] Library){
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -71,11 +71,11 @@ public class LibraryAccess {
     }
 
 
-    public static void AddItemToLibrary (SSLSocket socket, String Username, String Password, String Item){
+    public void AddItemToLibrary (SSLSocket socket, String Username, String Password, String Item){
         SendResult(socket, AddItem(Username, Password, Item));
     }
 
-    private static void SendResult(SSLSocket socket, String Msg){
+    private void SendResult(SSLSocket socket, String Msg){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Msg);
@@ -84,7 +84,7 @@ public class LibraryAccess {
         }
     }
 
-    public static String AddItem(String Username, String Password, String Item) {
+    public String AddItem(String Username, String Password, String Item) {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -129,11 +129,11 @@ public class LibraryAccess {
     }
 
 
-    public static void RemoveFromLibrary(SSLSocket socket, String Username, String Password, String Item){
+    public void RemoveFromLibrary(SSLSocket socket, String Username, String Password, String Item){
         SendResult(socket, RemoveItem(Username, Password, Item));
     }
 
-    public static String RemoveItem(String Username, String Password, String Item) {
+    public String RemoveItem(String Username, String Password, String Item) {
         EntityManager em = emf.createEntityManager();
 
         try {

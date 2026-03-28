@@ -28,7 +28,8 @@ public class VideoPlayerServerComm {
             if (Restart.equals("Restart")){
                 MediaIdentification.setStreamableFile(reader.readLine());
             }
-            System.out.println("Restart Value: "+ Restart);
+            String msg = "Restart Value: "+ Restart;
+            log.warn(msg);
         } catch (Exception e) {
             log.error("Unable to receive restart result from server");
         }

@@ -26,6 +26,9 @@ dependencies {
     implementation("com.jfoenix:jfoenix:9.0.10")
     implementation("io.github.mkpaz:atlantafx-base:2.1.0")
 
+    // Switch Button
+    implementation("org.controlsfx:controlsfx:11.2.1")
+
     // JavaFX Modules
     implementation("org.openjfx:javafx-controls:21.0.8")
     implementation("org.openjfx:javafx-fxml:21.0.8")

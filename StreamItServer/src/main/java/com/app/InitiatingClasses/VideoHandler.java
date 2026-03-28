@@ -34,12 +34,12 @@ public class VideoHandler {
         return ffprobeloc;
     }
 
-    protected static void SendDetails (SSLSocket socket, String Choice) {
+    protected void SendDetails (SSLSocket socket, String Choice) {
         List<String> VideoList = GetAllAvailableVideos(Choice);
         SendVideos(socket, VideoList);
     }
 
-    private static List<String> GetAllAvailableVideos (String Choice) {
+    private List<String> GetAllAvailableVideos (String Choice) {
         List<String> VideoList = null ;
         try (Stream<Path> walk = Files.walk(Paths.get("VideosAndPictures/AvailableVideos/" + Choice))) {
             VideoList = walk
@@ -53,7 +53,7 @@ public class VideoHandler {
         return VideoList;
     }
 
-    private static void SendVideos(SSLSocket socket, List<String> VideoList) {
+    private void SendVideos(SSLSocket socket, List<String> VideoList) {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -72,7 +72,7 @@ public class VideoHandler {
         }
     }
 
-    private static long getVideoLength(String filePath) {
+    private long getVideoLength(String filePath) {
         double seconds = 0;
         try {
             ProcessBuilder pb = new ProcessBuilder(

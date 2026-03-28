@@ -150,3 +150,11 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0, 0, 1);
 }
+
+#adaptive-text {
+    -fx-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #007AFF, 4, 0.3, 0, 0);
+}
+#adaptive-switch:selected {
+    -fx-background-color: #007AFF;
+}

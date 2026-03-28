@@ -24,11 +24,10 @@ public class StreamServer {
     private String Password;
     private String Item;
 
-    public static void StartSever (int Port) {
+    public void StartSever (int Port) {
         String password = System.getenv("KEYSTORE_PASSWORD");
         System.setProperty("javax.net.ssl.keyStore", "Encryption/StreamItKeyStore.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", password);
-
 
         try {
             SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
@@ -102,9 +101,18 @@ public class StreamServer {
     private void ChooseFunction (String StageChoice, SSLSocket socket) {
         switch (StageChoice) {
             case "Images" -> ImageSender.SendAllImages(socket);
-            case "Background" -> BackgroundSender.SendBackground(socket, Choice);
-            case "MediaDetails" -> MediaDetailsSender.SendDetails(socket, Choice);
-            case "Videos" -> VideoHandler.SendDetails(socket, Choice);
+            case "Background" -> {
+                BackgroundSender background = new BackgroundSender();
+                background.SendBackground(socket, Choice);
+            }
+            case "MediaDetails" -> {
+                MediaDetailsSender mediaDetails = new MediaDetailsSender();
+                mediaDetails.SendDetails(socket, Choice);
+            }
+            case "Videos" -> {
+                VideoHandler videoHandler = new VideoHandler();
+                videoHandler.SendDetails(socket, Choice);
+            }
             case "StartStream" -> {
                 StartStream stream = new StartStream();
                 stream.Stream(socket, Choice);
@@ -117,11 +125,26 @@ public class StreamServer {
                 AdaptiveStream adaptive = new AdaptiveStream();
                 adaptive.Adapt(socket, Choice, Speed, Streamble);
             }
-            case "Sign Up" -> LogInHandler.SignUp(socket, Username, Password);
-            case "Log In" -> LogInHandler.LogIn(socket, Username, Password);
-            case "Get All From Library" -> LibraryAccess.ReturnAllLibraryItems(socket, Username, Password);
-            case "Add To library" -> LibraryAccess.AddItemToLibrary(socket, Username, Password, Item);
-            case "Remove From library" -> LibraryAccess.RemoveFromLibrary(socket, Username, Password, Item);
+            case "Sign Up" -> {
+                LogInHandler logIn = new LogInHandler();
+                logIn.SignUp(socket, Username, Password);
+            }
+            case "Log In" -> {
+                LogInHandler logIn = new LogInHandler();
+                logIn.LogIn(socket, Username, Password);
+            }
+            case "Get All From Library" -> {
+                LibraryAccess libraryAccess = new LibraryAccess();
+                libraryAccess.ReturnAllLibraryItems(socket, Username, Password);
+            }
+            case "Add To library" -> {
+                LibraryAccess libraryAccess = new LibraryAccess();
+                libraryAccess.AddItemToLibrary(socket, Username, Password, Item);
+            }
+            case "Remove From library" -> {
+                LibraryAccess libraryAccess = new LibraryAccess();
+                libraryAccess.RemoveFromLibrary(socket, Username, Password, Item);
+            }
             case "Get All Movies" -> MoviesAccess.SendMovies(socket);
             case "Get All Shows" -> ShowsAccess.SendShows(socket);
             case "Get Recommended" -> RecommendedAccess.SendRecommended(socket);

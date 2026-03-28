@@ -150,6 +150,7 @@ public class SidePaneHandler {
             return;
         }
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
+        ChoiceServerComm.ReceiveVideoResponse(socket);
         DefaultServerComm.SocketClose(socket);
     }
 }

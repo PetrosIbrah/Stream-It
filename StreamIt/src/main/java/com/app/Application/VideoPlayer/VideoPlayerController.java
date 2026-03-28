@@ -14,7 +14,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
+import org.controlsfx.control.ToggleSwitch;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -53,7 +53,7 @@ public class VideoPlayerController {
     @FXML private ImageView FullScreenImage;
     @FXML private Slider VolumeBar;
     @FXML private ImageView LoadingImage;
-    @FXML private CheckBox AdaptiveCheck;
+    @FXML private ToggleSwitch AdaptiveCheck;
     @FXML private ProgressBar progressBar;
     @FXML private Text RecInfo;
     @FXML private ImageView RecImage;
@@ -74,7 +74,8 @@ public class VideoPlayerController {
             log.info("Delete this function in the future if ");
         }
 
-        AdaptiveCheck.setOnAction(this::handle);
+        AdaptiveCheck.selectedProperty().addListener((obs, oldVal, newVal) -> CheckAdaptive());
+        // AdaptiveCheck.setOnAction(this::handle);
 
         VolumeBar.setMin(0);
         VolumeBar.setMax(100);

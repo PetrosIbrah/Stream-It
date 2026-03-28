@@ -17,10 +17,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

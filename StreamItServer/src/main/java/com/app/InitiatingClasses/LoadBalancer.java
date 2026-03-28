@@ -4,19 +4,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.net.ssl.*;
 import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoadBalancer {
     private static final Logger log = LogManager.getLogger(LoadBalancer.class);
 
     private static final int[] SERVER_PORTS = {8001, 8002, 8003, 8004};
-    private static int PortNum = 2;
+    private static final AtomicInteger PortNum = new AtomicInteger(0);
 
     public static void BalanceLoad(int Port) {
         VideoHandler.VideoPopulation();
         for (int port : SERVER_PORTS) {
             log.info("Launching server on port {}", port);
             new Thread(() -> {
-                StreamServer.StartSever(port);
+                StreamServer streamServer = new StreamServer();
+                streamServer.StartSever(port);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -39,8 +41,8 @@ public class LoadBalancer {
             while (true) {
                 try {
                     SSLSocket ClientSocket = (SSLSocket) LoadBalanecrSocket.accept();
-                    PortNum = (PortNum + 1) % SERVER_PORTS.length;
-                    log.info("Sent a client to Server with port {}", 8000 + PortNum + 1);
+                    PortNum.getAndUpdate(p -> (p + 1) % SERVER_PORTS.length);
+                    log.info("Sent a client to Server with port {}",  SERVER_PORTS[PortNum.get()]);
                     new Thread(() -> ConnectionHandler(ClientSocket)).start();
                 } catch (Exception e) {
                     log.error("Couldnt accept client | Load Balanncer");
@@ -55,7 +57,7 @@ public class LoadBalancer {
 
         try {
             SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            SSLSocket ServerSocket = (SSLSocket) factory.createSocket("0.0.0.0", SERVER_PORTS[PortNum]);
+            SSLSocket ServerSocket = (SSLSocket) factory.createSocket("0.0.0.0", SERVER_PORTS[PortNum.get()]);
             ServerSocket.startHandshake();
 
             BufferedReader ReadFromClient = new BufferedReader(new InputStreamReader(ClientSocket.getInputStream()));
@@ -72,6 +74,10 @@ public class LoadBalancer {
             WriteToServer.println(Stage);
 
             switch (Stage) {
+                case "StartStream" -> {
+                    WriteToServer.println(ReadFromClient.readLine());
+                    WriteToClient.println(ReadFromServer.readLine());
+                }
                 case "Images" -> {
                     int fileCount = disFromServer.readInt();
                     dosToClient.writeInt(fileCount);
@@ -98,7 +104,7 @@ public class LoadBalancer {
                         dosToClient.flush();
                     }
                 }
-                case "Background", "MediaDetails", "Videos", "StartStream", "LoadingBar" -> {
+                case "Background", "MediaDetails", "Videos", "LoadingBar" -> {
                     WriteToServer.println(ReadFromClient.readLine());
                     if (Stage.equals("LoadingBar")){
                         WriteToServer.println(ReadFromClient.readLine());
@@ -204,7 +210,6 @@ public class LoadBalancer {
                 }
             }
             ClientSocket.close();
-
 
             log.info("Successful communication completion");
         } catch (Exception e) {

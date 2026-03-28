@@ -8,13 +8,13 @@ import java.io.*;
 public class BackgroundSender {
     private static final Logger log = LogManager.getLogger(BackgroundSender.class);
 
-    public static void SendBackground (SSLSocket socket, String Choice) {
+    public void SendBackground (SSLSocket socket, String Choice) {
         String BackgroundImage = "VideosAndPictures/BackgroundPictures/" + Choice;
         SendBackRoundPicture(socket, BackgroundImage);
 
     }
 
-    private static void SendBackRoundPicture(SSLSocket socket, String imageUrl) {
+    private void SendBackRoundPicture(SSLSocket socket, String imageUrl) {
         File image = new File(imageUrl);
         try {
             if (!image.isFile()) {
