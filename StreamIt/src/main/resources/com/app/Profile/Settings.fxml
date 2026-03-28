@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.ProfileControllers.SettingsController">
+    <Text fx:id="HomeText" layoutX="86.0" layoutY="55.0" text="Settings" textAlignment="CENTER" wrappingWidth="1126.6484375" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="108.0">
+        <font>
+            <Font size="48.0" />
+        </font>
+    </Text>
+
+    <ImageView fitHeight="61.0" fitWidth="65.0" layoutX="15.0" layoutY="5.0" onMouseClicked="#ClickedOnMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
+        <Image url="@../Application/menu.png" />
+    </ImageView>
+
+    <ImageView fitHeight="51.0" fitWidth="61.0" layoutX="1242.0" layoutY="10.0" onMouseClicked="#ClickedOnProfile" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="27.6484375" AnchorPane.topAnchor="10.0">
+        <Image url="@../Application/user.png" />
+    </ImageView>
+
+    <Separator fx:id="MenuLine" layoutX="86.0" orientation="VERTICAL" prefHeight="71.0" prefWidth="6.0" AnchorPane.leftAnchor="86.0" AnchorPane.topAnchor="0.0" />
+    <Separator fx:id="MainLine" layoutX="1.0" layoutY="70.0" prefHeight="2.0" prefWidth="1321.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="70.0" />
+    <Separator fx:id="ProfileLine" layoutX="1214.0" orientation="VERTICAL" prefHeight="71.0" prefWidth="0.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="0.0" />
+    <AnchorPane fx:id="SettingsPane" layoutX="147.0" layoutY="98.0" prefHeight="590.0" prefWidth="1029.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="144.6484375" AnchorPane.topAnchor="98.0">
+        <Separator layoutX="97.0" orientation="VERTICAL" prefHeight="590.0" prefWidth="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="21.0" />
+        <ChoiceBox fx:id="AudioChoicebox" layoutX="168.0" layoutY="68.0" onAction="#onAudioSelected" prefHeight="33.0" prefWidth="694.0" AnchorPane.leftAnchor="147.6484375" AnchorPane.rightAnchor="150.0" />
+        <Text layoutX="168.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Audio Output Device" wrappingWidth="275.96875">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font></Text>
+        <Text layoutX="168.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recording's Path" />
+        <TextField fx:id="PathText" editable="false" layoutX="168.0" layoutY="156.0" prefHeight="29.0" prefWidth="551.0" AnchorPane.leftAnchor="146.6484375" AnchorPane.rightAnchor="290.0" />
+        <Button fx:id="chooseButton" layoutX="732.0" layoutY="155.0" mnemonicParsing="false" onAction="#onChooseFolder" prefHeight="31.0" prefWidth="130.0" text="Choose Path" AnchorPane.rightAnchor="150.0" />
+      <Text layoutX="168.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account management" />
+      <Button fx:id="DeleteAccount" layoutX="708.0" layoutY="501.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="143.0" text="Delete Account" />
+      <Button fx:id="ClearLib" layoutX="178.0" layoutY="501.0" mnemonicParsing="false" text="Clear library" />
+      <Button fx:id="ChangeUser" layoutX="329.0" layoutY="501.0" mnemonicParsing="false" text="Change Username" />
+      <Button fx:id="ChangePass" layoutX="515.0" layoutY="501.0" mnemonicParsing="false" text="Change Password" />
+      <Separator layoutX="314.0" layoutY="498.0" orientation="VERTICAL" prefHeight="45.0" prefWidth="6.0" />
+      <Separator layoutX="686.0" layoutY="498.0" orientation="VERTICAL" prefHeight="45.0" prefWidth="6.0" />
+      <Text layoutX="168.0" layoutY="261.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Streaming" />
+      <Text layoutX="188.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minimum prefered resolution " />
+      <ChoiceBox fx:id="PrefResChoiceBox" layoutX="469.0" layoutY="278.0" onAction="#onDisplaySelected" prefWidth="150.0" AnchorPane.leftAnchor="447.6484375" AnchorPane.rightAnchor="409.6484375" />
+      <Text layoutX="189.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Autoplay next episode" />
+      <CheckBox fx:id="NextEpBox" layoutX="417.0" layoutY="325.0" mnemonicParsing="false" onAction="#ActionNextEp" />
+      <Text layoutX="188.0" layoutY="378.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Automatically Enable Adaptive Stream" />
+      <CheckBox fx:id="AutoAdaptBox" layoutX="570.0" layoutY="363.0" mnemonicParsing="false" onAction="#ActionAutoAdapt" />
+      <Separator layoutX="100.0" layoutY="437.0" prefHeight="3.0" prefWidth="762.0" AnchorPane.leftAnchor="78.6484375" AnchorPane.rightAnchor="150.0" />
+      <Separator layoutX="100.0" layoutY="210.0" prefHeight="3.0" prefWidth="762.0" AnchorPane.leftAnchor="78.6484375" AnchorPane.rightAnchor="150.0" />
+    </AnchorPane>
+    <VBox fx:id="MenuPane" layoutY="69.0" prefHeight="198.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="72.0">
+        <Button maxWidth="Infinity" onAction="#ClickedOnHome" text="Home" VBox.vgrow="ALWAYS" />
+        <Button maxWidth="Infinity" onAction="#ClickedOnLibrary" text="Library" VBox.vgrow="ALWAYS" />
+        <Separator />
+        <Button maxWidth="Infinity" onAction="#ClickedOnRecommended" text="Recommended" VBox.vgrow="ALWAYS" />
+        <Separator />
+        <Button maxWidth="Infinity" onAction="#ClickedOnMovies" text="Movies" VBox.vgrow="ALWAYS" />
+        <Button maxWidth="Infinity" onAction="#ClickedOnShows" text="Shows" VBox.vgrow="ALWAYS" />
+    </VBox>
+    <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="153.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+        <Button maxWidth="Infinity" onAction="#ClickedOnSettings" text="Settings" VBox.vgrow="ALWAYS" />
+        <Separator />
+        <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
+        <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />
+    </VBox>
+   <stylesheets>
+      <URL value="@../Settings.css" />
+      <URL value="@Settings.css" />
+   </stylesheets>
+
+</AnchorPane>

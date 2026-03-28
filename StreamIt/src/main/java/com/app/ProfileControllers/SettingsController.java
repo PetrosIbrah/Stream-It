@@ -5,6 +5,7 @@ import com.app.Utility.SceneSwapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -15,9 +16,10 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.File;
+import java.util.List;
 
-public class RecordingsController {
-    private static final Logger log = LogManager.getLogger(RecordingsController.class);
+public class SettingsController {
+    private static final Logger log = LogManager.getLogger(SettingsController.class);
 
     @FXML private AnchorPane rootPane;
     @FXML private Pane MenuPane;
@@ -26,21 +28,39 @@ public class RecordingsController {
     @FXML private ChoiceBox<String> AudioChoicebox;
     @FXML private TextField PathText;
     @FXML private Button chooseButton;
+    @FXML private ChoiceBox<String> PrefResChoiceBox;
+    @FXML private CheckBox NextEpBox;
+    @FXML private CheckBox AutoAdaptBox;
 
     private boolean VisibleMenu;
     private boolean VisibleProfile;
 
     @FXML private void initialize(){
+        List<String> Res = List.of("1080p", "720p", "480p", "360p", "240p");
+
+        NextEpBox.setSelected(Boolean.TRUE.equals(CallableFunctions.loadNextEp()));
+        AutoAdaptBox.setSelected(Boolean.TRUE.equals(CallableFunctions.loadAutoAdapt()));
+
+        PrefResChoiceBox.setItems(FXCollections.observableArrayList(Res));
+        PrefResChoiceBox.setValue(CallableFunctions.loadMinPrefResolution());
+
         VisibleProfile = false;
         VisibleMenu = false;
 
         AudioChoicebox.setItems(FXCollections.observableArrayList(CallableFunctions.GetAllAudioDevices()));
-
         AudioChoicebox.setValue(CallableFunctions.loadAudioDevice());
 
         PathText.setText(CallableFunctions.loadRecordingsPath());
 
         HomeText.wrappingWidthProperty().bind(rootPane.widthProperty().subtract(200));
+    }
+
+    @FXML private void ActionNextEp(){
+        CallableFunctions.saveNextEp(NextEpBox.isSelected());
+    }
+
+    @FXML private void ActionAutoAdapt(){
+        CallableFunctions.saveAutoAdapt(AutoAdaptBox.isSelected());
     }
 
     @FXML private void onChooseFolder () {
@@ -60,6 +80,11 @@ public class RecordingsController {
     @FXML private void onAudioSelected(){
         String selected = AudioChoicebox.getValue();
         CallableFunctions.saveAudioDevice(selected);
+    }
+
+    @FXML private void onDisplaySelected(){
+        String selected = PrefResChoiceBox.getValue();
+        CallableFunctions.saveMinPrefResolution(selected);
     }
 
     @FXML private void ClickedOnMenu() {

@@ -96,12 +96,12 @@ public class SceneSwapper {
         }
     }
 
-    public static void switchToRecordings(AnchorPane rootPane) {
+    public static void switchToSettings(AnchorPane rootPane) {
         try {
             Stage stage = (Stage) rootPane.getScene().getWindow();
 
             Parent root = FXMLLoader.load(
-                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Profile/Recordings/Recordings.fxml"))
+                    Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Profile/Settings.fxml"))
             );
             Scene scene = new Scene(root);
             stage.setTitle("StreamIt");

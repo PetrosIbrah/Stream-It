@@ -45,11 +45,8 @@
       <Button maxWidth="Infinity" onAction="#ClickedOnMovies" text="Movies" VBox.vgrow="ALWAYS" />
       <Button maxWidth="Infinity" onAction="#ClickedOnShows" text="Shows" VBox.vgrow="ALWAYS" />
    </VBox>
-   <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="198.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+   <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="160.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
       <Button maxWidth="Infinity" onAction="#ClickedOnSettings" text="Settings" VBox.vgrow="ALWAYS" />
-      <Separator />
-      <Button maxWidth="Infinity" onAction="#ClickedOnRecordings" text="Recordings" VBox.vgrow="ALWAYS" />
-      <Button maxWidth="Infinity" text="Profile Options" VBox.vgrow="ALWAYS" />
       <Separator />
       <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
       <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />
@@ -57,7 +54,7 @@
 
    <Pane fx:id="ErrorPane" prefHeight="61.0" prefWidth="175.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="3.0">
       <ImageView fx:id="ErrorIcon" fitHeight="48.0" fitWidth="60.0" layoutX="14.0" layoutY="6.0" preserveRatio="true">
-         <Image url="@../../Icons/warning.png"/>
+         <Image url="@../../Icons/warning.png" />
       </ImageView>
 
       <Text fx:id="ErrorText" layoutX="77.0" layoutY="17.0" text="Unable to Connect to Server!" textAlignment="CENTER" wrappingWidth="84.0" />

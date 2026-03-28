@@ -20,10 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.Socket;
 
 public class HomeSceneController {
     private static final Logger log = LogManager.getLogger(HomeSceneController.class);
@@ -213,10 +211,6 @@ public class HomeSceneController {
         }
     }
 
-    @FXML private void ClickedOnRecordings() {
-        SceneSwapper.switchToRecordings(rootPane);
-    }
-
     @FXML private void ClickedOnLogOut() {
         File rememberFile = new File("rememberme.txt");
         if (!rememberFile.delete()) {
@@ -230,6 +224,7 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnSettings() {
+        SceneSwapper.switchToSettings(rootPane);
     }
 
     @FXML private void CloseErrorPane () {

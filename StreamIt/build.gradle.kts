@@ -51,7 +51,6 @@ dependencies {
     // Recordings
     implementation("org.bytedeco:javacv:1.5.12")
     implementation("org.bytedeco:javacv-platform:1.5.12")
-
 }
 
 

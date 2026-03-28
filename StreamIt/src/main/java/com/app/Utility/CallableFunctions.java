@@ -67,6 +67,99 @@ public class CallableFunctions {
         }
     }
 
+    public static String loadMinPrefResolution() {
+        Properties props = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream(CONFIG_FILE);
+            props.load(fis);
+            return props.getProperty("MinPrefResolution", "");
+        } catch (Exception e) {
+            log.error("Unable to load Min Preferred Resolution from properties");
+            return "";
+        }
+    }
+
+    public static void saveMinPrefResolution(String resolution) {
+        Properties props = new Properties();
+        try {
+            try (FileInputStream fis = new FileInputStream(CONFIG_FILE)) {
+                props.load(fis);
+            } catch (Exception ignored) {}
+
+            props.setProperty("MinPrefResolution", resolution);
+
+            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+                props.store(fos, "Application config");
+            }
+
+        } catch (Exception e) {
+            log.error("Unable to save Min Preferred Resolution");
+        }
+    }
+
+
+    public static Boolean loadNextEp() {
+        Properties props = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream(CONFIG_FILE);
+            props.load(fis);
+            String value = props.getProperty("NextEp", null);
+            return value != null ? Boolean.parseBoolean(value) : null;
+        } catch (Exception e) {
+            log.error("Unable to load Next Episode preference from properties");
+            return null;
+        }
+    }
+
+    public static void saveNextEp(boolean value) {
+        Properties props = new Properties();
+        try {
+            try (FileInputStream fis = new FileInputStream(CONFIG_FILE)) {
+                props.load(fis);
+            } catch (Exception ignored) {}
+
+            props.setProperty("NextEp", String.valueOf(value));
+
+            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+                props.store(fos, "Application config");
+            }
+
+        } catch (Exception e) {
+            log.error("Unable to save Next Episode preference");
+        }
+    }
+
+    public static void saveAutoAdapt(boolean value) {
+        Properties props = new Properties();
+        try {
+            try (FileInputStream fis = new FileInputStream(CONFIG_FILE)) {
+                props.load(fis);
+            } catch (Exception ignored) {}
+
+            props.setProperty("AutoAdapt", String.valueOf(value));
+
+            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+                props.store(fos, "Application config");
+            }
+
+        } catch (Exception e) {
+            log.error("Unable to save Auto Adapt preference");
+        }
+    }
+
+    public static Boolean loadAutoAdapt() {
+        Properties props = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream(CONFIG_FILE);
+            props.load(fis);
+            String value = props.getProperty("AutoAdapt", null);
+            return value != null ? Boolean.parseBoolean(value) : null;
+        } catch (Exception e) {
+            log.error("Unable to load Auto Adapt preference from properties");
+            return null;
+        }
+    }
+
     public static String loadRecordingsPath() {
         Properties props = new Properties();
         try {
