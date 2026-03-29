@@ -1,5 +1,6 @@
 package com.app.Application.VideoPlayer;
 
+import com.app.Application.ChoiceDisplay.SidePaneHandler;
 import com.app.Utility.CallableFunctions;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.MediaIdentification;
@@ -12,8 +13,10 @@ import fr.bmartel.speedtest.inter.ISpeedTestListener;
 import fr.bmartel.speedtest.model.SpeedTestError;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import org.controlsfx.control.ToggleSwitch;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
@@ -31,10 +34,13 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurface;
 import javax.net.ssl.SSLSocket;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 public class VideoPlayerController {
     private static final Logger log = LogManager.getLogger(VideoPlayerController.class);
@@ -73,9 +79,12 @@ public class VideoPlayerController {
         if (Playing){
             log.info("Delete this function in the future if ");
         }
-
         AdaptiveCheck.selectedProperty().addListener((obs, oldVal, newVal) -> CheckAdaptive());
-        // AdaptiveCheck.setOnAction(this::handle);
+        Boolean AutoAdapt = CallableFunctions.loadAutoAdapt();
+        AdaptiveCheck.setSelected(false);
+        if (Boolean.TRUE.equals(AutoAdapt)){
+            AdaptiveCheck.setSelected(true);
+        }
 
         VolumeBar.setMin(0);
         VolumeBar.setMax(100);
@@ -312,6 +321,28 @@ public class VideoPlayerController {
                 mediaPlayer.videoSurface().set(new ImageViewVideoSurface(videoImageView));
                 playerReady = true;
 
+                mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+                    @Override
+                    public void finished(MediaPlayer mediaPlayer) {
+                        Platform.runLater(() -> {
+                            if(Boolean.TRUE.equals(CallableFunctions.loadNextEp())) {
+                                if(nextEpisode(MediaIdentification.getStreamableFile()) != null) {
+                                    if(SidePaneHandler.OnVideoRestarted(nextEpisode(MediaIdentification.getStreamableFile()))){
+                                    try {
+                                        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/app/Application/VideoPlayer/VideoPlayer.fxml")));
+                                        Stage stage = (Stage) rootPane.getScene().getWindow();
+                                        stage.setScene(new Scene(root));
+                                    } catch (IOException e) {
+                                        log.error("Couln't reload Scene");
+                                    }
+                                    }
+                                }
+                            }
+                            log.info("Media Completed successfully.");
+                        });
+                    }
+                });
+
                 mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
                 Playing = true;
                 startProgressUpdater();
@@ -324,6 +355,7 @@ public class VideoPlayerController {
 
             });
             LoadingImage.setVisible(false);
+
         }).start();
     }
 
@@ -377,8 +409,22 @@ public class VideoPlayerController {
         }
     }
 
-    private void handle(ActionEvent e) {
-        CheckAdaptive();
+    private static String nextEpisode(String filename) {
+        if (!filename.contains("Ep")) return null;
+
+        java.util.regex.Pattern episodeFolderPattern = java.util.regex.Pattern.compile("Episode (\\d+)/");
+        java.util.regex.Matcher folderMatcher = episodeFolderPattern.matcher(filename);
+        if (!folderMatcher.find()) return null;
+        int folderEp = Integer.parseInt(folderMatcher.group(1));
+        filename = filename.replaceAll("Episode \\d+/", "Episode " + (folderEp + 1) + "/");
+
+        java.util.regex.Pattern filePattern = java.util.regex.Pattern.compile("Ep(\\d+)");
+        java.util.regex.Matcher fileMatcher = filePattern.matcher(filename);
+        if (!fileMatcher.find()) return null;
+        int fileEp = Integer.parseInt(fileMatcher.group(1));
+        filename = filename.replaceAll("Ep\\d+", "Ep" + (fileEp + 1));
+
+        return filename;
     }
 
     @FXML private void CloseErrorPane () {

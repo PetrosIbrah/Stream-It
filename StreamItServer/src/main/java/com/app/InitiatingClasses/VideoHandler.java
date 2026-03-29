@@ -57,6 +57,13 @@ public class VideoHandler {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+            if (VideoList == null || VideoList.isEmpty()) {
+                out.println(0);
+                out.println(0);
+                log.warn("Didnt find any videos to send.");
+                return;
+            }
+
             out.println(VideoList.size());
             String vid = null;
             for (String videoPath : VideoList) {

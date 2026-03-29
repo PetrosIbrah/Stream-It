@@ -1,6 +1,7 @@
 package com.app.Application.ChoiceDisplay;
 
 import com.app.Identification.MediaIdentification;
+import com.app.Utility.CallableFunctions;
 import com.app.Utility.DefaultServerComm;
 import com.app.Utility.ServerCommunication.ChoiceServerComm;
 import javafx.application.Platform;
@@ -106,10 +107,22 @@ public class SidePaneHandler {
             groupedVideos.computeIfAbsent(res, k -> new ArrayList<>()).add(fullPath);
         }
 
+
+        String MinresAllowed = CallableFunctions.loadMinPrefResolution();
+        int MinresVal;
+        if (MinresAllowed == null) {
+            MinresVal = 0;
+        } else {
+            MinresVal = Integer.parseInt(MinresAllowed.replace("p", ""));
+        }
         for (Map.Entry<Integer, List<String>> entry : groupedVideos.entrySet()) {
             int resolution = entry.getKey();
 
+            if (MinresAllowed != null && resolution < MinresVal) continue;
+
             Text heading = new Text(resolution + "p");
+
+
             heading.setStyle("-fx-fill: #ffffff; -fx-font-size: 18px; -fx-font-weight: bold;");
             SidePane.getChildren().add(heading);
 
@@ -152,5 +165,41 @@ public class SidePaneHandler {
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
         ChoiceServerComm.ReceiveVideoResponse(socket);
         DefaultServerComm.SocketClose(socket);
+    }
+
+    public static boolean OnVideoRestarted(String next) {
+        if (next == null) return false;
+
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("Season (\\d+)/Episode (\\d+)");
+        java.util.regex.Matcher matcher = pattern.matcher(next);
+        if (!matcher.find()) return false;
+
+        int CurrentSeason = Integer.parseInt(matcher.group(1)) - 1;
+        int CurrentEpisode = Integer.parseInt(matcher.group(2));
+
+        List<Integer> seasons = MediaIdentification.getSeasons();
+        if (seasons == null || CurrentSeason >= seasons.size()) return false;
+        if (CurrentEpisode > seasons.get(CurrentSeason)) return false;
+        // ===========================================================
+
+
+        MediaIdentification.setStreamableFile(next);
+
+        SSLSocket socket = DefaultServerComm.Connect();
+        if (socket == null) return false;
+
+        String episodePath = next.substring(0, next.lastIndexOf("/"));
+        episodePath = episodePath.replace("VideosAndPictures/AvailableVideos/", "");
+        ChoiceServerComm.SendStreamChoice(socket, "Videos", episodePath);
+        ChoiceServerComm.ReceiveVideoList(socket);
+        DefaultServerComm.SocketClose(socket);
+
+        socket = DefaultServerComm.Connect();
+        if (socket == null) return false;
+        ChoiceServerComm.SendStreamChoice(socket, "StartStream", next);
+        ChoiceServerComm.ReceiveVideoResponse(socket);
+        DefaultServerComm.SocketClose(socket);
+
+        return true;
     }
 }

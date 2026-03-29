@@ -155,6 +155,3 @@
     -fx-fill: #ffffff;
     -fx-effect: dropshadow(gaussian, #007AFF, 4, 0.3, 0, 0);
 }
-#adaptive-switch:selected {
-    -fx-background-color: #007AFF;
-}
