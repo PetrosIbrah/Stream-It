@@ -3,7 +3,6 @@ package com.app.Application.LogIn;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
@@ -80,28 +79,9 @@ public class LogInController {
     }
 
     @FXML private void SignUpAction() {
-        SSLSocket socket = DefaultServerComm.Connect();
-        if (socket == null) {
-            ErrorPane.setVisible(true);
-            return;
-        }
-        LogInServerComm.SendStageAndCredentials(socket, "Sign Up", UserFill.getText(), PasswordFill.getText());
-        String Result = LogInServerComm.GetLogInResult(socket);
-        DefaultServerComm.SocketClose(socket);
-
-        if (Result.equals("Account Created")) {
-            log.info("Account successfully created");
-            InfoText.setText(Result);
-            InfoText.setVisible(true);
-            InfoText.setStyle("-fx-fill: green;");
-        } else if (Result.equals("Username already exists")) {
-            InfoText.setText(Result);
-            InfoText.setVisible(true);
-        } else {
-            InfoText.setText(Result);
-            InfoText.setVisible(true);
-        }
+        SceneSwapper.switchToSignUp(rootPane);
     }
+
 
     @FXML private void RememberMeFunction () {
         if (!RememberCheckBox.isSelected()) {
@@ -121,7 +101,7 @@ public class LogInController {
             ErrorPane.setVisible(true);
             return;
         }
-        LogInServerComm.SendStageAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
+        LogInServerComm.SendLogInAndCredentials(socket, "Log In", UserFill.getText(), PasswordFill.getText());
         String Result = LogInServerComm.GetLogInResult(socket);
         DefaultServerComm.SocketClose(socket);
 

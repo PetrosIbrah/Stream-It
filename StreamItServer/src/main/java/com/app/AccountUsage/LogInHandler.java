@@ -14,8 +14,8 @@ public class LogInHandler {
         SendLogInResult(socket, AccountsRepo.CheckLogIn(Username, Password));
     }
 
-    public void SignUp (SSLSocket socket, String Username, String Password){
-        SendLogInResult(socket, AccountsRepo.SaveAccount(Username, Password));
+    public void SignUp (SSLSocket socket, String Username, String Email, String Password){
+        SendLogInResult(socket, AccountsRepo.SaveAccount(Username, Email, Password));
     }
 
     public void SendLogInResult(SSLSocket socket, String Restart){

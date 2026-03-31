@@ -12,11 +12,14 @@ public class Accounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userid;
 
+    @Column(name = "token")
+    private String token;
+
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(unique = true, nullable = false)
+    private String email;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -26,19 +29,19 @@ public class Accounts {
     )
     private Set<Library> library = new HashSet<>();
 
-    public Accounts( String username, String password) {
+    public Accounts( String username, String email) {
         this.username = username;
-        this.password = password;
+        this.email = email;
     }
 
     @SuppressWarnings("unused")
     public Accounts() {}
 
     @SuppressWarnings("unused")
-    public Accounts(Long userid, String username, String password) {
+    public Accounts(Long userid, String username, String email) {
         this.userid = userid;
         this.username = username;
-        this.password = password;
+        this.email = email;
     }
 
     @SuppressWarnings("unused")
@@ -52,16 +55,20 @@ public class Accounts {
     public void setUsername(String username) {this.username = username;}
 
     @SuppressWarnings("unused")
-    public String getPassword() {return password;}
-    @SuppressWarnings("unused")
-    public void setPassword(String password) {this.password = password;}
-
-    @SuppressWarnings("unused")
     public void addLibraryItem(Library item) {
         library.add(item);
     }
     @SuppressWarnings("unused")
     public void removeLibraryItem(Library item) {
         library.remove(item);
+    }
+    @SuppressWarnings("unused")
+    public String getEmail() {return email;}
+    @SuppressWarnings("unused")
+    public void setEmail(String email) {this.email = email;}
+
+    public String getToken() {return token;}
+    public void setToken(String token) {
+        this.token = token;
     }
 }

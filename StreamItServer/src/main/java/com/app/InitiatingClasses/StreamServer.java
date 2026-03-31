@@ -21,6 +21,7 @@ public class StreamServer {
     private double Speed;
     private String Streamble;
     private String Username;
+    private String Email;
     private String Password;
     private String Item;
 
@@ -82,9 +83,12 @@ public class StreamServer {
                     Speed = Double.parseDouble(tmpSpeed);
                     Streamble = reader.readLine();
                 }
-                case "Log In", "Sign Up", "Get All From Library" -> {
+                case "Log In", "Get All From Library", "Sign Up" -> {
                     Username = reader.readLine();
                     Password = reader.readLine();
+                    if (StageChoice.equals("Sign Up")){
+                        Email = reader.readLine();
+                    }
                 }
                 case "Add To library", "Remove From library" -> {
                     Username = reader.readLine();
@@ -127,7 +131,7 @@ public class StreamServer {
             }
             case "Sign Up" -> {
                 LogInHandler logIn = new LogInHandler();
-                logIn.SignUp(socket, Username, Password);
+                logIn.SignUp(socket, Username, Email, Password);
             }
             case "Log In" -> {
                 LogInHandler logIn = new LogInHandler();

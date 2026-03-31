@@ -177,6 +177,10 @@ public class LoadBalancer {
                     WriteToServer.println(ReadFromClient.readLine());
                     // Password
                     WriteToServer.println(ReadFromClient.readLine());
+                    if (Stage.equals("Sign Up")){
+                        // Email
+                        WriteToServer.println(ReadFromClient.readLine());
+                    }
                     if (Stage.equals("Log In") || Stage.equals("Sign Up")){
                         // Response
                         WriteToClient.println(ReadFromServer.readLine());

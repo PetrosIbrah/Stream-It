@@ -1,6 +1,7 @@
 package com.app.AccountUsage;
 
 import com.app.Identification.Accounts;
+import com.app.Utilization.JwtUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -24,29 +25,26 @@ public class LibraryAccess {
         SendLibraryToClient(socket, Library);
     }
 
-    private String[] GetFromDatabase (String Username, String Password) {
+    private String[] GetFromDatabase(String Username, String Password) {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Accounts> userQuery = em.createQuery(
-                    "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
+                    "SELECT u FROM Accounts u WHERE u.username = :uname", Accounts.class
             );
             userQuery.setParameter("uname", Username);
-            userQuery.setParameter("pwd", Password);
 
             List<Accounts> users = userQuery.getResultList();
-            if (users.isEmpty()) {
-                return new String[0];
-            }
+            if (users.isEmpty()) return new String[0];
 
             Accounts user = users.getFirst();
+
+            if (!JwtUtil.verifyPassword(user.getToken(), Password)) return new String[0];
 
             TypedQuery<String> libQuery = em.createQuery(
                     "SELECT l.medianame FROM Library l WHERE l.user = :user", String.class
             );
             libQuery.setParameter("user", user);
-
             List<String> items = libQuery.getResultList();
             return items.toArray(new String[0]);
-
         } catch (Exception e) {
             log.error("Unable to get library items from Database");
             return new String[0];
@@ -91,10 +89,9 @@ public class LibraryAccess {
             em.getTransaction().begin();
 
             TypedQuery<Accounts> userQuery = em.createQuery(
-                    "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
+                    "SELECT u FROM Accounts u WHERE u.username = :uname", Accounts.class
             );
             userQuery.setParameter("uname", Username);
-            userQuery.setParameter("pwd", Password);
             List<Accounts> users = userQuery.getResultList();
 
             if (users.isEmpty()) {
@@ -102,6 +99,10 @@ public class LibraryAccess {
             }
 
             Accounts user = users.getFirst();
+
+            if (!JwtUtil.verifyPassword(user.getToken(), Password)) {
+                return "User not found.";
+            }
 
             TypedQuery<Library> libQuery = em.createQuery(
                     "SELECT l FROM Library l WHERE l.user = :user AND l.medianame = :item", Library.class
@@ -140,10 +141,9 @@ public class LibraryAccess {
             em.getTransaction().begin();
 
             TypedQuery<Accounts> userQuery = em.createQuery(
-                    "SELECT u FROM Accounts u WHERE u.username = :uname AND u.password = :pwd", Accounts.class
+                    "SELECT u FROM Accounts u WHERE u.username = :uname", Accounts.class
             );
             userQuery.setParameter("uname", Username);
-            userQuery.setParameter("pwd", Password);
             List<Accounts> users = userQuery.getResultList();
 
             if (users.isEmpty()) {
@@ -151,6 +151,10 @@ public class LibraryAccess {
             }
 
             Accounts user = users.getFirst();
+
+            if (!JwtUtil.verifyPassword(user.getToken(), Password)) {
+                return "User not found.";
+            }
 
             TypedQuery<Library> libQuery = em.createQuery(
                     "SELECT l FROM Library l WHERE l.user = :user AND l.medianame = :item", Library.class
@@ -165,7 +169,6 @@ public class LibraryAccess {
             }
 
             Library libItem = results.getFirst();
-
             em.remove(libItem);
 
             em.getTransaction().commit();

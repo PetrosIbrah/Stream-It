@@ -21,6 +21,10 @@ public class SceneSwapper {
 
         try {
             Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setMinWidth(0);
+            stage.setMinHeight(0);
+            stage.setMaxWidth(Double.MAX_VALUE);
+            stage.setMaxHeight(Double.MAX_VALUE);
 
             FXMLLoader loader = new FXMLLoader(SceneSwapper.class.getResource("/com/app/Application/Home/HomeScene.fxml"));
             Parent root = loader.load();
@@ -50,23 +54,55 @@ public class SceneSwapper {
 
     public static void switchToLogIn(AnchorPane rootPane) {
         try {
-            Stage oldStage = (Stage) rootPane.getScene().getWindow();
-            Stage stage = new Stage();
+            Stage stage = (Stage) rootPane.getScene().getWindow();
             Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/LogIn/LogInScene.fxml")));
 
-            Scene scene = new Scene(root, 600, 367);
+            stage.close();
+
+            Scene scene = new Scene(root, 600, 385);
 
             stage.setScene(scene);
             stage.setTitle("StreamIt");
             stage.setResizable(false);
+            stage.setMinWidth(600);
+            stage.setMinHeight(385);
+            stage.setMaxWidth(600);
+            stage.setMaxHeight(385);
+            stage.setWidth(600);
+            stage.setHeight(385);
             stage.centerOnScreen();
-
-            oldStage.close();
-
             stage.show();
+
             log.info("Successfully initiated Log in scene");
         } catch (Exception e) {
             log.error("Unable to swap to Log In scene.");
+        }
+    }
+
+    public static void switchToSignUp(AnchorPane rootPane) {
+        try {
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+
+            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Application/SignUp/SignUpScene.fxml")));
+
+            stage.close();
+            Scene scene = new Scene(root, 600, 385);
+
+            stage.setScene(scene);
+            stage.setTitle("StreamIt");
+            stage.setResizable(false);
+            stage.setMinWidth(600);
+            stage.setMinHeight(385);
+            stage.setMaxWidth(600);
+            stage.setMaxHeight(385);
+            stage.setWidth(600);
+            stage.setHeight(385);
+            stage.centerOnScreen();
+            stage.show();
+
+            log.info("Successfully initiated Sign Up scene");
+        } catch (Exception e) {
+            log.error("Unable to swap to Sign Up scene.");
         }
     }
 
