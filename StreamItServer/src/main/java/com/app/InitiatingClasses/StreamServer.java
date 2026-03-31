@@ -1,5 +1,6 @@
 package com.app.InitiatingClasses;
 
+import com.app.AccountUsage.AccountSettings;
 import com.app.AccountUsage.LibraryAccess;
 import com.app.Categories.MoviesAccess;
 import com.app.Categories.RecommendedAccess;
@@ -23,6 +24,7 @@ public class StreamServer {
     private String Username;
     private String Email;
     private String Password;
+    private String ToChange;
     private String Item;
 
     public void StartSever (int Port) {
@@ -83,7 +85,7 @@ public class StreamServer {
                     Speed = Double.parseDouble(tmpSpeed);
                     Streamble = reader.readLine();
                 }
-                case "Log In", "Get All From Library", "Sign Up" -> {
+                case "Log In", "Get All From Library", "Sign Up", "Clear Library", "Delete Account" -> {
                     Username = reader.readLine();
                     Password = reader.readLine();
                     if (StageChoice.equals("Sign Up")){
@@ -94,6 +96,11 @@ public class StreamServer {
                     Username = reader.readLine();
                     Password = reader.readLine();
                     Item = reader.readLine();
+                }
+                case "Change Password", "Change Username" -> {
+                    Email = reader.readLine();
+                    Password = reader.readLine(); // Old Password || Password
+                    ToChange = reader.readLine(); // New Password || New Username
                 }
             }
         } catch (Exception e) {
@@ -148,6 +155,22 @@ public class StreamServer {
             case "Remove From library" -> {
                 LibraryAccess libraryAccess = new LibraryAccess();
                 libraryAccess.RemoveFromLibrary(socket, Username, Password, Item);
+            }
+            case "Clear Library" -> {
+                AccountSettings accountSettings = new AccountSettings();
+                accountSettings.ClearLibrary(socket, Username, Password);
+            }
+            case "Delete Account" -> {
+                AccountSettings accountSettings = new AccountSettings();
+                accountSettings.DeleteAccount(socket, Username, Password);
+            }
+            case "Change Password" -> {
+                AccountSettings accountSettings = new AccountSettings();
+                accountSettings.ChangePassword(socket, Email, Password, ToChange);
+            }
+            case "Change Username" -> {
+                AccountSettings accountSettings = new AccountSettings();
+                accountSettings.ChangeUsername(socket, Email, Password, ToChange);
             }
             case "Get All Movies" -> MoviesAccess.SendMovies(socket);
             case "Get All Shows" -> ShowsAccess.SendShows(socket);

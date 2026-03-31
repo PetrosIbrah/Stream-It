@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -149,6 +150,60 @@ public class SceneSwapper {
             log.info("Successfully initiated Recordings scene");
         } catch (Exception e) {
             log.error("Unable to swap to Recordings scene.");
+        }
+    }
+
+    public static void switchToChangePass(AnchorPane rootPane) {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Profile/Change/ChangePassword.fxml")));
+
+            Scene scene = new Scene(root, 600, 385);
+
+            stage.setScene(scene);
+            stage.setTitle("StreamIt");
+            stage.setResizable(false);
+            stage.setMinWidth(600);
+            stage.setMinHeight(385);
+            stage.setMaxWidth(600);
+            stage.setMaxHeight(385);
+            stage.setWidth(600);
+            stage.setHeight(385);
+            stage.initOwner(rootPane.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.centerOnScreen();
+            stage.show();
+
+            log.info("Successfully initiated Change Password scene");
+        } catch (Exception e) {
+            log.error("Unable to swap to Change Password scene.");
+        }
+    }
+
+    public static void switchToChangeUser(AnchorPane rootPane) {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(SceneSwapper.class.getResource("/com/app/Profile/Change/ChangeUsername.fxml")));
+
+            Scene scene = new Scene(root, 600, 385);
+
+            stage.setScene(scene);
+            stage.setTitle("StreamIt");
+            stage.setResizable(false);
+            stage.setMinWidth(600);
+            stage.setMinHeight(385);
+            stage.setMaxWidth(600);
+            stage.setMaxHeight(385);
+            stage.setWidth(600);
+            stage.setHeight(385);
+            stage.initOwner(rootPane.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.centerOnScreen();
+            stage.show();
+
+            log.info("Successfully initiated Change Username scene");
+        } catch (Exception e) {
+            log.error("Unable to swap to Change Username scene.");
         }
     }
 

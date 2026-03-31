@@ -243,6 +243,10 @@ public class ChoiceDisplayController {
         SceneSwapper.ShutDownApp();
     }
 
+    @FXML private void ClickedOnSettings() {
+        SceneSwapper.switchToSettings(rootPane);
+    }
+
     @FXML private void CloseErrorPane () {
         ErrorPane.setVisible(false);
     }

@@ -1,7 +1,12 @@
 package com.app.ProfileControllers;
 
+import com.app.Identification.LibraryIdentification;
+import com.app.Identification.ServerIdentification;
 import com.app.Utility.CallableFunctions;
+import com.app.Utility.DefaultServerComm;
 import com.app.Utility.SceneSwapper;
+import com.app.Utility.ServerCommunication.LibraryServerComm;
+import com.app.Utility.ServerCommunication.SettingsServerComm;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,6 +20,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.net.ssl.SSLSocket;
 import java.io.File;
 import java.util.List;
 
@@ -22,6 +29,7 @@ public class SettingsController {
     private static final Logger log = LogManager.getLogger(SettingsController.class);
 
     @FXML private AnchorPane rootPane;
+    @FXML private Pane ErrorPane;
     @FXML private Pane MenuPane;
     @FXML private Pane ProfilePane;
     @FXML private Text HomeText;
@@ -144,5 +152,51 @@ public class SettingsController {
     }
 
     @FXML private void ClickedOnSettings() {
+    }
+
+    @FXML private void ActionClearLib() {
+        SSLSocket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
+        SettingsServerComm.RequestClearLibrary(socket, "Clear Library",  ServerIdentification.getUserName(), ServerIdentification.getPassword());
+        log.info(SettingsServerComm.SettingsResult(socket));
+        DefaultServerComm.SocketClose(socket);
+
+        socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
+        LibraryServerComm.RequestFromLibrary(socket, "Get All From Library", ServerIdentification.getUserName(), ServerIdentification.getPassword());
+        LibraryIdentification.setSavedFileNames(LibraryServerComm.GetAllLibraryItems(socket));
+        DefaultServerComm.SocketClose(socket);
+    }
+
+    @FXML private void ActionDeleteAccount() {
+        SSLSocket socket = DefaultServerComm.Connect();
+        if (socket == null) {
+            ErrorPane.setVisible(true);
+            return;
+        }
+        SettingsServerComm.RequestDeleteAccount(socket, "Delete Account",  ServerIdentification.getUserName(), ServerIdentification.getPassword());
+        log.info(SettingsServerComm.SettingsResult(socket));
+        DefaultServerComm.SocketClose(socket);
+
+        SceneSwapper.switchToLogIn(rootPane);
+    }
+
+    @FXML private void ChangePassAction () {
+        SceneSwapper.switchToChangePass(rootPane);
+    }
+
+    @FXML private void ChangeUserAction () {
+        SceneSwapper.switchToChangeUser(rootPane);
+    }
+
+
+    @FXML private void CloseErrorPane () {
+        ErrorPane.setVisible(false);
     }
 }

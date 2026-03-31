@@ -66,8 +66,8 @@
         <Button maxWidth="Infinity" onAction="#ClickedOnMovies" text="Movies" VBox.vgrow="ALWAYS" />
         <Button maxWidth="Infinity" onAction="#ClickedOnShows" text="Shows" VBox.vgrow="ALWAYS" />
     </VBox>
-    <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="157.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
-        <Button maxWidth="Infinity" text="Settings" VBox.vgrow="ALWAYS" />
+    <VBox fx:id="ProfilePane" layoutX="1137.0" layoutY="79.0" prefHeight="160.0" prefWidth="183.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+        <Button maxWidth="Infinity" onAction="#ClickedOnSettings" text="Settings" VBox.vgrow="ALWAYS" />
         <Separator />
         <Button maxWidth="Infinity" onAction="#ClickedOnExit" text="Exit" VBox.vgrow="ALWAYS" />
         <Button maxWidth="Infinity" onAction="#ClickedOnLogOut" text="Log Out" VBox.vgrow="ALWAYS" />

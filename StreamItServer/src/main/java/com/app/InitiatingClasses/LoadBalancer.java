@@ -172,7 +172,7 @@ public class LoadBalancer {
                         WriteToClient.println(ReadFromServer.readLine());
                     }
                 }
-                case "Log In", "Sign Up", "Get All From Library" -> {
+                case "Log In", "Sign Up", "Get All From Library", "Clear Library", "Delete Account" -> {
                     // Username
                     WriteToServer.println(ReadFromClient.readLine());
                     // Password
@@ -181,7 +181,7 @@ public class LoadBalancer {
                         // Email
                         WriteToServer.println(ReadFromClient.readLine());
                     }
-                    if (Stage.equals("Log In") || Stage.equals("Sign Up")){
+                    if (Stage.equals("Log In") || Stage.equals("Sign Up") || Stage.equals("Clear Library") || Stage.equals("Delete Account")){
                         // Response
                         WriteToClient.println(ReadFromServer.readLine());
                     } else {
@@ -211,6 +211,17 @@ public class LoadBalancer {
                         dosToClient.writeUTF(disFromServer.readUTF());
                     }
                     dosToClient.flush();
+                }
+                case "Change Password", "Change Username" -> {
+                    // Email
+                    WriteToServer.println(ReadFromClient.readLine());
+                    // Old Password || Password
+                    WriteToServer.println(ReadFromClient.readLine());
+                    // New Password || New Username
+                    WriteToServer.println(ReadFromClient.readLine());
+
+                    // Response
+                    WriteToClient.println(ReadFromServer.readLine());
                 }
             }
             ClientSocket.close();
