@@ -67,6 +67,7 @@ public class AccountsRepo {
                 return "Log In NOT Accepted";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Unexpected Log in Error");
             return "Unexpected Error";
         }
