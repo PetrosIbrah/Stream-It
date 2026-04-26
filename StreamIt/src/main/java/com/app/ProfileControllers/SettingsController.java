@@ -1,5 +1,6 @@
 package com.app.ProfileControllers;
 
+import com.app.Identification.FileIdentification;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
 import com.app.Utility.CallableFunctions;
@@ -140,7 +141,7 @@ public class SettingsController {
     }
 
     @FXML private void ClickedOnLogOut() {
-        File rememberFile = new File("rememberme.txt");
+        File rememberFile = new File(FileIdentification.RememberMe);
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }

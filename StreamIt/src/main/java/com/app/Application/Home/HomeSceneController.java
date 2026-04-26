@@ -1,5 +1,6 @@
 package com.app.Application.Home;
 
+import com.app.Identification.FileIdentification;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
@@ -60,7 +61,7 @@ public class HomeSceneController {
         container.getChildren().clear();
 
         for (String fileName : imageFiles) {
-            File imageFile = new File("ReferencePictures", fileName);
+            File imageFile = new File(FileIdentification.ReferencePictures, fileName);
             if (!imageFile.exists()) continue;
 
             Image img = new Image(imageFile.toURI().toString());
@@ -212,7 +213,7 @@ public class HomeSceneController {
     }
 
     @FXML private void ClickedOnLogOut() {
-        File rememberFile = new File("rememberme.txt");
+        File rememberFile = new File(FileIdentification.RememberMe);
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }

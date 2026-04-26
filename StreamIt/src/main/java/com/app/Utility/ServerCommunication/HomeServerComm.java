@@ -1,5 +1,6 @@
 package com.app.Utility.ServerCommunication;
 
+import com.app.Identification.FileIdentification;
 import com.app.Identification.MediaIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ public class HomeServerComm {
 
     public static void GetAllImages(SSLSocket socket, int ImageCount) {
         try {
-            File dir = new File("ReferencePictures");
+            File dir = new File(FileIdentification.ReferencePictures);
             if (!dir.exists()) {
                 if (dir.mkdir()) {
                     log.info("Directory ReferencePictures created successfully.");

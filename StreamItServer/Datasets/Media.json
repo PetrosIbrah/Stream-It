@@ -1,21 +1,15 @@
 {
   "Media": [
     {
-      "Title": "Game Of Thrones",
-      "Type": "Series",
-      "Description": "Game of Thrones is a sprawling fantasy epic set in the fictional continents of Westeros and Essos, where noble families vie for power, honor, and survival. As political intrigue, betrayal, and war unfold, legendary heroes and villains alike navigate a world filled with dragons, dark magic, and the ever-present threat of supernatural forces beyond the Wall. Renowned for its complex characters, intricate storytelling, and cinematic scale, the series explores the human struggle for power in a morally ambiguous world.",
-      "Seasons": [2, 9, 13, 18, 2, 10]
-    },
-    {
-      "Title": "Breaking Bad",
+      "Title": "Beast",
       "Type": "Movie",
-      "Description": "A Breaking Bad movie about Jesse Pinkman."
+      "Description": "A movie of small length used as a Demo."
     },
     {
-      "Title": "Friends",
+      "Title": "Surfing",
       "Type": "Series",
-      "Description": "A sitcom about six friends in New York.",
-      "Seasons": [24, 24, 25, 24, 24, 25, 24, 24, 24, 18]
+      "Description": "Sufing is a small show. What would it be like to grow up next to shores of a 5 mile deep ocean, and grow up to be a surfer connecting with nature?",
+      "Seasons": [2, 1]
     }
   ]
 }

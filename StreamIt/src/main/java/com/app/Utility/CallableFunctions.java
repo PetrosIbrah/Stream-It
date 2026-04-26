@@ -1,11 +1,13 @@
 package com.app.Utility;
 
+import com.app.Identification.FileIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.Properties;
 public class CallableFunctions {
     private static final Logger log = LogManager.getLogger(CallableFunctions.class);
 
-    private static final String CONFIG_FILE = "config.properties";
+    private static final String CONFIG_FILE = FileIdentification.Properties;
 
     public static List<String> GetAllAudioDevices() {
         List<String> devices = new ArrayList<>();
@@ -188,6 +190,50 @@ public class CallableFunctions {
 
         } catch (Exception e) {
             log.error("Unable to save Recordings Path");
+        }
+    }
+
+    public static String loadServerIp() {
+        Properties props = new Properties();
+        try {
+            File configFile = new File(CONFIG_FILE);
+            if (!configFile.exists()) {
+                props.setProperty("ServerIp", "localhost");
+                props.setProperty("Port", "8000");
+                try (FileOutputStream fos = new FileOutputStream(configFile)) {
+                    props.store(fos, "Application config");
+                }
+                return "localhost";
+            }
+            try (FileInputStream fis = new FileInputStream(configFile)) {
+                props.load(fis);
+            }
+            return props.getProperty("ServerIp", "localhost");
+        } catch (Exception e) {
+            log.error("Unable to load Server IP from properties");
+            return "localhost";
+        }
+    }
+
+    public static int loadPort() {
+        Properties props = new Properties();
+        try {
+            File configFile = new File(CONFIG_FILE);
+            if (!configFile.exists()) {
+                props.setProperty("ServerIp", "localhost");
+                props.setProperty("Port", "8000");
+                try (FileOutputStream fos = new FileOutputStream(configFile)) {
+                    props.store(fos, "Application config");
+                }
+                return 8000;
+            }
+            try (FileInputStream fis = new FileInputStream(configFile)) {
+                props.load(fis);
+            }
+            return Integer.parseInt(props.getProperty("Port", "8000"));
+        } catch (Exception e) {
+            log.error("Unable to load Port from properties");
+            return 8000;
         }
     }
 

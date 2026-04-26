@@ -1,5 +1,6 @@
 package com.app.Utility.ServerCommunication;
 
+import com.app.Identification.FileIdentification;
 import com.app.Identification.MediaIdentification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,7 @@ public class ChoiceServerComm {
     public static void GetBackgroundImage(SSLSocket socket, String Choice) {
         try {
             //InputStream is = socket.getInputStream();
-            File dir = new File("BackgroundPictures");
+            File dir = new File(FileIdentification.BackgroundPictures);
 
             if (!dir.exists()) {
                 boolean created = dir.mkdir();

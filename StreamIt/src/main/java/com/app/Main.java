@@ -1,5 +1,6 @@
 package com.app;
 
+import com.app.Identification.FileIdentification;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -43,8 +44,8 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        DeleteDirectory("ReferencePictures");
-        DeleteDirectory("BackgroundPictures");
+        DeleteDirectory(FileIdentification.ReferencePictures);
+        DeleteDirectory(FileIdentification.BackgroundPictures);
 
         Platform.exit();
     }

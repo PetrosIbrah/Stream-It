@@ -110,7 +110,7 @@ public class SidePaneHandler {
 
         String MinresAllowed = CallableFunctions.loadMinPrefResolution();
         int MinresVal;
-        if (MinresAllowed == null) {
+        if (MinresAllowed == null || MinresAllowed.isEmpty()) {
             MinresVal = 0;
         } else {
             MinresVal = Integer.parseInt(MinresAllowed.replace("p", ""));
@@ -163,7 +163,8 @@ public class SidePaneHandler {
             return;
         }
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", fullPath);
-        ChoiceServerComm.ReceiveVideoResponse(socket);
+        String Res = "Server Responded: " + ChoiceServerComm.ReceiveVideoResponse(socket);
+        log.info(Res);
         DefaultServerComm.SocketClose(socket);
     }
 
@@ -197,7 +198,8 @@ public class SidePaneHandler {
         socket = DefaultServerComm.Connect();
         if (socket == null) return false;
         ChoiceServerComm.SendStreamChoice(socket, "StartStream", next);
-        ChoiceServerComm.ReceiveVideoResponse(socket);
+        String Res = "Server Responce: " + ChoiceServerComm.ReceiveVideoResponse(socket);
+        log.info(Res);
         DefaultServerComm.SocketClose(socket);
 
         return true;

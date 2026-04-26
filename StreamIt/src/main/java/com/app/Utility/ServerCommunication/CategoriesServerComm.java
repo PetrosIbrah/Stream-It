@@ -2,10 +2,8 @@ package com.app.Utility.ServerCommunication;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.net.ssl.SSLSocket;
 import java.io.*;
-// import java.net.Socket;
 
 public class CategoriesServerComm {
     private static final Logger log = LogManager.getLogger(CategoriesServerComm.class);

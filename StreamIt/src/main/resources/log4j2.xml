@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-        <Console name="Output" target="SYSTEM_OUT">
+        <File name="FileOutput"  fileName="${sys:user.home}/StreamIt/Logs/App.log" append="true">
             <PatternLayout
                     pattern="[%-6level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
-        </Console>
+        </File>
     </Appenders>
     <Loggers>
         <Root level="all" additivity="true">
-            <AppenderRef ref="Output" />
+            <AppenderRef ref="FileOutput" />
         </Root>
     </Loggers>
 </Configuration>

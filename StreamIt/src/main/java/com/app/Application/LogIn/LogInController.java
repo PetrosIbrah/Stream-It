@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
+import com.app.Identification.FileIdentification;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.ServerIdentification;
@@ -39,7 +41,7 @@ public class LogInController {
         LoadingGif.setVisible(false);
         InfoText.setVisible(false);
 
-        File file = new File("rememberme.txt");
+        File file = new File(FileIdentification.RememberMe);
         if (file.exists()) {
             LoadingGif.setVisible(true);
             RememberCheckBox.setSelected(true);
@@ -67,7 +69,7 @@ public class LogInController {
         SwitchToHomePage ();
 
         if (RememberCheckBox.isSelected()) {
-            try (FileWriter writer = new FileWriter("rememberme.txt")) {
+            try (FileWriter writer = new FileWriter(FileIdentification.RememberMe)) {
                 writer.write(UserFill.getText() + "\n");
                 writer.write(PasswordFill.getText());
             } catch (IOException e) {
@@ -127,7 +129,7 @@ public class LogInController {
     }
 
     private void DeleteRememberMe () {
-        File rememberFile = new File("rememberme.txt");
+        File rememberFile = new File(FileIdentification.RememberMe);
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }

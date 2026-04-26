@@ -1,2 +1,0 @@
-ServerIp=localhost
-Port=8000

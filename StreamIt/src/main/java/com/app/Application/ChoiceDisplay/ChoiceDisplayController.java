@@ -1,5 +1,6 @@
 package com.app.Application.ChoiceDisplay;
 
+import com.app.Identification.FileIdentification;
 import com.app.Utility.SceneSwapper;
 import com.app.Identification.LibraryIdentification;
 import com.app.Identification.MediaIdentification;
@@ -116,7 +117,7 @@ public class ChoiceDisplayController {
 
     private void SetBackgroundImage(String Choice) {
         try {
-            File imageFile = new File("BackgroundPictures/" + Choice);
+            File imageFile = new File(FileIdentification.BackgroundPictures + "/" + Choice);
             if (imageFile.exists()) {
                 Image img = new Image(imageFile.toURI().toString());
                 ChoiceImage.setImage(img);
@@ -232,7 +233,7 @@ public class ChoiceDisplayController {
     }
 
     @FXML private void ClickedOnLogOut() {
-        File rememberFile = new File("rememberme.txt");
+        File rememberFile = new File(FileIdentification.RememberMe);
         if (!rememberFile.delete()) {
             log.warn("Couldn't delete remember me file.");
         }
