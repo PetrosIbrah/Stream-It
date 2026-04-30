@@ -372,21 +372,27 @@ public class VideoPlayerController {
                 log.info(msg);
                 CD.countDown();
 
-                SSLSocket socket = DefaultServerComm.Connect();
-                if (socket == null) {
-                    ErrorPane.setVisible(true);
-                    return;
-                }
-                long Time = (long) (progressBar.getProgress() * MediaIdentification.GetDuration());
-                VideoPlayerServerComm.SendAdaptive(socket,"Adaptive", Time, Speed);
-                String Restart = VideoPlayerServerComm.ReceiveRestart(socket);
-                DefaultServerComm.SocketClose(socket);
+                double finalSpeed = Speed;
 
-                if (Restart.equals("Restart")){
-                    Percentage =  progressBar.getProgress();
-                    LoadingImage.setVisible(true);
-                    restartPlayer();
-                }
+                new Thread(() -> {
+                    SSLSocket socket = DefaultServerComm.Connect();
+                    if (socket == null) {
+                        Platform.runLater(() -> ErrorPane.setVisible(true));
+                        return;
+                    }
+                    long Time = (long) (progressBar.getProgress() * MediaIdentification.GetDuration());
+                    VideoPlayerServerComm.SendAdaptive(socket,"Adaptive", Time, finalSpeed);
+                    String Restart = VideoPlayerServerComm.ReceiveRestart(socket);
+                    DefaultServerComm.SocketClose(socket);
+
+                    if (Restart.equals("Restart")){
+                        Platform.runLater(() -> {
+                            Percentage =  progressBar.getProgress();
+                            LoadingImage.setVisible(true);
+                            restartPlayer();
+                        });
+                    }
+                }).start();
             }
 
             @Override

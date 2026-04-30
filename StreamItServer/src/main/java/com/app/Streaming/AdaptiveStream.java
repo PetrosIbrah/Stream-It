@@ -53,7 +53,6 @@ public class AdaptiveStream {
         assert OldResolution != null;
         if (!OldResolution.equals(Resolution)) {
             NewVideo = replaceResolution(Steamable, Resolution);
-            Media.setStreamingFile(NewVideo);
             new Thread(() -> {
                 StartStream stream = new StartStream();
                 stream.UpdateStream(socket, Ms, NewVideo);

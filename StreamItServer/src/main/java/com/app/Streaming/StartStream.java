@@ -1,6 +1,5 @@
 package com.app.Streaming;
 
-import com.app.Identification.Media;
 import com.app.InitiatingClasses.VideoHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,6 @@ public class StartStream {
         }
 
         ClientChoice = Choice;
-        Media.setStreamingFile(Choice);
         File Streamable = new File( Choice);
 
         if (Streamable.exists()) {

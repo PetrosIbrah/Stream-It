@@ -1,5 +1,6 @@
 package com.app.InitiatingClasses;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.net.ssl.*;
@@ -28,7 +29,12 @@ public class LoadBalancer {
         }
 
         try {
-            String password = System.getenv("KEYSTORE_PASSWORD");
+            Dotenv dotenv = Dotenv.configure()
+                    .directory(System.getProperty("user.dir"))
+                    .filename("Variables.env")
+                    .ignoreIfMissing()
+                    .load();
+            String password = dotenv.get("KEYSTORE_PASSWORD");
             System.setProperty("javax.net.ssl.trustStore", "Encryption/TrustedStreamItStore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", password);
             System.setProperty("javax.net.ssl.keyStore", "Encryption/StreamItKeyStore.jks");

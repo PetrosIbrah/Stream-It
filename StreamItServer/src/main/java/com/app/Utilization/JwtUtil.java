@@ -5,10 +5,16 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class JwtUtil {
-    // Not so secrect for now. :)
-    private static final String SECRET_KEY = "When-you-play-the-Game-Of-Thrones,-you-win-or-you-die,-there-is-no-middle-ground";
+    private static final Dotenv dotenv = Dotenv.configure()
+            .directory(System.getProperty("user.dir"))
+            .filename("Variables.env")
+            .ignoreIfMissing()
+            .load();
+
+    private static final String SECRET_KEY = dotenv.get("JWT_KEY");
 
     public static String generateToken(String username, String email, String password) {
         return Jwts.builder()

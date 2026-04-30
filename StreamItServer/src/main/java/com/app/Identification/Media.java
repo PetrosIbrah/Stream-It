@@ -7,7 +7,6 @@ public class Media {
     private String Type;
     private String Description;
     private List<Integer> Seasons;
-    private static String StreamingFile = null;
 
     public String getTitle() { return Title; }
     @SuppressWarnings("unused")
@@ -24,11 +23,4 @@ public class Media {
     public List<Integer> getSeasons() { return Seasons; }
     @SuppressWarnings("unused")
     public void setSeasons(List<Integer> seasons) { this.Seasons = seasons; }
-
-    public static String getStreamingFile() {
-        return StreamingFile;
-    }
-    public static void setStreamingFile(String streamingFile) {
-        StreamingFile = streamingFile;
-    }
 }

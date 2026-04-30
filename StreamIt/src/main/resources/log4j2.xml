@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-        <File name="FileOutput"  fileName="${sys:user.home}/StreamIt/Logs/App.log" append="true">
+        <File name="FileOutput"  fileName="${sys:user.home}/StreamIt/Logs/App.log" append="false">
             <PatternLayout
                     pattern="[%-6level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
         </File>
