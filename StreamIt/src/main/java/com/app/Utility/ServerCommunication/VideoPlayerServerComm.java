@@ -27,6 +27,7 @@ public class VideoPlayerServerComm {
             Restart = reader.readLine();
             if (Restart.equals("Restart")){
                 MediaIdentification.setStreamableFile(reader.readLine());
+                MediaIdentification.setPort(Integer.parseInt(reader.readLine()));
             }
             String msg = "Restart Value: "+ Restart;
             log.warn(msg);
@@ -35,6 +36,16 @@ public class VideoPlayerServerComm {
         }
         return Restart;
     }
+
+    public static void ReceiveLoadingBarResponse(SSLSocket socket) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            MediaIdentification.setPort(Integer.parseInt(reader.readLine()));
+        } catch (Exception e) {
+            log.error("Unable to receive loading result from server");
+        }
+    }
+
 
     public static void SendAdaptive(SSLSocket socket, String Stage, long TimeStamp, double Speedtest){
         try {

@@ -142,7 +142,6 @@ public class SidePaneHandler {
                                 stage.setTitle("StreamIt");
                                 stage.setResizable(true);
                                 stage.setScene(scene);
-                                stage.centerOnScreen();
                                 stage.show();
 
                             } catch (Exception ex) {

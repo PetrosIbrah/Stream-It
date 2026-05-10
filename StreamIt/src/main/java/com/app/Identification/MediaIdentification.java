@@ -6,6 +6,7 @@ public class MediaIdentification {
     private static String[] FileNames;
     private static String Choice;
     private static String StreamableFile;
+    private static int Port;
 
     public static void Init (int ImageCount) {
         FileNames = new String[ImageCount];
@@ -50,4 +51,12 @@ public class MediaIdentification {
 
     public static String getStreamableFile() {return StreamableFile;}
     public static void setStreamableFile(String streamableFile) {StreamableFile = streamableFile;}
+
+    public static int getPort() {
+        return Port;
+    }
+
+    public static void setPort(int port) {
+        Port = port;
+    }
 }

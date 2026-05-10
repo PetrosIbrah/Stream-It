@@ -15,8 +15,10 @@ import java.util.Objects;
 
 public class SceneSwapper {
     private static final Logger log = LogManager.getLogger(SceneSwapper.class);
+    private static int FirstHome = 0;
 
     public static void switchToSpesificHomeScene(AnchorPane rootPane, String Scenename) {
+        FirstHome = FirstHome + 1;
         String  msg = "Successfully initiated " + Scenename + " scene";
         String  errmsg = "Unable to swap to " + Scenename + " scene.";
 
@@ -43,9 +45,10 @@ public class SceneSwapper {
             stage.setHeight(720);
             stage.setMinWidth(854);
             stage.setMinHeight(480);
-            stage.centerOnScreen();
+            if (Scenename.equals("Home") && FirstHome == 1){
+                stage.centerOnScreen();
+            }
             stage.show();
-
 
             log.info(msg);
         } catch (Exception e) {
@@ -125,7 +128,6 @@ public class SceneSwapper {
             stage.setMinWidth(854);
             stage.setMinHeight(480);
             stage.setScene(scene);
-            stage.centerOnScreen();
             stage.show();
             log.info("Successfully initiated Choice scene");
         } catch (Exception e) {

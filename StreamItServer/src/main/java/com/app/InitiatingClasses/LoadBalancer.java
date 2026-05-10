@@ -83,6 +83,7 @@ public class LoadBalancer {
                 case "StartStream" -> {
                     WriteToServer.println(ReadFromClient.readLine());
                     WriteToClient.println(ReadFromServer.readLine());
+                    WriteToClient.println(ReadFromServer.readLine()); // port
                 }
                 case "Images" -> {
                     int fileCount = disFromServer.readInt();
@@ -114,6 +115,7 @@ public class LoadBalancer {
                     WriteToServer.println(ReadFromClient.readLine());
                     if (Stage.equals("LoadingBar")){
                         WriteToServer.println(ReadFromClient.readLine());
+                        WriteToClient.println(ReadFromServer.readLine()); // Port
                     }
 
                     switch (Stage) {
@@ -176,6 +178,7 @@ public class LoadBalancer {
                     WriteToClient.println(Restart);
                     if (Restart.equals("Restart")){
                         WriteToClient.println(ReadFromServer.readLine());
+                        WriteToClient.println(ReadFromServer.readLine()); // port
                     }
                 }
                 case "Log In", "Sign Up", "Get All From Library", "Clear Library", "Delete Account" -> {

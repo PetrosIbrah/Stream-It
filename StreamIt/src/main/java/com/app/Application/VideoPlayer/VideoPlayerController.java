@@ -149,6 +149,7 @@ public class VideoPlayerController {
             return;
         }
         VideoPlayerServerComm.SendTimeStamp(socket, "LoadingBar", seekTime);
+        VideoPlayerServerComm.ReceiveLoadingBarResponse(socket);
         DefaultServerComm.SocketClose(socket);
         if (mediaPlayer != null) {
             mediaPlayer.controls().setTime(seekTime);
@@ -303,7 +304,7 @@ public class VideoPlayerController {
             if (mediaPlayer != null) {
 
                 mediaPlayer.controls().stop();
-                mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
+                mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":" + MediaIdentification.getPort());
 
                 PausePlayIcon.setImage(PauseImage);
                 startProgressUpdater();
@@ -343,7 +344,7 @@ public class VideoPlayerController {
                     }
                 });
 
-                mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":7778");
+                mediaPlayer.media().play("tcp://" + ServerIdentification.GetHost() + ":" + MediaIdentification.getPort());
                 Playing = true;
                 startProgressUpdater();
 

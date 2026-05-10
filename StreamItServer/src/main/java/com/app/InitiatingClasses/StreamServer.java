@@ -60,10 +60,12 @@ public class StreamServer {
         log.info(msg);
 
         ChooseFunction(StageChoice, socket);
-        try {
-            socket.close();
-        } catch (Exception e) {
-            log.fatal("Unable to close communication with client.");
+        if (!StageChoice.equals("Adaptive") && !StageChoice.equals("LoadingBar")){
+            try {
+                socket.close();
+            } catch (Exception e) {
+                log.fatal("Unable to close communication with client.");
+            }
         }
     }
 
@@ -130,7 +132,7 @@ public class StreamServer {
             }
             case "LoadingBar" -> {
                 StartStream stream = new StartStream();
-                stream.UpdateStream(socket, Choice, Streamble);
+                stream.UpdateStream(socket, Choice, Streamble, stream.findFreePort());
             }
             case "Adaptive" -> {
                 AdaptiveStream adaptive = new AdaptiveStream();

@@ -116,7 +116,9 @@ public class ChoiceServerComm {
     public static String ReceiveVideoResponse (SSLSocket socket) {
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            return reader.readLine();
+            String Res = reader.readLine();
+            MediaIdentification.setPort(Integer.parseInt(reader.readLine()));
+            return Res;
         } catch (Exception e) {
             log.error("Unable to receive Video Player Response.");
         }

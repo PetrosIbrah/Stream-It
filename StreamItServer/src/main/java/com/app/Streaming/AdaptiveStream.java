@@ -1,6 +1,5 @@
 package com.app.Streaming;
 
-import com.app.Identification.Media;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.net.ssl.SSLSocket;
@@ -50,18 +49,26 @@ public class AdaptiveStream {
             case null, default -> {}
         }
 
+        int Port;
         assert OldResolution != null;
+        if (!OldResolution.equals(Resolution)){
+            StartStream SS = new StartStream();
+            Port = SS.findFreePort();
+        } else {
+            Port = 0;
+        }
         if (!OldResolution.equals(Resolution)) {
             NewVideo = replaceResolution(Steamable, Resolution);
             new Thread(() -> {
                 StartStream stream = new StartStream();
-                stream.UpdateStream(socket, Ms, NewVideo);
+                stream.UpdateStream(socket, Ms, NewVideo, Port);
+
             }).start();
             Restart = "Restart";
         } else {
             NewVideo = null;
         }
-        SendRestart(socket, Restart, NewVideo);
+        SendRestart(socket, Restart, NewVideo, Port);
     }
 
     public String replaceResolution(String filePath, String newResolution) {
@@ -86,12 +93,13 @@ public class AdaptiveStream {
         return null;
     }
 
-    public void SendRestart(SSLSocket socket, String Restart, String NewVid){
+    public void SendRestart(SSLSocket socket, String Restart, String NewVid, int Port){
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(Restart);
             if (Restart.equals("Restart")) {
                 out.println(NewVid);
+                out.println(Port);
             }
         } catch (IOException e) {
             log.error("Unable to send message to client to restart stream");
