@@ -11,6 +11,7 @@ import com.app.PicturesAndDetails.ImageSender;
 import com.app.PicturesAndDetails.MediaDetailsSender;
 import com.app.Streaming.AdaptiveStream;
 import com.app.Streaming.StartStream;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.net.ssl.*;
@@ -28,7 +29,12 @@ public class StreamServer {
     private String Item;
 
     public void StartSever (int Port) {
-        String password = System.getenv("KEYSTORE_PASSWORD");
+        Dotenv dotenv = Dotenv.configure()
+                .directory(System.getProperty("user.dir"))
+                .filename("Variables.env")
+                .ignoreIfMissing()
+                .load();
+        String password = dotenv.get("KEYSTORE_PASSWORD");
         System.setProperty("javax.net.ssl.keyStore", "Encryption/StreamItKeyStore.jks");
         System.setProperty("javax.net.ssl.keyStorePassword", password);
 
