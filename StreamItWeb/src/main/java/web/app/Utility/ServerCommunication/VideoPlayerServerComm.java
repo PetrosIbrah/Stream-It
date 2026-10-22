@@ -1,0 +1,61 @@
+package web.app.Utility.ServerCommunication;
+
+import web.app.Identification.MediaIdentification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import javax.net.ssl.SSLSocket;
+import java.io.*;
+
+public class VideoPlayerServerComm {
+    private static final Logger log = LogManager.getLogger(VideoPlayerServerComm.class);
+
+    public static void SendTimeStamp(SSLSocket socket, String Stage, long TimeStamp){
+        try {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(Stage);
+            out.println(TimeStamp);
+            out.println(MediaIdentification.getStreamableFile());
+        } catch (IOException e) {
+            log.error("Unable to send media time stamp to server");
+        }
+    }
+
+    public static String ReceiveRestart(SSLSocket socket) {
+        String Restart = " ";
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Restart = reader.readLine();
+            if (Restart.equals("Restart")){
+                MediaIdentification.setStreamableFile(reader.readLine());
+                MediaIdentification.setPort(Integer.parseInt(reader.readLine()));
+            }
+            String msg = "Restart Value: "+ Restart;
+            log.warn(msg);
+        } catch (Exception e) {
+            log.error("Unable to receive restart result from server");
+        }
+        return Restart;
+    }
+
+    public static void ReceiveLoadingBarResponse(SSLSocket socket) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            MediaIdentification.setPort(Integer.parseInt(reader.readLine()));
+        } catch (Exception e) {
+            log.error("Unable to receive loading result from server");
+        }
+    }
+
+
+    public static void SendAdaptive(SSLSocket socket, String Stage, long TimeStamp, double Speedtest){
+        try {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(Stage);
+            out.println(TimeStamp);
+            out.println(Speedtest);
+            out.println(MediaIdentification.getStreamableFile());
+        } catch (IOException e) {
+            log.error("Unable to send speedtest results and timestamp to server");
+        }
+    }
+}
